@@ -1,0 +1,615 @@
+@import url('https://fonts.googleapis.com/css2?family=Xanh+Mono:ital@0;1&display=swap');
+@import url('https://use.typekit.net/vzz8cwm.css');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Xanh Mono', monospace;
+    background: #f5f5f5;
+    color: #000;
+    line-height: 1.6;
+    padding: 0 40px;
+}
+
+.layout-wrapper {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 60px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
+/* Left Column - Navigation & Contact */
+.left-column {
+    position: sticky;
+    top: 20px;
+    align-self: start;
+    height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
+}
+
+.top-line {
+    height: 2px;
+    background: #000;
+    margin-bottom: 20px;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+nav a {
+    color: #000;
+    text-decoration: none;
+    font-size: 14px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 4px;
+    transition: opacity 0.3s;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+nav a:hover {
+    opacity: 0.6;
+}
+
+nav a::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: transparent;
+    flex-shrink: 0;
+}
+
+nav a.active::before {
+    background: #4CAF50;
+}
+
+.spacer {
+    height: 40px;
+}
+
+.contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-links a {
+    color: #000;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #000;
+    padding-bottom: 4px;
+    transition: opacity 0.3s;
+}
+
+.contact-links a:hover {
+    opacity: 0.6;
+}
+
+.arrow-circle {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+}
+
+/* Project Navigation in Left Column */
+.project-navigation-left {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: auto;
+    padding-bottom: 20px;
+}
+
+.nav-button-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    border: 1px solid #000;
+    border-radius: 50px;
+    text-decoration: none;
+    color: #000;
+    font-family: 'Xanh Mono', monospace;
+    font-size: 13px;
+    transition: all 0.3s;
+    background: transparent;
+}
+
+.nav-button-left:hover {
+    background: #000;
+    color: #f5f5f5;
+}
+
+/* Mobile Project Navigation */
+.project-navigation-mobile {
+    display: none;
+}
+
+/* Right Column - Main Content */
+.center-top-line {
+    height: 2px;
+    background: #000;
+    margin-bottom: 60px;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.hero h1 {
+    font-size: clamp(42px, 5.5vw, 72px);
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 20px;
+    font-family: "gyst-variable", sans-serif;
+    line-height: 1.2;
+}
+
+.circle {
+    display: inline-block;
+    padding: 6px 18px;
+    border: 2px solid #000;
+    border-radius: 50%;
+    font-style: italic;
+    white-space: nowrap;
+}
+
+.hero p {
+    font-size: clamp(16px, 1.5vw, 20px);
+    color: #666;
+    font-family: "gyst-variable", sans-serif;
+    font-style: italic;
+}
+
+/* Project details in hero - use body font, no labels, tight spacing */
+.project-details + .hero p,
+.hero.project-hero p {
+    font-family: 'Xanh Mono', monospace;
+    font-style: normal;
+    color: #000;
+    margin-bottom: 4px;
+}
+
+.hero p:last-of-type {
+    margin-bottom: 0;
+}
+
+.hero p strong {
+    display: none;
+}
+
+.hero p a {
+    font-family: 'Xanh Mono', monospace;
+    font-style: normal;
+    color: #0066cc;
+    text-decoration: underline;
+}
+
+.hero p a:hover {
+    color: #004999;
+}
+
+/* Projects Grid */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 30px;
+    margin-bottom: 80px;
+}
+
+.project-card {
+    text-decoration: none;
+    color: #000;
+    display: block;
+    transition: opacity 0.3s;
+}
+
+.project-card:hover {
+    opacity: 0.7;
+}
+
+.project-image {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: #ddd;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.project-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 13px;
+}
+
+.project-title {
+    font-weight: 400;
+    font-size: 13px;
+}
+
+.project-title a {
+    color: #000;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.project-title a:hover {
+    opacity: 0.6;
+}
+
+.project-year {
+    color: #666;
+    font-size: 13px;
+}
+
+/* Divider Line */
+.divider {
+    height: 1px;
+    background: #000;
+    margin: 60px 0;
+}
+
+/* Footer */
+.footer-wrapper {
+    grid-column: 1 / -1;
+    margin-top: 50px;
+}
+
+.footer-divider {
+    height: 1px;
+    background: #000;
+    margin: 15px 0;
+}
+
+footer {
+    text-align: center;
+    padding-bottom: 60px;
+    font-size: 12px;
+    color: #666;
+    font-family: "gyst-variable", sans-serif;
+}
+
+/* Project Navigation */
+.project-navigation {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    margin-top: 60px;
+}
+
+.nav-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 32px;
+    border: 1px solid #000;
+    border-radius: 50px;
+    text-decoration: none;
+    color: #000;
+    font-family: 'Xanh Mono', monospace;
+    font-size: 14px;
+    transition: all 0.3s;
+    background: transparent;
+}
+
+.nav-button:hover {
+    background: #000;
+    color: #f5f5f5;
+}
+
+.nav-button .arrow {
+    font-size: 16px;
+}
+
+.prev-project {
+    justify-content: flex-start;
+    padding-left: 24px;
+}
+
+.next-project {
+    justify-content: flex-end;
+    padding-right: 24px;
+}
+
+/* About Page Styling */
+.about-content {
+    margin-bottom: 80px;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.picture-column img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.text-column p {
+    margin-bottom: 20px;
+}
+
+/* Project Grid Styling */
+.project-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+/* Image Column Styling */
+.image-column {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.image-column img,
+.image-column video {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 0;
+}
+
+/* Two column layout for vertical images/videos */
+.image-row-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.image-row-2col img,
+.image-row-2col video {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Text Column Styling - Multiple Sections */
+.text-column {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.text-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.text-column h2 {
+    font-size: 24px;
+    font-family: "gyst-variable", sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    margin: 0;
+    color: #000;
+}
+
+.text-column p {
+    font-size: 16px;
+    font-family: 'Xanh Mono', monospace;
+    line-height: 1.7;
+    margin: 0;
+    color: #000;
+}
+
+/* Project Title Styling - for project detail pages only */
+.project-details .hero h1 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+/* Website Link */
+.details-link {
+    font-size: 16px;
+    color: #0066cc;
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+}
+
+.details-link:hover {
+    color: #004999;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .project-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        background: #fff;
+        padding: 20px;
+    }
+
+    .layout-wrapper {
+        grid-template-columns: 1fr;
+        gap: 0;
+        padding-top: 0;
+    }
+
+    .left-column {
+        position: relative;
+        height: auto;
+        margin-bottom: 0;
+    }
+
+    /* Hide desktop project navigation on mobile */
+    .project-navigation-left {
+        display: none;
+    }
+
+    /* Show mobile project navigation after content */
+    .project-navigation-mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 60px;
+        margin-bottom: 40px;
+    }
+
+    .top-line {
+        display: block;
+        margin-bottom: 25px;
+    }
+
+    nav {
+        flex-direction: row;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 0;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #000;
+    }
+
+    nav a {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .spacer {
+        display: none;
+    }
+
+    .contact-links {
+        gap: 15px;
+        padding-top: 25px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #000;
+        margin-bottom: 40px;
+    }
+
+    .contact-links a {
+        border-bottom: none;
+        padding-bottom: 0;
+        justify-content: center;
+        gap: 10px;
+        width: auto;
+    }
+
+    .arrow-circle {
+        margin-left: 0;
+    }
+
+    .center-top-line {
+        display: none;
+    }
+
+    .hero {
+        margin-bottom: 60px;
+        padding-top: 40px;
+    }
+
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .footer-wrapper {
+        margin-bottom: 0;
+    }
+
+    .footer-divider {
+        margin-bottom: 30px;
+    }
+
+    .project-navigation {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .nav-button,
+    .nav-button-left {
+        width: 100%;
+        justify-content: center;
+        padding: 16px 32px;
+    }
+
+    .prev-project,
+    .next-project {
+        justify-content: center;
+        padding: 16px 32px;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .picture-column {
+        margin-bottom: 20px;
+    }
+
+    .project-grid {
+        grid-template-columns: 1fr !important;
+        gap: 40px;
+    }
+
+    .text-column h2 {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 30px;
+    }
+
+    .circle {
+        padding: 4px 14px;
+    }
+}
