@@ -1,5 +1,206 @@
-"Weapon of Mass Distraction" explores our paradoxical relationship with smartphone technology through a series of glitch art posters. Starting with clean iPhone mockups, the digital imagery was corrupted using Audacity to manipulate image files as audio data and a text editor to alter the image data. After data corruption, Adobe Photoshop was employed to create sophisticated visual distortions across multiple chromatic variations.
-The text "WEAPON of MASS DISTRACTION" works as both title and commentary on how devices made for connection now break apart our attention and get in the way of real human contact. Crowds shown as silhouettes at the bottom of each poster were AI-generated and added to show how disconnected we've become in social spaces. These figures represent the strange isolation that happens in crowded places where people are physically together but mentally lost in their digital worlds.
-WEAPON OF MASS DISTRACTION
-Spring 2025
-Poster Series
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weapon of Mass Distraction - Case Study</title>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .slideshow-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        
+        .slideshow-image.active {
+            opacity: 1;
+        }
+        
+        .image-row-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: stretch;
+        }
+        
+        .image-row-2col > * {
+            height: 100%;
+            width: 100%;
+        }
+        
+        .image-row-2col img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        
+        @media (max-width: 768px) {
+            .image-row-2col {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout-wrapper">
+        <!-- Left Column - Navigation -->
+        <div class="left-column">
+            <div class="top-line"></div>
+            <nav>
+                <a href="index.html">selected work</a>
+                <a href="about.html">about</a>
+            </nav>
+            <div class="spacer"></div>
+            <div class="contact-links">
+                <a href="mailto:petrahelebrantova@email.cz">
+                    email <span class="arrow-circle">→</span>
+                </a>
+                <a href="https://instagram.com/phelebrantova" target="_blank">
+                    instagram <span class="arrow-circle">→</span>
+                </a>
+                <a href="https://www.linkedin.com/in/petra-helebrantová-684729240" target="_blank">
+                    linkedin <span class="arrow-circle">→</span>
+                </a>
+                <a href="#cv">
+                    cv <span class="arrow-circle">→</span>
+                </a>
+            </div>
+            
+            <!-- Project Navigation at bottom -->
+            <div class="project-navigation-left">
+                <a href="#" class="nav-button-left prev-project">
+                    ← Previous
+                </a>
+                <a href="#" class="nav-button-left next-project">
+                    Next →
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Column - Main Content -->
+        <div class="right-column">
+            <div class="center-top-line"></div>
+
+            <!-- Project Title -->
+            <section class="hero project-hero">
+                <h1>Weapon of Mass Distraction</h1>
+                <p>Spring 2025</p>
+                <p>Poster Series, Glitch Art</p>
+            </section>
+
+            <!-- Project Details -->
+            <section class="project-details">
+                <div class="project-grid">
+                    <!-- Images (Left Column) -->
+                    <div class="image-column">
+                        <!-- First image full width -->
+                        <img src="img/weapon-of-mass-distraction/1.jpg" alt="Process image 1">
+                        
+                        <!-- Two columns: Slideshow and static image -->
+                        <div class="image-row-2col">
+                            <!-- Slideshow for images 2-6 -->
+                            <div class="slideshow-container" id="posterSlideshow">
+                                <img src="img/weapon-of-mass-distraction/2.jpg" class="slideshow-image active" alt="Process image 2">
+                                <img src="img/weapon-of-mass-distraction/3.jpg" class="slideshow-image" alt="Process image 3">
+                                <img src="img/weapon-of-mass-distraction/4.jpg" class="slideshow-image" alt="Process image 4">
+                                <img src="img/weapon-of-mass-distraction/5.jpg" class="slideshow-image" alt="Process image 5">
+                                <img src="img/weapon-of-mass-distraction/6.jpg" class="slideshow-image" alt="Process image 6">
+                            </div>
+                            <img src="img/weapon-of-mass-distraction/originalphoto.jpg" alt="Original photo before manipulation">
+                        </div>
+                        
+                        <!-- Two columns: Original poster and Poster 1 -->
+                        <div class="image-row-2col">
+                            <img src="img/weapon-of-mass-distraction/OriginalPoster.jpg" alt="Original uncorrupted poster design">
+                            <img src="img/weapon-of-mass-distraction/Poster1.jpg" alt="Weapon of Mass Distraction poster variation 1">
+                        </div>
+                        
+                        <!-- Two columns: Poster 2 and Poster 5 -->
+                        <div class="image-row-2col">
+                            <img src="img/weapon-of-mass-distraction/Poster2.jpg" alt="Weapon of Mass Distraction poster variation 2">
+                            <img src="img/weapon-of-mass-distraction/poster5.jpg" alt="Weapon of Mass Distraction poster variation 5">
+                        </div>
+                        
+                        <!-- Two columns: Poster 3 and Poster 4 -->
+                        <div class="image-row-2col">
+                            <img src="img/weapon-of-mass-distraction/Poster3.jpg" alt="Weapon of Mass Distraction poster variation 3">
+                            <img src="img/weapon-of-mass-distraction/Poster4.jpg" alt="Weapon of Mass Distraction poster variation 4">
+                        </div>
+                    </div>
+                    
+                    <!-- Text (Right Column) - 3 Sections -->
+                    <div class="text-column">
+                        <div class="text-section">
+                            <h2>Concept</h2>
+                            <p>"Weapon of Mass Distraction" explores our paradoxical relationship with smartphone technology through a series of glitch art posters. The text works as both title and commentary on how devices made for connection now break apart our attention and get in the way of real human contact. Crowds shown as silhouettes at the bottom of each poster were AI-generated and added to show how disconnected we've become in social spaces. These figures represent the strange isolation that happens in crowded places where people are physically together but mentally lost in their digital worlds.</p>
+                        </div>
+
+                        <div class="text-section">
+                            <h2>Process</h2>
+                            <p>The project began with clean iPhone mockups, which were then corrupted using databending techniques. Image files were opened in Audacity and manipulated as audio data, while a text editor altered the raw image structure. This created unpredictable digital glitches that visually represent technological disruption. After corrupting the files, Photoshop was used to refine the distortions and create different color variations, each balancing chaos with intentional design.</p>
+                        </div>
+
+                        <div class="text-section">
+                            <h2>Visual Approach</h2>
+                            <p>The glitch aesthetic works as a visual metaphor for fractured attention in the digital age. The corruption techniques mirror how technology both connects and disconnects us simultaneously. Each color version explores a different emotional tone. By intentionally degrading the pristine smartphone image, the work challenges assumptions about technology as purely beneficial.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mobile Project Navigation - Only shows on mobile -->
+            <div class="project-navigation-mobile">
+                <a href="#" class="nav-button-left prev-project">
+                    ← Previous
+                </a>
+                <a href="#" class="nav-button-left next-project">
+                    Next →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-wrapper">
+        <div class="footer-divider"></div>
+        <footer>
+            <p>© 2024-2026 Petra Helebrantová. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Slideshow functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('#posterSlideshow .slideshow-image');
+        const totalSlides = slides.length;
+
+        function showNextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % totalSlides;
+            slides[currentSlide].classList.add('active');
+        }
+
+        // Change slide every 4 seconds
+        setInterval(showNextSlide, 4000);
+    </script>
+</body>
+</html>
