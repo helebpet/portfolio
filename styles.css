@@ -389,6 +389,13 @@ footer {
     margin-bottom: 0;
 }
 
+/* Embedded iframes (videos and PDFs) */
+.image-column iframe {
+    width: 100%;
+    height: auto;
+    border: none;
+}
+
 /* Two column layout for vertical images/videos */
 .image-row-2col {
     display: grid;
