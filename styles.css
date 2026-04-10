@@ -112,6 +112,7 @@ nav a.active::before {
     align-items: center;
     justify-content: center;
     font-size: 10px;
+    line-height: 1;
     flex-shrink: 0;
 }
 
@@ -618,5 +619,41 @@ footer {
 
     .circle {
         padding: 4px 14px;
+    }
+}
+
+/* Glass bottom overlay — fixed frosted bar, top edge dissolves into content */
+.glass-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    backdrop-filter: blur(14px) saturate(1.3);
+    -webkit-backdrop-filter: blur(14px) saturate(1.3);
+    background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(245, 245, 245, 0.08) 30%,
+        rgba(245, 245, 245, 0.3) 55%,
+        rgba(245, 245, 245, 0.55) 100%);
+    -webkit-mask-image: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(0,0,0,0.05) 25%,
+        rgba(0,0,0,0.2) 50%,
+        rgba(0,0,0,0.65) 75%,
+        black 100%);
+    mask-image: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(0,0,0,0.05) 25%,
+        rgba(0,0,0,0.2) 50%,
+        rgba(0,0,0,0.65) 75%,
+        black 100%);
+    pointer-events: none;
+    z-index: 200;
+}
+
+@media (max-width: 768px) {
+    .glass-bottom {
+        background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.55) 100%);
     }
 }
