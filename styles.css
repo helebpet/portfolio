@@ -622,6 +622,126 @@ footer {
     }
 }
 
+/* Theme toggle button — styled to match nav links */
+.theme-toggle {
+    background: none;
+    border: none;
+    border-bottom: 1px solid #000;
+    margin: 0;
+    padding: 0 0 4px 0;
+    font-family: 'Xanh Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #000;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    transition: opacity 0.3s;
+}
+
+.theme-toggle:hover {
+    opacity: 0.6;
+}
+
+.theme-toggle::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4CAF50;
+    flex-shrink: 0;
+}
+
+/* Dark mode — body class toggled by dark-mode.js */
+html.dark body {
+    background: #141414;
+    color: #e8e8e8;
+}
+
+html.dark .top-line,
+html.dark .center-top-line,
+html.dark .divider,
+html.dark .footer-divider {
+    background: #e8e8e8;
+}
+
+html.dark nav a {
+    color: #e8e8e8;
+    border-bottom-color: #e8e8e8;
+}
+
+html.dark .contact-links a {
+    color: #e8e8e8;
+    border-bottom-color: #e8e8e8;
+}
+
+html.dark .arrow-circle {
+    border-color: #e8e8e8;
+}
+
+html.dark .circle {
+    border-color: #e8e8e8;
+}
+
+html.dark .hero p {
+    color: #999;
+}
+
+html.dark .project-year {
+    color: #999;
+}
+
+html.dark .project-title a {
+    color: #e8e8e8;
+}
+
+html.dark .project-image {
+    background: #2a2a2a;
+}
+
+html.dark .nav-button,
+html.dark .nav-button-left {
+    border-color: #e8e8e8;
+    color: #e8e8e8;
+}
+
+html.dark .nav-button:hover,
+html.dark .nav-button-left:hover {
+    background: #e8e8e8;
+    color: #141414;
+}
+
+html.dark footer {
+    color: #999;
+}
+
+html.dark .text-column h2,
+html.dark .text-column p {
+    color: #e8e8e8;
+}
+
+html.dark .theme-toggle {
+    color: #e8e8e8;
+    border-bottom-color: #e8e8e8;
+}
+
+html.dark .glass-bottom {
+    background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(20, 20, 20, 0.08) 30%,
+        rgba(20, 20, 20, 0.3) 55%,
+        rgba(20, 20, 20, 0.55) 100%);
+}
+
+@media (max-width: 768px) {
+    html.dark body {
+        background: #141414;
+    }
+}
+
 /* Glass bottom overlay — fixed frosted bar, top edge dissolves into content */
 .glass-bottom {
     position: fixed;
