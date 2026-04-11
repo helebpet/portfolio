@@ -328,7 +328,8 @@
             ctx.fillStyle   = '#ffffff';
             ctx.font        = '12px "Xanh Mono", monospace';
             ctx.textAlign   = 'center';
-            ctx.fillText('click or move to continue', W * 0.5, H - 28);
+            var hint = window.innerWidth <= 768 ? 'tap to continue' : 'click or move to continue';
+            ctx.fillText(hint, W * 0.5, H - 28);
             ctx.globalAlpha = 1;
         }
     }

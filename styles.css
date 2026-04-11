@@ -747,6 +747,14 @@ html.dark .glass-bottom {
     html.dark body {
         background: #141414;
     }
+
+    html.dark nav {
+        border-bottom-color: #e8e8e8;
+    }
+
+    html.dark .contact-links {
+        border-bottom-color: #e8e8e8;
+    }
 }
 
 /* Glass bottom overlay — fixed frosted bar, top edge dissolves into content */
