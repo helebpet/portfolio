@@ -513,14 +513,21 @@ footer {
 
     nav {
         flex-direction: row;
-        justify-content: center;
-        gap: 30px;
+        justify-content: space-evenly;
+        gap: 0;
         margin-bottom: 0;
         padding-bottom: 25px;
         border-bottom: 1px solid #000;
+        align-items: center;
     }
 
     nav a {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .theme-toggle {
+        width: auto;
         border-bottom: none;
         padding-bottom: 0;
     }
@@ -775,5 +782,12 @@ html.dark .glass-bottom {
 @media (max-width: 768px) {
     .glass-bottom {
         background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.55) 100%);
+    }
+
+    /* Override theme-toggle base border — must come after base .theme-toggle rule */
+    .theme-toggle {
+        width: auto;
+        border-bottom: none;
+        padding-bottom: 0;
     }
 }
