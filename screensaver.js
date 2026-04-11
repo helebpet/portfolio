@@ -354,10 +354,15 @@
     document.addEventListener('DOMContentLoaded', function () {
         setup();
 
-        // Show immediately on first load
-        activate();
+        // Show immediately only on the very first page load of the session
+        if (!sessionStorage.getItem('ss_visited')) {
+            sessionStorage.setItem('ss_visited', '1');
+            activate();
+        } else {
+            scheduleIdle();
+        }
 
-        // After user interacts: dismiss + start idle timer
+        // After user interacts: dismiss + restart idle timer
         ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'].forEach(function (type) {
             document.addEventListener(type, function () {
                 if (active) dismiss(); else scheduleIdle();
