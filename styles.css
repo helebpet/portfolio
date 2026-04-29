@@ -662,13 +662,29 @@ footer {
     opacity: 0.6;
 }
 
-.theme-toggle::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #4CAF50;
+.toggle-switch {
     flex-shrink: 0;
+    width: 30px;
+    height: 16px;
+    border: 1px solid #000;
+    border-radius: 8px;
+    position: relative;
+    transition: background 0.25s;
+}
+
+.toggle-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #000;
+    transition: transform 0.25s;
+}
+
+html.dark .toggle-knob {
+    transform: translateX(14px);
 }
 
 /* Dark mode — body class toggled by dark-mode.js */
@@ -742,6 +758,14 @@ html.dark .text-column p {
 html.dark .theme-toggle {
     color: #e8e8e8;
     border-bottom-color: #e8e8e8;
+}
+
+html.dark .toggle-switch {
+    border-color: #e8e8e8;
+}
+
+html.dark .toggle-knob {
+    background: #e8e8e8;
 }
 
 html.dark .glass-bottom {

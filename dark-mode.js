@@ -9,8 +9,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var btn = document.getElementById('theme-toggle');
     if (!btn) return;
 
+    btn.innerHTML = '<span class="toggle-switch"><span class="toggle-knob"></span></span><span class="toggle-label"></span>';
+    var label = btn.querySelector('.toggle-label');
+
     function updateButton() {
-        btn.textContent = document.documentElement.classList.contains('dark') ? 'dark mode' : 'light mode';
+        label.textContent = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
     }
 
     updateButton();
