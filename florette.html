@@ -411,6 +411,14 @@
                             </div>
                         </div>
 
+                        <!-- Website: recorded prototype walkthroughs -->
+                        <video autoplay loop muted playsinline>
+                            <source src="img/florette/website-preview-2026-05-10.mp4" type="video/mp4">
+                        </video>
+                        <video autoplay loop muted playsinline>
+                            <source src="img/florette/website-preview-2026-05-11.mp4" type="video/mp4">
+                        </video>
+
                         <!-- Print + OOH applications -->
                         <img src="img/florette/mockup-poster-good-things-grow-here.png" alt="Florette poster: 'Good things grow here'">
                         <img src="img/florette/mockup-subway-billboard.png" alt="Florette out-of-home: subway billboard">
@@ -419,19 +427,9 @@
 
                         <!-- Digital + merch -->
                         <img src="img/florette/mockup-instagram-posts.png" alt="Florette social: Instagram grid of posts">
-                        <div class="image-row-2col">
-                            <img src="img/florette/mockup-tshirt.png" alt="Florette merch: branded t-shirt">
-                            <img src="img/florette/mockup-shopping-bag-logo.png" alt="Florette merch: branded shopping bag with wordmark">
-                        </div>
+                        <img src="img/florette/mockup-tshirt.png" alt="Florette merch: branded t-shirt">
+                        <img src="img/florette/mockup-shopping-bag-logo.png" alt="Florette merch: branded shopping bag with wordmark">
                         <img src="img/florette/mockup-app-screens.png" alt="Florette mobile app screens">
-
-                        <!-- Website: recorded prototype walkthroughs -->
-                        <video autoplay loop muted playsinline>
-                            <source src="img/florette/website-preview-2026-05-11.mp4" type="video/mp4">
-                        </video>
-                        <video autoplay loop muted playsinline>
-                            <source src="img/florette/website-preview-2026-05-10.mp4" type="video/mp4">
-                        </video>
                     </div>
 
                     <!-- Text (Right Column) - 3 Sections -->
@@ -478,13 +476,16 @@
     <script src="cursor.js"></script>
     <script src="screensaver.js?v=9"></script>
     <script>
-        // Florette: stagger reveal on color circles + parallax drift on circles AND product scene items
+        // Florette: stagger reveal on color circles, parallax drift on circles + product
+        // scene items, and hover-to-focus (glide to centre + scale up) on scene items.
         (function () {
             const circles    = document.querySelectorAll('.fc-circle');
             const sceneItems = document.querySelectorAll('.scene-item');
             if (!circles.length && !sceneItems.length) return;
 
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const FOCUS_SCALE = 1.6;
+            const FOCUS_EASE  = 'transform 0.55s cubic-bezier(0.34, 1.2, 0.64, 1)';
 
             // Stagger reveal for color circles
             if (circles.length) {
@@ -501,15 +502,57 @@
                 circles.forEach((c) => observer.observe(c));
             }
 
-            // Apply base rotation to scene items so they sit correctly even before/without scroll parallax
+            // Parallax offset for one scene item, based on its natural (transform-free)
+            // position so the maths stays correct even mid-hover.
+            function parallaxTransform(el) {
+                const scene = el.closest('.product-scene');
+                if (!scene) return 'rotate(' + (parseFloat(el.dataset.rotate) || 0) + 'deg)';
+                const naturalTop = scene.getBoundingClientRect().top + el.offsetTop;
+                const centerOffset = (naturalTop + el.offsetHeight / 2) - window.innerHeight / 2;
+                const speed = parseFloat(el.dataset.speed) || 0;
+                const rot   = parseFloat(el.dataset.rotate) || 0;
+                const y = (centerOffset * speed).toFixed(2);
+                return 'translate3d(0,' + y + 'px, 0) rotate(' + rot + 'deg)';
+            }
+
+            // Base state so items sit correctly even before scroll / with reduced motion
             sceneItems.forEach((el) => {
-                const rot = parseFloat(el.dataset.rotate) || 0;
-                el.style.transform = 'rotate(' + rot + 'deg)';
+                el.style.transform = prefersReducedMotion
+                    ? 'rotate(' + (parseFloat(el.dataset.rotate) || 0) + 'deg)'
+                    : parallaxTransform(el);
+            });
+
+            // Hover-to-focus: glide the item to the centre of the scene and scale it up
+            sceneItems.forEach((el) => {
+                el.addEventListener('mouseenter', () => {
+                    el.dataset.focused = '1';
+                    const scene = el.closest('.product-scene');
+                    if (!scene) return;
+                    const dx = scene.offsetWidth  / 2 - el.offsetLeft - el.offsetWidth  / 2;
+                    const dy = scene.offsetHeight / 2 - el.offsetTop  - el.offsetHeight / 2;
+                    el.style.transition = FOCUS_EASE;
+                    el.style.zIndex = '20';
+                    el.style.transform =
+                        'translate(' + dx.toFixed(2) + 'px,' + dy.toFixed(2) + 'px) scale(' + FOCUS_SCALE + ') rotate(0deg)';
+                });
+                el.addEventListener('mouseleave', () => {
+                    delete el.dataset.focused;
+                    // Transition stays active so the item glides back to its floating spot
+                    el.style.transform = prefersReducedMotion
+                        ? 'rotate(' + (parseFloat(el.dataset.rotate) || 0) + 'deg)'
+                        : parallaxTransform(el);
+                    setTimeout(() => {
+                        if (!el.dataset.focused) {
+                            el.style.transition = '';
+                            el.style.zIndex = '';
+                        }
+                    }, 600);
+                });
             });
 
             if (prefersReducedMotion) return;
 
-            // Parallax drift: each element moves at its own data-speed relative to its viewport position
+            // Parallax drift on scroll — each element moves at its own data-speed
             let ticking = false;
             const update = () => {
                 const viewportH = window.innerHeight;
@@ -521,12 +564,8 @@
                     el.style.transform = 'translate3d(0,' + y + 'px, 0)';
                 });
                 sceneItems.forEach((el) => {
-                    const rect = el.getBoundingClientRect();
-                    const centerOffset = (rect.top + rect.height / 2) - viewportH / 2;
-                    const speed = parseFloat(el.dataset.speed) || 0;
-                    const rot   = parseFloat(el.dataset.rotate) || 0;
-                    const y = (centerOffset * speed).toFixed(2);
-                    el.style.transform = 'translate3d(0,' + y + 'px, 0) rotate(' + rot + 'deg)';
+                    if (el.dataset.focused) return;   // leave hovered items centred
+                    el.style.transform = parallaxTransform(el);
                 });
                 ticking = false;
             };
