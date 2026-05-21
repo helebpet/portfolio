@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Florette - Case Study</title>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <script src="dark-mode.js"></script>
+    <style>
+        /* ===== Florette case study: type + color sections ===== */
+        @import url("https://use.typekit.net/ujk4uyy.css");
+
+        .florette-slide {
+            background: #FBF6E9;
+            padding: 64px 56px;
+            color: #6B6259;
+            font-family: 'itc-benguiat', Georgia, serif;
+            overflow: hidden;
+        }
+
+        /* Typography section (mirrors Slide 651) */
+        .florette-type {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 48px;
+            align-items: start;
+        }
+
+        .ft-labels {
+            display: flex;
+            gap: 24px;
+        }
+
+        .ft-vertical-label {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-size: 22px;
+            color: #6B6259;
+            letter-spacing: 0.02em;
+            margin-top: 4px;
+        }
+
+        .ft-label-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 36px;
+            width: 100%;
+        }
+
+        .ft-label-item .ft-cap {
+            font-size: 14px;
+            color: #B8B0A4;
+            margin: 0 0 6px;
+        }
+
+        .ft-label-item .ft-name {
+            font-size: 18px;
+            line-height: 1.25;
+            color: #6B6259;
+            margin: 0;
+        }
+
+        .ft-samples {
+            display: flex;
+            flex-direction: column;
+            gap: 36px;
+        }
+
+        .ft-title {
+            font-family: 'itc-benguiat-condensed', 'itc-benguiat', Georgia, serif;
+            font-size: clamp(48px, 7vw, 96px);
+            font-weight: 500;
+            line-height: 1;
+            color: #6B6259;
+            margin: 0;
+            letter-spacing: -0.01em;
+        }
+
+        .ft-subtitle {
+            font-family: 'itc-benguiat-condensed', 'itc-benguiat', Georgia, serif;
+            font-size: clamp(28px, 3.5vw, 44px);
+            font-weight: 700;
+            line-height: 1.1;
+            color: #6B6259;
+            margin: 0;
+        }
+
+        .ft-body {
+            font-size: clamp(16px, 1.4vw, 20px);
+            font-weight: 400;
+            line-height: 1.5;
+            color: #6B6259;
+            margin: 0;
+            max-width: 28em;
+        }
+
+        .ft-caption {
+            font-size: 13px;
+            font-weight: 400;
+            color: #6B6259;
+            margin: 0;
+        }
+
+        /* Color palette section (mirrors Slide 603) */
+        .florette-color {
+            padding-bottom: 80px;
+        }
+
+        .fc-heading {
+            font-family: 'itc-benguiat', Georgia, serif;
+            font-size: 22px;
+            font-weight: 500;
+            color: #6B6259;
+            margin: 0 0 48px;
+        }
+
+        .fc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px 24px;
+            justify-items: center;
+        }
+
+        .fc-circle {
+            position: relative;
+            width: 100%;
+            max-width: 180px;
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: 'itc-benguiat', Georgia, serif;
+            opacity: 0;
+            transition: opacity 0.9s ease;
+            will-change: transform, opacity;
+        }
+
+        .fc-circle.is-visible {
+            opacity: 1;
+        }
+
+        .fc-circle .fc-name {
+            font-size: clamp(14px, 1.2vw, 18px);
+            font-weight: 500;
+            line-height: 1.15;
+            padding: 0 12px;
+            margin: 0 0 8px;
+        }
+
+        .fc-circle .fc-hex {
+            font-family: 'Xanh Mono', monospace;
+            font-size: clamp(10px, 0.85vw, 12px);
+            letter-spacing: 0.04em;
+            opacity: 0.85;
+        }
+
+        /* Parchment is so light it needs a stroke + dark text */
+        .fc-circle.fc-parchment {
+            background: #FBF6E9;
+            border: 1px solid #6B6259;
+            color: #6B6259;
+        }
+        .fc-circle.fc-pewter    { background: #C2C2C2; color: #2E2520; }
+        .fc-circle.fc-espresso  { background: #2E2520; color: #FBF6E9; }
+        .fc-circle.fc-driftwood { background: #6B6259; color: #FBF6E9; }
+        .fc-circle.fc-rose-1    { background: #76261B; color: #FBF6E9; }
+        .fc-circle.fc-rose-2    { background: #B14B2F; color: #FBF6E9; }
+        .fc-circle.fc-cal-1     { background: #B9663F; color: #FBF6E9; }
+        .fc-circle.fc-cal-2     { background: #B7513B; color: #FBF6E9; }
+        .fc-circle.fc-viola-1   { background: #91697F; color: #FBF6E9; }
+        .fc-circle.fc-viola-2   { background: #715168; color: #FBF6E9; }
+
+        /* Dark mode tweaks: keep slide cream regardless of theme */
+        html.dark .florette-slide {
+            background: #FBF6E9;
+            color: #6B6259;
+        }
+
+        @media (max-width: 900px) {
+            .florette-slide { padding: 40px 32px; }
+            .florette-type {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            .ft-vertical-label { display: none; }
+            .fc-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 560px) {
+            .florette-slide { padding: 28px 22px; }
+            .fc-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 16px; }
+            .fc-heading { margin-bottom: 28px; }
+        }
+
+        /* Three-column image row for product trios and pattern sets */
+        .image-row-3col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .image-row-3col img,
+        .image-row-3col video {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+        @media (max-width: 700px) {
+            .image-row-3col { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 480px) {
+            .image-row-3col { grid-template-columns: 1fr; }
+        }
+
+        /* Product scenes: flower photo background with packaging floating on top */
+        .product-scene {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            background: #2E2520;
+        }
+        .product-scene .scene-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        .product-scene::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.22) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .product-scene .scene-item {
+            position: absolute;
+            pointer-events: none;
+            z-index: 2;
+            will-change: transform;
+        }
+        .product-scene .scene-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 30px 60px rgba(0,0,0,0.55));
+        }
+        .product-scene .scene-tube   { width: 26%; left: 10%; top: 14%; }
+        .product-scene .scene-bottle { width: 17%; right: 14%; top: 38%; }
+
+        @media (max-width: 700px) {
+            .product-scene { aspect-ratio: 4 / 5; }
+            .product-scene .scene-tube   { width: 36%; left: 8%;  top: 16%; }
+            .product-scene .scene-bottle { width: 26%; right: 8%; top: 52%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout-wrapper">
+        <!-- Left Column - Navigation -->
+        <div class="left-column">
+            <div class="top-line"></div>
+            <nav>
+                <button class="theme-toggle" id="theme-toggle"></button>
+                <a href="index.html">selected work</a>
+                <a href="about.html">about</a>
+            </nav>
+            <div class="spacer"></div>
+            <div class="contact-links">
+                <a href="mailto:petrahelebrantova@email.cz">
+                    email <span class="arrow-circle">→</span>
+                </a>
+                <a href="https://instagram.com/phelebrantova" target="_blank">
+                    instagram <span class="arrow-circle">→</span>
+                </a>
+                <a href="https://www.linkedin.com/in/petra-helebrantová-684729240" target="_blank">
+                    linkedin <span class="arrow-circle">→</span>
+                </a>
+                <a href="https://drive.google.com/file/d/1Na4DG4BrRFdsfdnuB2XAb_mwU41mTYej/view?usp=sharing" target="_blank">
+                    cv <span class="arrow-circle">→</span>
+                </a>
+            </div>
+
+            <!-- Project Navigation at bottom -->
+            <div class="project-navigation-left">
+                <a href="weapon-of-mass-distraction.html" class="nav-button-left prev-project">
+                    ← Previous
+                </a>
+                <a href="wavia.html" class="nav-button-left next-project">
+                    Next →
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Column - Main Content -->
+        <div class="right-column">
+            <div class="center-top-line"></div>
+
+            <!-- Project Title -->
+            <section class="hero project-hero">
+                <h1>Florette</h1>
+                <p>Spring 2026</p>
+                <p>Brand Identity, Packaging, Web Design</p>
+                <p><a href="https://www.figma.com/proto/rQAcHiBN4IcIIdG7N8sj6m/Florette?node-id=3-645&viewport=108%2C57%2C0.06&t=hUTxOLKUjkUIBS4d-1&scaling=contain&content-scaling=fixed&page-id=3%3A644" target="_blank">View Full Deck</a></p>
+            </section>
+
+            <!-- Project Details -->
+            <section class="project-details">
+                <div class="project-grid">
+                    <!-- Images (Left Column) -->
+                    <div class="image-column">
+                        <!-- Brand-animation video: wordmark draws on, fills in, daisy spins -->
+                        <video autoplay loop muted playsinline>
+                            <source src="img/florette/brand-animation.mp4" type="video/mp4">
+                        </video>
+                        <!-- Typography usage (recreated from Slide 651) -->
+                        <div class="florette-slide florette-type" aria-label="Florette typography usage">
+                            <div class="ft-labels">
+                                <div class="ft-vertical-label">Usage</div>
+                                <div class="ft-label-stack">
+                                    <div class="ft-label-item">
+                                        <p class="ft-cap">Title</p>
+                                        <p class="ft-name">Benguiat Pro ITC,<br>Medium Condensed</p>
+                                    </div>
+                                    <div class="ft-label-item">
+                                        <p class="ft-cap">Subtitle</p>
+                                        <p class="ft-name">Benguiat Pro ITC,<br>Bold Condensed</p>
+                                    </div>
+                                    <div class="ft-label-item">
+                                        <p class="ft-cap">Body</p>
+                                        <p class="ft-name">Benguiat Pro ITC,<br>Book</p>
+                                    </div>
+                                    <div class="ft-label-item">
+                                        <p class="ft-cap">Caption</p>
+                                        <p class="ft-name">Benguiat Pro ITC,<br>Book</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ft-samples">
+                                <h3 class="ft-title">Florette</h3>
+                                <h4 class="ft-subtitle">Bake &amp; Cook</h4>
+                                <p class="ft-body">Florette is the only brand offering both dried edible flowers and natural floral extracts, created for the young, aesthetically driven home baker and cook who wants premium, 100% natural ingredients that bring the beauty of nature to every bake and meal.</p>
+                                <p class="ft-caption">Florette for artful bakers and cooks</p>
+                            </div>
+                        </div>
+
+                        <!-- Color palette (recreated from Slide 603) -->
+                        <div class="florette-slide florette-color" aria-label="Florette color palette">
+                            <h3 class="fc-heading">Color Palette</h3>
+                            <div class="fc-grid" id="fc-grid">
+                                <div class="fc-circle fc-parchment" data-speed="-0.06"><span class="fc-name">Parchment</span><span class="fc-hex">#FBF6E9</span></div>
+                                <div class="fc-circle fc-pewter"    data-speed="0.10"><span class="fc-name">Pewter</span><span class="fc-hex">#C2C2C2</span></div>
+                                <div class="fc-circle fc-espresso"  data-speed="-0.08"><span class="fc-name">Espresso</span><span class="fc-hex">#2E2520</span></div>
+                                <div class="fc-circle fc-driftwood" data-speed="0.06"><span class="fc-name">Driftwood</span><span class="fc-hex">#6B6259</span></div>
+                                <div class="fc-circle fc-rose-1"    data-speed="0.12"><span class="fc-name">Rose<br>Primary</span><span class="fc-hex">#76261B</span></div>
+                                <div class="fc-circle fc-rose-2"    data-speed="-0.05"><span class="fc-name">Rose<br>Secondary</span><span class="fc-hex">#B14B2F</span></div>
+                                <div class="fc-circle fc-cal-1"     data-speed="0.08"><span class="fc-name">Calendula<br>Primary</span><span class="fc-hex">#B9663F</span></div>
+                                <div class="fc-circle fc-cal-2"     data-speed="-0.10"><span class="fc-name">Calendula<br>Secondary</span><span class="fc-hex">#B7513B</span></div>
+                                <div class="fc-circle fc-viola-1"   data-speed="0.05"><span class="fc-name">Viola<br>Primary</span><span class="fc-hex">#91697F</span></div>
+                                <div class="fc-circle fc-viola-2"   data-speed="-0.07"><span class="fc-name">Viola<br>Secondary</span><span class="fc-hex">#715168</span></div>
+                            </div>
+                        </div>
+                        <!-- Photography: dreamy, blurred macro shots, one per flower -->
+                        <div class="image-row-2col">
+                            <img src="img/florette/photo-rose-blurred.jpg" alt="Florette photography: dreamy macro of red roses with soft blur">
+                            <img src="img/florette/photo-calendula-blurred.jpg" alt="Florette photography: dreamy macro of orange calendula flowers">
+                        </div>
+                        <div class="image-row-2col">
+                            <img src="img/florette/photo-viola-blurred.jpg" alt="Florette photography: dreamy macro of purple violas">
+                            <img src="img/florette/photo-forget-me-not-blurred.jpg" alt="Florette photography: dreamy macro of blue forget-me-nots">
+                        </div>
+
+                        <!-- Tile patterns inspired by decorative ceramic kitchen tiles -->
+                        <img src="img/florette/pattern-tile-floral-terracotta-light.png" alt="Florette tile pattern: light terracotta floral">
+                        <img src="img/florette/pattern-tile-floral-terracotta-dark.png" alt="Florette tile pattern: dark terracotta floral">
+                        <img src="img/florette/pattern-tile-floral-hexagon-purple.png" alt="Florette tile pattern: purple hexagonal floral">
+
+                        <!-- Pointillist illustrations built from small open circles -->
+                        <img src="img/florette/pattern-dots-large.svg" alt="Florette illustration: large botanical drawn entirely from small open circles">
+                        <div class="image-row-2col">
+                            <img src="img/florette/pattern-dots-small.svg" alt="Florette illustration: small botanical from open circles">
+                            <img src="img/florette/pattern-dots-accent.svg" alt="Florette illustration: accent motif from open circles">
+                        </div>
+
+                        <!-- Packaging: three product-line scenes (Rose / Calendula / Viola).
+                             Each: flower-photo backdrop + matching tube + matching bottle,
+                             with parallax drift on scroll. -->
+                        <div class="product-scene" aria-label="Rose product line">
+                            <img class="scene-bg" src="img/florette/photo-rose-blurred.jpg" alt="">
+                            <div class="scene-item scene-tube"   data-speed="0.09"  data-rotate="-8">
+                                <img src="img/florette/mockup-tube-rose.png" alt="Florette Rose dried-flowers kraft tube">
+                            </div>
+                            <div class="scene-item scene-bottle" data-speed="-0.06" data-rotate="7">
+                                <img src="img/florette/mockup-bottle-rose-extract.png" alt="Florette Rose floral extract dropper bottle">
+                            </div>
+                        </div>
+
+                        <div class="product-scene" aria-label="Calendula product line">
+                            <img class="scene-bg" src="img/florette/photo-calendula-blurred.jpg" alt="">
+                            <div class="scene-item scene-tube"   data-speed="0.07"  data-rotate="-5">
+                                <img src="img/florette/mockup-tube-calendula.png" alt="Florette Calendula dried-flowers kraft tube">
+                            </div>
+                            <div class="scene-item scene-bottle" data-speed="-0.08" data-rotate="9">
+                                <img src="img/florette/mockup-bottle-calendula-extract.png" alt="Florette Calendula floral extract dropper bottle">
+                            </div>
+                        </div>
+
+                        <div class="product-scene" aria-label="Viola product line">
+                            <img class="scene-bg" src="img/florette/photo-viola-blurred.jpg" alt="">
+                            <div class="scene-item scene-tube"   data-speed="0.08"  data-rotate="-10">
+                                <img src="img/florette/mockup-tube-viola.png" alt="Florette Viola dried-flowers kraft tube">
+                            </div>
+                            <div class="scene-item scene-bottle" data-speed="-0.05" data-rotate="5">
+                                <img src="img/florette/mockup-bottle-viola-extract.png" alt="Florette Viola floral extract dropper bottle">
+                            </div>
+                        </div>
+
+                        <!-- Print + OOH applications -->
+                        <img src="img/florette/mockup-poster-good-things-grow-here.png" alt="Florette poster: 'Good things grow here'">
+                        <img src="img/florette/mockup-subway-billboard.png" alt="Florette out-of-home: subway billboard">
+                        <img src="img/florette/mockup-magazine-spread.png" alt="Florette editorial: magazine spread">
+                        <img src="img/florette/mockup-business-cards.png" alt="Florette stationery: business cards">
+
+                        <!-- Digital + merch -->
+                        <img src="img/florette/mockup-instagram-posts.png" alt="Florette social: Instagram grid of posts">
+                        <div class="image-row-2col">
+                            <img src="img/florette/mockup-tshirt.png" alt="Florette merch: branded t-shirt">
+                            <img src="img/florette/mockup-shopping-bag-logo.png" alt="Florette merch: branded shopping bag with wordmark">
+                        </div>
+                        <img src="img/florette/mockup-app-screens.png" alt="Florette mobile app screens">
+
+                        <!-- Website: recorded prototype walkthroughs -->
+                        <video autoplay loop muted playsinline>
+                            <source src="img/florette/website-preview-2026-05-11.mp4" type="video/mp4">
+                        </video>
+                        <video autoplay loop muted playsinline>
+                            <source src="img/florette/website-preview-2026-05-10.mp4" type="video/mp4">
+                        </video>
+                    </div>
+
+                    <!-- Text (Right Column) - 3 Sections -->
+                    <div class="text-column">
+                        <div class="text-section">
+                            <h2>Concept</h2>
+                            <p>Florette is a brand for dried edible flowers and natural floral extracts, made for the young, aesthetically driven home baker and cook who treats the kitchen as a creative space. The audience, "The Artful Baker," discovers brands through Instagram and Pinterest, shops small, and is drawn to cottagecore, botanical aesthetics, and slow living. Florette is positioned as the only brand offering both dried flowers and floral extracts: premium, 100% natural ingredients that bring the beauty of nature to every bake and meal. The tone of voice sits at the intersection of three attributes: dreamy, natural, and joyful.</p>
+                        </div>
+
+                        <div class="text-section">
+                            <h2>Brand Identity</h2>
+                            <p>The identity is built around a "Wild Type" idea: nature already has its own design system, so organic forms like petals, spirals, and curling vines are pulled directly from the plant world into the letterforms themselves. The wordmark grows its own flourishes (loops, scrolls, and a daisy that takes the place of the O), and a separate daisy mark sits inside a circular border, like a flower laid on a plate, for moments where the full wordmark won't fit.</p>
+                            <p>Typography is set in Benguiat Pro ITC, an editorial serif that gives the brand warmth and craft across Medium Condensed, Bold Condensed, and Book weights. The palette is muted and earthy, anchored by Parchment and Espresso, with Rose, Calendula, and Viola accents that map directly onto the product line.</p>
+                        </div>
+
+                        <div class="text-section">
+                            <h2>Brand World</h2>
+                            <p>Florette's patterns draw from decorative tile and ceramic traditions, the botanical aesthetic that already fills the homes and kitchens of the people the brand is made for. They show up as three tile motifs in terracotta and purple, used across packaging, surface graphics, and editorial.</p>
+                            <p>Photography is intentionally soft and slightly blurred so every flower reads like a memory rather than a product shot, with colors that bleed into each other and light that's never too sharp. A second illustration system, built entirely from small open circles packed into shapes, gives the brand a pointillist, almost beaded quality that mirrors the care that goes into each product.</p>
+                        </div>
+
+                        <div class="text-section">
+                            <h2>Applications</h2>
+                            <p>Two product lines extend across three flowers each: tile-patterned kraft tubes for the dried edible flowers, and amber dropper bottles for the floral extracts. Rose, Calendula, and Viola each get their own pattern and accent color, so the line reads as a family without losing each variant's identity.</p>
+                            <p>The system stretches into print, out-of-home, social, merch, and a mobile app, with a moody, photographic website where the wordmark anchors the homepage and the daisy symbol carries the navigation.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mobile Project Navigation - Only shows on mobile -->
+            <div class="project-navigation-mobile">
+                <a href="weapon-of-mass-distraction.html" class="nav-button-left prev-project">
+                    ← Previous
+                </a>
+                <a href="wavia.html" class="nav-button-left next-project">
+                    Next →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-wrapper">
+        <div class="footer-divider"></div>
+        <footer>
+            <p>© 2024-2026 Petra Helebrantová. All Rights Reserved.</p>
+        </footer>
+    </div>
+    <div class="glass-bottom"></div>
+    <script src="cursor.js"></script>
+    <script src="screensaver.js?v=9"></script>
+    <script>
+        // Florette: stagger reveal on color circles + parallax drift on circles AND product scene items
+        (function () {
+            const circles    = document.querySelectorAll('.fc-circle');
+            const sceneItems = document.querySelectorAll('.scene-item');
+            if (!circles.length && !sceneItems.length) return;
+
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // Stagger reveal for color circles
+            if (circles.length) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            const idx = Array.from(circles).indexOf(entry.target);
+                            entry.target.style.transitionDelay = (idx * 70) + 'ms';
+                            entry.target.classList.add('is-visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.18 });
+                circles.forEach((c) => observer.observe(c));
+            }
+
+            // Apply base rotation to scene items so they sit correctly even before/without scroll parallax
+            sceneItems.forEach((el) => {
+                const rot = parseFloat(el.dataset.rotate) || 0;
+                el.style.transform = 'rotate(' + rot + 'deg)';
+            });
+
+            if (prefersReducedMotion) return;
+
+            // Parallax drift: each element moves at its own data-speed relative to its viewport position
+            let ticking = false;
+            const update = () => {
+                const viewportH = window.innerHeight;
+                circles.forEach((el) => {
+                    const rect = el.getBoundingClientRect();
+                    const centerOffset = (rect.top + rect.height / 2) - viewportH / 2;
+                    const speed = parseFloat(el.dataset.speed) || 0;
+                    const y = (centerOffset * speed).toFixed(2);
+                    el.style.transform = 'translate3d(0,' + y + 'px, 0)';
+                });
+                sceneItems.forEach((el) => {
+                    const rect = el.getBoundingClientRect();
+                    const centerOffset = (rect.top + rect.height / 2) - viewportH / 2;
+                    const speed = parseFloat(el.dataset.speed) || 0;
+                    const rot   = parseFloat(el.dataset.rotate) || 0;
+                    const y = (centerOffset * speed).toFixed(2);
+                    el.style.transform = 'translate3d(0,' + y + 'px, 0) rotate(' + rot + 'deg)';
+                });
+                ticking = false;
+            };
+            const onScroll = () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(update);
+                    ticking = true;
+                }
+            };
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', onScroll);
+            update();
+        })();
+    </script>
+</body>
+</html>

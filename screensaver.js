@@ -1,13 +1,14 @@
 (function () {
     'use strict';
 
-    var IDLE_MS  = 10000;
+    var IDLE_MS  = 60000;
     var CELL     = 12;
     var PAD      = 2;
     var FRAME_MS = 1000 / 30;
 
     var overlay, canvas, ctx, animId, t0, prevNow = 0, lastFrame = 0;
     var active = false, idleTimer = null;
+    var cssW = 0, cssH = 0;
 
     /* ── Per-eye state (index 0 = left, 1 = right) ───────────────────── */
     var lookX  = [0, 0], lookY  = [0, 0];   // current iris position
@@ -51,8 +52,14 @@
 
     function sizeCanvas() {
         if (!canvas) return;
-        canvas.width  = window.innerWidth;
-        canvas.height = window.innerHeight;
+        var dpr = window.devicePixelRatio || 1;
+        cssW = window.innerWidth;
+        cssH = window.innerHeight;
+        canvas.width  = Math.round(cssW * dpr);
+        canvas.height = Math.round(cssH * dpr);
+        canvas.style.width  = cssW + 'px';
+        canvas.style.height = cssH + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
     /* ── Activate / dismiss ──────────────────────────────────────────── */
@@ -257,7 +264,7 @@
 
     /* ── Render ──────────────────────────────────────────────────────── */
     function render() {
-        var W = canvas.width, H = canvas.height;
+        var W = cssW, H = cssH;
 
         ctx.fillStyle = '#080808';
         ctx.fillRect(0, 0, W, H);
