@@ -476,18 +476,18 @@
     <script src="cursor.js"></script>
     <script src="screensaver.js?v=9"></script>
     <script>
-        // Florette: stagger reveal on color circles, parallax drift on circles + product
-        // scene items, and hover-to-focus (glide to centre + scale up) on scene items.
+        // Florette: colour-circle reveal + scroll parallax, and product-scene items that
+        // drift organically on their own — pausing and filling the frame when hovered.
         (function () {
             const circles    = document.querySelectorAll('.fc-circle');
             const sceneItems = document.querySelectorAll('.scene-item');
             if (!circles.length && !sceneItems.length) return;
 
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const FOCUS_SCALE = 1.6;
-            const FOCUS_EASE  = 'transform 0.55s cubic-bezier(0.34, 1.2, 0.64, 1)';
+            const FOCUS_EASE = 'transform 0.85s cubic-bezier(0.16, 1, 0.3, 1)';
+            const FOCUS_MS   = 850;
 
-            // Stagger reveal for color circles
+            /* ---- Colour circles: staggered reveal + gentle scroll parallax ---- */
             if (circles.length) {
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach((entry) => {
@@ -500,84 +500,117 @@
                     });
                 }, { threshold: 0.18 });
                 circles.forEach((c) => observer.observe(c));
+
+                if (!prefersReducedMotion) {
+                    let ticking = false;
+                    const updateCircles = () => {
+                        const viewportH = window.innerHeight;
+                        circles.forEach((el) => {
+                            const rect = el.getBoundingClientRect();
+                            const centerOffset = (rect.top + rect.height / 2) - viewportH / 2;
+                            const speed = parseFloat(el.dataset.speed) || 0;
+                            el.style.transform = 'translate3d(0,' + (centerOffset * speed).toFixed(2) + 'px,0)';
+                        });
+                        ticking = false;
+                    };
+                    const onScroll = () => {
+                        if (!ticking) { window.requestAnimationFrame(updateCircles); ticking = true; }
+                    };
+                    window.addEventListener('scroll', onScroll, { passive: true });
+                    window.addEventListener('resize', onScroll);
+                    updateCircles();
+                }
             }
 
-            // Parallax offset for one scene item, based on its natural (transform-free)
-            // position so the maths stays correct even mid-hover.
-            function parallaxTransform(el) {
-                const scene = el.closest('.product-scene');
-                if (!scene) return 'rotate(' + (parseFloat(el.dataset.rotate) || 0) + 'deg)';
-                const naturalTop = scene.getBoundingClientRect().top + el.offsetTop;
-                const centerOffset = (naturalTop + el.offsetHeight / 2) - window.innerHeight / 2;
-                const speed = parseFloat(el.dataset.speed) || 0;
-                const rot   = parseFloat(el.dataset.rotate) || 0;
-                const y = (centerOffset * speed).toFixed(2);
-                return 'translate3d(0,' + y + 'px, 0) rotate(' + rot + 'deg)';
-            }
+            /* ---- Product scene items: organic float + hover-to-fill ---- */
+            if (!sceneItems.length) return;
 
-            // Base state so items sit correctly even before scroll / with reduced motion
-            sceneItems.forEach((el) => {
-                el.style.transform = prefersReducedMotion
-                    ? 'rotate(' + (parseFloat(el.dataset.rotate) || 0) + 'deg)'
-                    : parallaxTransform(el);
-            });
-
-            // Hover-to-focus: glide the item to the centre of the scene and scale it up
+            // Hover: glide the item to the centre and scale it up to fill the frame
             sceneItems.forEach((el) => {
                 el.addEventListener('mouseenter', () => {
+                    if (el._leaveTimer) { clearTimeout(el._leaveTimer); el._leaveTimer = null; }
                     el.dataset.focused = '1';
                     const scene = el.closest('.product-scene');
                     if (!scene) return;
-                    const dx = scene.offsetWidth  / 2 - el.offsetLeft - el.offsetWidth  / 2;
-                    const dy = scene.offsetHeight / 2 - el.offsetTop  - el.offsetHeight / 2;
+                    const sceneW = scene.offsetWidth, sceneH = scene.offsetHeight;
+                    const itemW  = el.offsetWidth,    itemH  = el.offsetHeight;
+                    const scale = Math.min(sceneW * 0.92 / itemW, sceneH * 0.92 / itemH);
+                    const dx = sceneW / 2 - el.offsetLeft - itemW / 2;
+                    const dy = sceneH / 2 - el.offsetTop  - itemH / 2;
                     el.style.transition = FOCUS_EASE;
                     el.style.zIndex = '20';
                     el.style.transform =
-                        'translate(' + dx.toFixed(2) + 'px,' + dy.toFixed(2) + 'px) scale(' + FOCUS_SCALE + ') rotate(0deg)';
+                        'translate3d(' + dx.toFixed(2) + 'px,' + dy.toFixed(2) + 'px,0) scale(' + scale.toFixed(3) + ') rotate(0deg)';
                 });
                 el.addEventListener('mouseleave', () => {
-                    delete el.dataset.focused;
-                    // Transition stays active so the item glides back to its floating spot
-                    el.style.transform = prefersReducedMotion
-                        ? 'rotate(' + (parseFloat(el.dataset.rotate) || 0) + 'deg)'
-                        : parallaxTransform(el);
-                    setTimeout(() => {
-                        if (!el.dataset.focused) {
-                            el.style.transition = '';
-                            el.style.zIndex = '';
-                        }
-                    }, 600);
+                    const base = el._float ? el._float.baseRot : (parseFloat(el.dataset.rotate) || 0);
+                    el.style.transition = FOCUS_EASE;
+                    el.style.transform = 'translate3d(0,0,0) rotate(' + base + 'deg)';
+                    el._leaveTimer = setTimeout(() => {
+                        delete el.dataset.focused;   // hand control back to the float loop
+                        el.style.transition = '';
+                        el.style.zIndex = '';
+                        el._leaveTimer = null;
+                    }, FOCUS_MS);
                 });
             });
 
-            if (prefersReducedMotion) return;
-
-            // Parallax drift on scroll — each element moves at its own data-speed
-            let ticking = false;
-            const update = () => {
-                const viewportH = window.innerHeight;
-                circles.forEach((el) => {
-                    const rect = el.getBoundingClientRect();
-                    const centerOffset = (rect.top + rect.height / 2) - viewportH / 2;
-                    const speed = parseFloat(el.dataset.speed) || 0;
-                    const y = (centerOffset * speed).toFixed(2);
-                    el.style.transform = 'translate3d(0,' + y + 'px, 0)';
-                });
+            // Reduced motion: items rest at their base rotation, no ambient drift
+            if (prefersReducedMotion) {
                 sceneItems.forEach((el) => {
-                    if (el.dataset.focused) return;   // leave hovered items centred
-                    el.style.transform = parallaxTransform(el);
+                    el.style.transform = 'rotate(' + (parseFloat(el.dataset.rotate) || 0) + 'deg)';
                 });
-                ticking = false;
+                return;
+            }
+
+            // Each item gets its own slow, desynced drift so the group floats organically
+            sceneItems.forEach((el, i) => {
+                el._float = {
+                    ax: 7 + (i % 3) * 3,        // horizontal travel (px)
+                    ay: 10 + (i % 3) * 4,       // vertical travel (px)
+                    ar: 1.6 + (i % 3) * 0.9,    // rotation sway (deg)
+                    sx: 0.42 + i * 0.05,        // speeds — all different, never in sync
+                    sy: 0.35 + i * 0.045,
+                    sr: 0.28 + i * 0.035,
+                    ox: i * 1.3,                // phase offsets
+                    oy: i * 0.8,
+                    or: i * 1.7,
+                    baseRot: parseFloat(el.dataset.rotate) || 0
+                };
+                el.style.transform = 'rotate(' + el._float.baseRot + 'deg)';
+            });
+
+            let floatRaf = null;
+            const floatTick = (now) => {
+                const t = now / 1000;
+                sceneItems.forEach((el) => {
+                    if (el.dataset.focused) return;   // hovered item is frozen at centre
+                    const f = el._float;
+                    const x = Math.sin(t * f.sx + f.ox) * f.ax;
+                    const y = Math.sin(t * f.sy + f.oy) * f.ay;
+                    const r = f.baseRot + Math.sin(t * f.sr + f.or) * f.ar;
+                    el.style.transform =
+                        'translate3d(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px,0) rotate(' + r.toFixed(2) + 'deg)';
+                });
+                floatRaf = requestAnimationFrame(floatTick);
             };
-            const onScroll = () => {
-                if (!ticking) {
-                    window.requestAnimationFrame(update);
-                    ticking = true;
-                }
-            };
-            window.addEventListener('scroll', onScroll, { passive: true });
-            window.addEventListener('resize', onScroll);
-            update();
+
+            // Run the drift loop only while the scene is on screen
+            const scene = sceneItems[0].closest('.product-scene');
+            if (scene && 'IntersectionObserver' in window) {
+                new IntersectionObserver((entries) => {
+                    entries.forEach((e) => {
+                        if (e.isIntersecting && floatRaf === null) {
+                            floatRaf = requestAnimationFrame(floatTick);
+                        } else if (!e.isIntersecting && floatRaf !== null) {
+                            cancelAnimationFrame(floatRaf);
+                            floatRaf = null;
+                        }
+                    });
+                }, { threshold: 0 }).observe(scene);
+            } else {
+                floatRaf = requestAnimationFrame(floatTick);
+            }
         })();
     </script>
 </body>
