@@ -215,13 +215,15 @@
             .image-row-3col { grid-template-columns: 1fr; }
         }
 
-        /* Product scenes: flower photo background with packaging floating on top */
+        /* Product scene: forget-me-not photo backdrop with the full Florette range
+           (3 tubes + 3 bottles) floating like clouds on individual parallax tracks.
+           Sizes vary for depth: larger items feel closer, smaller items recede. */
         .product-scene {
             position: relative;
             width: 100%;
-            aspect-ratio: 16 / 10;
+            aspect-ratio: 4 / 3;
             overflow: hidden;
-            background: #2E2520;
+            background: #1f2e22;
         }
         .product-scene .scene-bg {
             position: absolute;
@@ -235,13 +237,14 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.22) 100%);
+            background: linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.28) 100%);
             z-index: 1;
             pointer-events: none;
         }
         .product-scene .scene-item {
             position: absolute;
-            pointer-events: none;
+            pointer-events: auto;
+            cursor: pointer;
             z-index: 2;
             will-change: transform;
         }
@@ -251,13 +254,29 @@
             display: block;
             filter: drop-shadow(0 30px 60px rgba(0,0,0,0.55));
         }
-        .product-scene .scene-tube   { width: 26%; left: 10%; top: 14%; }
-        .product-scene .scene-bottle { width: 17%; right: 14%; top: 38%; }
+
+        /* Cloud-scatter layout: tubes all the same size, bottles all the same size
+           (and smaller than tubes). Variety comes from position, rotation, and speed. */
+        .product-scene .scene-tube   { width: 13%; }
+        .product-scene .scene-bottle { width: 9%; }
+
+        .product-scene .tube-rose      { left: 5%;  top: 14%; }
+        .product-scene .tube-calendula { left: 56%; top: 6%;  }
+        .product-scene .tube-viola     { left: 32%; top: 40%; }
+        .product-scene .bottle-rose      { left: 21%; top: 66%; }
+        .product-scene .bottle-calendula { left: 73%; top: 54%; }
+        .product-scene .bottle-viola     { left: 82%; top: 22%; }
 
         @media (max-width: 700px) {
-            .product-scene { aspect-ratio: 4 / 5; }
-            .product-scene .scene-tube   { width: 36%; left: 8%;  top: 16%; }
-            .product-scene .scene-bottle { width: 26%; right: 8%; top: 52%; }
+            .product-scene { aspect-ratio: 3 / 4; }
+            .product-scene .scene-tube   { width: 22%; }
+            .product-scene .scene-bottle { width: 16%; }
+            .product-scene .tube-rose      { left: 6%;  top: 10%; }
+            .product-scene .tube-calendula { left: 56%; top: 4%;  }
+            .product-scene .tube-viola     { left: 30%; top: 50%; }
+            .product-scene .bottle-rose      { left: 8%;  top: 76%; }
+            .product-scene .bottle-calendula { left: 70%; top: 64%; }
+            .product-scene .bottle-viola     { left: 74%; top: 30%; }
         }
     </style>
 </head>
@@ -366,58 +385,29 @@
                                 <div class="fc-circle fc-viola-2"   data-speed="-0.07"><span class="fc-name">Viola<br>Secondary</span><span class="fc-hex">#715168</span></div>
                             </div>
                         </div>
-                        <!-- Photography: dreamy, blurred macro shots, one per flower -->
-                        <div class="image-row-2col">
-                            <img src="img/florette/photo-rose-blurred.jpg" alt="Florette photography: dreamy macro of red roses with soft blur">
-                            <img src="img/florette/photo-calendula-blurred.jpg" alt="Florette photography: dreamy macro of orange calendula flowers">
-                        </div>
-                        <div class="image-row-2col">
-                            <img src="img/florette/photo-viola-blurred.jpg" alt="Florette photography: dreamy macro of purple violas">
-                            <img src="img/florette/photo-forget-me-not-blurred.jpg" alt="Florette photography: dreamy macro of blue forget-me-nots">
-                        </div>
+                        <!-- Packaging: all three product pairs on a single forget-me-not backdrop.
+                             Each tube and bottle drifts on its own parallax track. -->
+                        <div class="product-scene" aria-label="Florette product range: Rose, Calendula, Viola tubes and extracts">
+                            <img class="scene-bg" src="img/florette/photo-forget-me-not-blurred.jpg" alt="">
 
-                        <!-- Tile patterns inspired by decorative ceramic kitchen tiles -->
-                        <img src="img/florette/pattern-tile-floral-terracotta-light.png" alt="Florette tile pattern: light terracotta floral">
-                        <img src="img/florette/pattern-tile-floral-terracotta-dark.png" alt="Florette tile pattern: dark terracotta floral">
-                        <img src="img/florette/pattern-tile-floral-hexagon-purple.png" alt="Florette tile pattern: purple hexagonal floral">
+                            <div class="scene-item scene-tube tube-rose"      data-speed="0.035"  data-rotate="-10">
+                                <img src="img/florette/product-tube-rose.png" alt="Florette Rose dried-flowers tube">
+                            </div>
+                            <div class="scene-item scene-tube tube-calendula" data-speed="-0.065" data-rotate="6">
+                                <img src="img/florette/product-tube-calendula.png" alt="Florette Calendula dried-flowers tube">
+                            </div>
+                            <div class="scene-item scene-tube tube-viola"     data-speed="0.05"   data-rotate="-4">
+                                <img src="img/florette/product-tube-viola.png" alt="Florette Viola dried-flowers tube">
+                            </div>
 
-                        <!-- Pointillist illustrations built from small open circles -->
-                        <img src="img/florette/pattern-dots-large.svg" alt="Florette illustration: large botanical drawn entirely from small open circles">
-                        <div class="image-row-2col">
-                            <img src="img/florette/pattern-dots-small.svg" alt="Florette illustration: small botanical from open circles">
-                            <img src="img/florette/pattern-dots-accent.svg" alt="Florette illustration: accent motif from open circles">
-                        </div>
-
-                        <!-- Packaging: three product-line scenes (Rose / Calendula / Viola).
-                             Each: flower-photo backdrop + matching tube + matching bottle,
-                             with parallax drift on scroll. -->
-                        <div class="product-scene" aria-label="Rose product line">
-                            <img class="scene-bg" src="img/florette/photo-rose-blurred.jpg" alt="">
-                            <div class="scene-item scene-tube"   data-speed="0.09"  data-rotate="-8">
-                                <img src="img/florette/mockup-tube-rose.png" alt="Florette Rose dried-flowers kraft tube">
+                            <div class="scene-item scene-bottle bottle-rose"      data-speed="-0.04"  data-rotate="8">
+                                <img src="img/florette/product-bottle-extract-rose.png" alt="Florette Rose floral extract bottle">
                             </div>
-                            <div class="scene-item scene-bottle" data-speed="-0.06" data-rotate="7">
-                                <img src="img/florette/mockup-bottle-rose-extract.png" alt="Florette Rose floral extract dropper bottle">
+                            <div class="scene-item scene-bottle bottle-calendula" data-speed="0.055"  data-rotate="-8">
+                                <img src="img/florette/product-bottle-extract-calendula.png" alt="Florette Calendula floral extract bottle">
                             </div>
-                        </div>
-
-                        <div class="product-scene" aria-label="Calendula product line">
-                            <img class="scene-bg" src="img/florette/photo-calendula-blurred.jpg" alt="">
-                            <div class="scene-item scene-tube"   data-speed="0.07"  data-rotate="-5">
-                                <img src="img/florette/mockup-tube-calendula.png" alt="Florette Calendula dried-flowers kraft tube">
-                            </div>
-                            <div class="scene-item scene-bottle" data-speed="-0.08" data-rotate="9">
-                                <img src="img/florette/mockup-bottle-calendula-extract.png" alt="Florette Calendula floral extract dropper bottle">
-                            </div>
-                        </div>
-
-                        <div class="product-scene" aria-label="Viola product line">
-                            <img class="scene-bg" src="img/florette/photo-viola-blurred.jpg" alt="">
-                            <div class="scene-item scene-tube"   data-speed="0.08"  data-rotate="-10">
-                                <img src="img/florette/mockup-tube-viola.png" alt="Florette Viola dried-flowers kraft tube">
-                            </div>
-                            <div class="scene-item scene-bottle" data-speed="-0.05" data-rotate="5">
-                                <img src="img/florette/mockup-bottle-viola-extract.png" alt="Florette Viola floral extract dropper bottle">
+                            <div class="scene-item scene-bottle bottle-viola"     data-speed="-0.045" data-rotate="11">
+                                <img src="img/florette/product-bottle-extract-viola.png" alt="Florette Viola floral extract bottle">
                             </div>
                         </div>
 
@@ -455,12 +445,6 @@
                             <h2>Brand Identity</h2>
                             <p>The identity is built around a "Wild Type" idea: nature already has its own design system, so organic forms like petals, spirals, and curling vines are pulled directly from the plant world into the letterforms themselves. The wordmark grows its own flourishes (loops, scrolls, and a daisy that takes the place of the O), and a separate daisy mark sits inside a circular border, like a flower laid on a plate, for moments where the full wordmark won't fit.</p>
                             <p>Typography is set in Benguiat Pro ITC, an editorial serif that gives the brand warmth and craft across Medium Condensed, Bold Condensed, and Book weights. The palette is muted and earthy, anchored by Parchment and Espresso, with Rose, Calendula, and Viola accents that map directly onto the product line.</p>
-                        </div>
-
-                        <div class="text-section">
-                            <h2>Brand World</h2>
-                            <p>Florette's patterns draw from decorative tile and ceramic traditions, the botanical aesthetic that already fills the homes and kitchens of the people the brand is made for. They show up as three tile motifs in terracotta and purple, used across packaging, surface graphics, and editorial.</p>
-                            <p>Photography is intentionally soft and slightly blurred so every flower reads like a memory rather than a product shot, with colors that bleed into each other and light that's never too sharp. A second illustration system, built entirely from small open circles packed into shapes, gives the brand a pointillist, almost beaded quality that mirrors the care that goes into each product.</p>
                         </div>
 
                         <div class="text-section">
