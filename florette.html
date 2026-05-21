@@ -291,6 +291,10 @@
             width: 100%;
             height: auto;
         }
+        @media (max-width: 700px) {
+            .video-framed-pewter,
+            html.dark .video-framed-pewter { padding: 12px; }
+        }
     </style>
 </head>
 <body>
@@ -488,6 +492,26 @@
     <script src="cursor.js"></script>
     <script src="screensaver.js?v=9"></script>
     <script>
+        // Coax every video into autoplaying on mobile (iOS / Android block autoplay
+        // unless the video is muted + playsinline AND play() is called explicitly).
+        (function () {
+            function playAll() {
+                document.querySelectorAll('video').forEach(function (v) {
+                    v.muted = true;
+                    v.defaultMuted = true;
+                    v.playsInline = true;
+                    v.setAttribute('playsinline', '');
+                    v.setAttribute('webkit-playsinline', '');
+                    var attempt = v.play();
+                    if (attempt && typeof attempt.catch === 'function') attempt.catch(function () {});
+                });
+            }
+            if (document.readyState !== 'loading') playAll();
+            else document.addEventListener('DOMContentLoaded', playAll);
+            window.addEventListener('load', playAll);
+            document.addEventListener('touchstart', playAll, { once: true, passive: true });
+        })();
+
         // Florette: colour-circle reveal + scroll parallax, and product-scene items that
         // drift organically on their own — pausing and filling the frame when hovered.
         (function () {

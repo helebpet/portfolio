@@ -643,6 +643,11 @@ footer {
     .text-column h2 {
         font-size: 26px;
     }
+
+    /* Slimmer Pewter frame on small screens */
+    .project-image.framed-pewter {
+        padding: 14px;
+    }
 }
 
 @media (max-width: 480px) {
