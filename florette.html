@@ -241,11 +241,24 @@
             z-index: 1;
             pointer-events: none;
         }
+        /* Outer wrapper: sits still, owns the base tilt and the hover-to-fill.
+           Hover is pure CSS :hover so it triggers reliably from every side. */
         .product-scene .scene-item {
             position: absolute;
             pointer-events: auto;
             cursor: pointer;
             z-index: 2;
+            transform: rotate(var(--rot, 0deg));
+            transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), z-index 0s 0.75s;
+            will-change: transform;
+        }
+        .product-scene .scene-item:hover {
+            transform: translate(var(--fx, 0px), var(--fy, 0px)) scale(var(--fs, 2)) rotate(0deg);
+            z-index: 20;
+            transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), z-index 0s 0s;
+        }
+        /* Inner wrapper: the continuous organic float (driven by JS) */
+        .product-scene .scene-float {
             will-change: transform;
         }
         .product-scene .scene-item img {
@@ -256,16 +269,16 @@
         }
 
         /* Cloud-scatter layout: tubes all the same size, bottles all the same size
-           (and smaller than tubes). Variety comes from position, rotation, and speed. */
+           (and smaller than tubes). Variety comes from position and base rotation. */
         .product-scene .scene-tube   { width: 13%; }
         .product-scene .scene-bottle { width: 9%; }
 
-        .product-scene .tube-rose      { left: 5%;  top: 14%; }
-        .product-scene .tube-calendula { left: 56%; top: 6%;  }
-        .product-scene .tube-viola     { left: 32%; top: 40%; }
-        .product-scene .bottle-rose      { left: 21%; top: 66%; }
-        .product-scene .bottle-calendula { left: 73%; top: 54%; }
-        .product-scene .bottle-viola     { left: 82%; top: 22%; }
+        .product-scene .tube-rose      { left: 5%;  top: 14%; --rot: -10deg; }
+        .product-scene .tube-calendula { left: 56%; top: 6%;  --rot: 6deg;   }
+        .product-scene .tube-viola     { left: 32%; top: 40%; --rot: -4deg;  }
+        .product-scene .bottle-rose      { left: 21%; top: 66%; --rot: 8deg;  }
+        .product-scene .bottle-calendula { left: 73%; top: 54%; --rot: -8deg; }
+        .product-scene .bottle-viola     { left: 82%; top: 22%; --rot: 11deg; }
 
         @media (max-width: 700px) {
             .product-scene { aspect-ratio: 3 / 4; }
@@ -407,24 +420,24 @@
                         <div class="product-scene" aria-label="Florette product range: Rose, Calendula, Viola tubes and extracts">
                             <img class="scene-bg" src="img/florette/photo-forget-me-not-blurred.jpg" alt="">
 
-                            <div class="scene-item scene-tube tube-rose"      data-speed="0.035"  data-rotate="-10">
-                                <img src="img/florette/product-tube-rose.png" alt="Florette Rose dried-flowers tube">
+                            <div class="scene-item scene-tube tube-rose">
+                                <div class="scene-float"><img src="img/florette/product-tube-rose.png" alt="Florette Rose dried-flowers tube"></div>
                             </div>
-                            <div class="scene-item scene-tube tube-calendula" data-speed="-0.065" data-rotate="6">
-                                <img src="img/florette/product-tube-calendula.png" alt="Florette Calendula dried-flowers tube">
+                            <div class="scene-item scene-tube tube-calendula">
+                                <div class="scene-float"><img src="img/florette/product-tube-calendula.png" alt="Florette Calendula dried-flowers tube"></div>
                             </div>
-                            <div class="scene-item scene-tube tube-viola"     data-speed="0.05"   data-rotate="-4">
-                                <img src="img/florette/product-tube-viola.png" alt="Florette Viola dried-flowers tube">
+                            <div class="scene-item scene-tube tube-viola">
+                                <div class="scene-float"><img src="img/florette/product-tube-viola.png" alt="Florette Viola dried-flowers tube"></div>
                             </div>
 
-                            <div class="scene-item scene-bottle bottle-rose"      data-speed="-0.04"  data-rotate="8">
-                                <img src="img/florette/product-bottle-extract-rose.png" alt="Florette Rose floral extract bottle">
+                            <div class="scene-item scene-bottle bottle-rose">
+                                <div class="scene-float"><img src="img/florette/product-bottle-extract-rose.png" alt="Florette Rose floral extract bottle"></div>
                             </div>
-                            <div class="scene-item scene-bottle bottle-calendula" data-speed="0.055"  data-rotate="-8">
-                                <img src="img/florette/product-bottle-extract-calendula.png" alt="Florette Calendula floral extract bottle">
+                            <div class="scene-item scene-bottle bottle-calendula">
+                                <div class="scene-float"><img src="img/florette/product-bottle-extract-calendula.png" alt="Florette Calendula floral extract bottle"></div>
                             </div>
-                            <div class="scene-item scene-bottle bottle-viola"     data-speed="-0.045" data-rotate="11">
-                                <img src="img/florette/product-bottle-extract-viola.png" alt="Florette Viola floral extract bottle">
+                            <div class="scene-item scene-bottle bottle-viola">
+                                <div class="scene-float"><img src="img/florette/product-bottle-extract-viola.png" alt="Florette Viola floral extract bottle"></div>
                             </div>
                         </div>
 
@@ -520,8 +533,6 @@
             if (!circles.length && !sceneItems.length) return;
 
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const FOCUS_EASE = 'transform 0.85s cubic-bezier(0.16, 1, 0.3, 1)';
-            const FOCUS_MS   = 850;
 
             /* ---- Colour circles: staggered reveal + gentle scroll parallax ---- */
             if (circles.length) {
@@ -558,85 +569,76 @@
                 }
             }
 
-            /* ---- Product scene items: organic float + hover-to-fill ---- */
+            /* ---- Product scene items: enveloped organic float; CSS drives hover ---- */
             if (!sceneItems.length) return;
 
-            // Hover: glide the item to the centre and scale it up to fill the frame
-            sceneItems.forEach((el) => {
-                el.addEventListener('mouseenter', () => {
-                    if (el._leaveTimer) { clearTimeout(el._leaveTimer); el._leaveTimer = null; }
-                    el.dataset.focused = '1';
-                    const scene = el.closest('.product-scene');
-                    if (!scene) return;
-                    const sceneW = scene.offsetWidth, sceneH = scene.offsetHeight;
-                    const itemW  = el.offsetWidth,    itemH  = el.offsetHeight;
-                    const scale = Math.min(sceneW * 0.92 / itemW, sceneH * 0.92 / itemH);
-                    const dx = sceneW / 2 - el.offsetLeft - itemW / 2;
-                    const dy = sceneH / 2 - el.offsetTop  - itemH / 2;
-                    el.style.transition = FOCUS_EASE;
-                    el.style.zIndex = '20';
-                    el.style.transform =
-                        'translate3d(' + dx.toFixed(2) + 'px,' + dy.toFixed(2) + 'px,0) scale(' + scale.toFixed(3) + ') rotate(0deg)';
-                });
-                el.addEventListener('mouseleave', () => {
-                    const base = el._float ? el._float.baseRot : (parseFloat(el.dataset.rotate) || 0);
-                    el.style.transition = FOCUS_EASE;
-                    el.style.transform = 'translate3d(0,0,0) rotate(' + base + 'deg)';
-                    el._leaveTimer = setTimeout(() => {
-                        delete el.dataset.focused;   // hand control back to the float loop
-                        el.style.transition = '';
-                        el.style.zIndex = '';
-                        el._leaveTimer = null;
-                    }, FOCUS_MS);
-                });
-            });
+            const scene = sceneItems[0].closest('.product-scene');
 
-            // Reduced motion: items rest at their base rotation, no ambient drift
-            if (prefersReducedMotion) {
+            // Per-item focus transform (centre offset + fill scale), exposed as CSS
+            // custom properties so the pure-CSS :hover rule can use them. Recomputed
+            // on resize and once images have loaded.
+            function computeFocusVars() {
+                if (!scene) return;
+                const sceneW = scene.offsetWidth, sceneH = scene.offsetHeight;
                 sceneItems.forEach((el) => {
-                    el.style.transform = 'rotate(' + (parseFloat(el.dataset.rotate) || 0) + 'deg)';
+                    const itemW = el.offsetWidth, itemH = el.offsetHeight;
+                    if (!itemW || !itemH) return;
+                    const scale = Math.min(sceneW * 0.92 / itemW, sceneH * 0.92 / itemH);
+                    el.style.setProperty('--fx', (sceneW / 2 - el.offsetLeft - itemW / 2).toFixed(1) + 'px');
+                    el.style.setProperty('--fy', (sceneH / 2 - el.offsetTop  - itemH / 2).toFixed(1) + 'px');
+                    el.style.setProperty('--fs', scale.toFixed(3));
                 });
-                return;
             }
+            computeFocusVars();
+            window.addEventListener('resize', computeFocusVars);
+            window.addEventListener('load', computeFocusVars);
 
-            // Each item gets its own slow, desynced drift so the group floats organically
+            if (prefersReducedMotion) return;
+
+            // Each item drifts on its own slow, desynced sine path. An amplitude
+            // envelope eases the drift out while hovered and back in on leave, so the
+            // float never starts or stops with a jump — and the freeze is smooth.
             sceneItems.forEach((el, i) => {
-                el._float = {
-                    ax: 7 + (i % 3) * 3,        // horizontal travel (px)
-                    ay: 10 + (i % 3) * 4,       // vertical travel (px)
-                    ar: 1.6 + (i % 3) * 0.9,    // rotation sway (deg)
-                    sx: 0.42 + i * 0.05,        // speeds — all different, never in sync
-                    sy: 0.35 + i * 0.045,
-                    sr: 0.28 + i * 0.035,
-                    ox: i * 1.3,                // phase offsets
-                    oy: i * 0.8,
-                    or: i * 1.7,
-                    baseRot: parseFloat(el.dataset.rotate) || 0
+                el._inner = el.querySelector('.scene-float');
+                el._f = {
+                    ax: 5 + (i % 3) * 2.5,
+                    ay: 7 + (i % 3) * 3,
+                    ar: 1.2 + (i % 3) * 0.7,
+                    sx: 0.40 + i * 0.05,
+                    sy: 0.33 + i * 0.045,
+                    sr: 0.26 + i * 0.035,
+                    ox: i * 1.3, oy: i * 0.8, or: i * 1.7
                 };
-                el.style.transform = 'rotate(' + el._float.baseRot + 'deg)';
+                el._env  = 1;                    // float amplitude envelope (0..1)
+                el._t    = 0;                    // accumulated float time (ms)
+                el._last = performance.now();
             });
 
             let floatRaf = null;
             const floatTick = (now) => {
-                const t = now / 1000;
                 sceneItems.forEach((el) => {
-                    if (el.dataset.focused) return;   // hovered item is frozen at centre
-                    const f = el._float;
-                    const x = Math.sin(t * f.sx + f.ox) * f.ax;
-                    const y = Math.sin(t * f.sy + f.oy) * f.ay;
-                    const r = f.baseRot + Math.sin(t * f.sr + f.or) * f.ar;
-                    el.style.transform =
+                    if (!el._inner) return;
+                    const dt = Math.min(now - el._last, 50);
+                    el._last = now;
+                    const hovered = el.matches(':hover');
+                    el._env += ((hovered ? 0 : 1) - el._env) * Math.min(1, dt * 0.007);
+                    if (!hovered) el._t += dt;     // freeze time while hovered — no jump on resume
+                    const t = el._t / 1000, f = el._f, e = el._env;
+                    const x = Math.sin(t * f.sx + f.ox) * f.ax * e;
+                    const y = Math.sin(t * f.sy + f.oy) * f.ay * e;
+                    const r = Math.sin(t * f.sr + f.or) * f.ar * e;
+                    el._inner.style.transform =
                         'translate3d(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px,0) rotate(' + r.toFixed(2) + 'deg)';
                 });
                 floatRaf = requestAnimationFrame(floatTick);
             };
 
             // Run the drift loop only while the scene is on screen
-            const scene = sceneItems[0].closest('.product-scene');
             if (scene && 'IntersectionObserver' in window) {
                 new IntersectionObserver((entries) => {
                     entries.forEach((e) => {
                         if (e.isIntersecting && floatRaf === null) {
+                            sceneItems.forEach((el) => { el._last = performance.now(); });
                             floatRaf = requestAnimationFrame(floatTick);
                         } else if (!e.isIntersecting && floatRaf !== null) {
                             cancelAnimationFrame(floatRaf);
