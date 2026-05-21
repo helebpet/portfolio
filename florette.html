@@ -278,6 +278,19 @@
             .product-scene .bottle-calendula { left: 70%; top: 64%; }
             .product-scene .bottle-viola     { left: 74%; top: 30%; }
         }
+
+        /* Website video framed in Pewter (#C2C2C2) — the palette light gray.
+           Locked to the same gray in light and dark mode. */
+        .video-framed-pewter,
+        html.dark .video-framed-pewter {
+            background: #C2C2C2;
+            padding: 28px;
+        }
+        .video-framed-pewter video {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -411,13 +424,12 @@
                             </div>
                         </div>
 
-                        <!-- Website: recorded prototype walkthroughs -->
-                        <video autoplay loop muted playsinline>
-                            <source src="img/florette/website-preview-2026-05-10.mp4" type="video/mp4">
-                        </video>
-                        <video autoplay loop muted playsinline>
-                            <source src="img/florette/website-preview-2026-05-11.mp4" type="video/mp4">
-                        </video>
+                        <!-- Website: recorded prototype walkthrough, in a Pewter frame -->
+                        <div class="video-framed-pewter">
+                            <video autoplay loop muted playsinline>
+                                <source src="img/florette/website-preview-2026-05-10.mp4" type="video/mp4">
+                            </video>
+                        </div>
 
                         <!-- Print + OOH applications -->
                         <img src="img/florette/mockup-poster-good-things-grow-here.png" alt="Florette poster: 'Good things grow here'">
