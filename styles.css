@@ -262,6 +262,7 @@ nav a.active::before {
 
 .project-image video {
     pointer-events: none;
+    background: transparent;
 }
 
 /* Pewter-framed thumbnail (matches Florette palette swatch #C2C2C2) */
@@ -273,6 +274,10 @@ nav a.active::before {
 .project-image.framed-pewter img,
 .project-image.framed-pewter video {
     object-fit: contain;
+}
+/* Match video letterbox area to the pewter frame so no black bars show */
+.project-image.framed-pewter video {
+    background: #C2C2C2;
 }
 
 .project-info {
@@ -414,6 +419,8 @@ footer {
     height: auto;
     object-fit: cover;
     margin-bottom: 0;
+    display: block;
+    background: transparent;
 }
 
 /* Embedded iframes (videos and PDFs) */
@@ -435,6 +442,8 @@ footer {
     width: 100%;
     height: auto;
     object-fit: cover;
+    display: block;
+    background: transparent;
 }
 
 /* Text Column Styling - Multiple Sections */
