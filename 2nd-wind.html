@@ -8,58 +8,43 @@
     <link rel="stylesheet" href="styles.css">
     <script src="dark-mode.js"></script>
     <style>
-        /* Dark frame that lets the transparent product/logo PNGs sit on the
-           brand's signature black backdrop without losing edge contrast. */
-        .tw-dark-frame {
-            background: #0a0a0a;
-            padding: 56px 40px;
+        /* Cream frame for the brand-system SVGs (badges, phone outline).
+           Background picks up the sand tone from the brand palette so the
+           black outline marks read clearly without floating on white. */
+        .tw-cream-frame {
+            background: #EAD9BC;
+            padding: 72px 40px;
             box-sizing: border-box;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 80px;
         }
-        .tw-dark-frame img,
-        .tw-dark-frame video {
-            width: 70%;
+        .tw-cream-frame img {
+            width: 22%;
             height: auto;
             display: block;
             background: transparent;
         }
 
-        /* Three product bottles standing side by side on the dark backdrop. */
-        .tw-bottle-row {
+        /* Three-up editorial photography row. */
+        .tw-row-3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            background: #0a0a0a;
-            padding: 48px 24px 32px;
-            align-items: end;
         }
-        .tw-bottle-row img {
+        .tw-row-3 img {
             width: 100%;
-            height: auto;
-            display: block;
-            background: transparent;
-        }
-
-        /* Two-up apparel mockups (forest + natural tee). */
-        .tw-pair {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .tw-pair img {
-            width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
             display: block;
             background: transparent;
         }
 
         @media (max-width: 700px) {
-            .tw-dark-frame { padding: 36px 24px; }
-            .tw-dark-frame img,
-            .tw-dark-frame video { width: 85%; }
-            .tw-bottle-row { padding: 28px 12px 20px; gap: 8px; }
+            .tw-cream-frame { padding: 48px 24px; gap: 48px; }
+            .tw-cream-frame img { width: 30%; }
+            .tw-row-3 { gap: 8px; }
         }
     </style>
 </head>
@@ -122,43 +107,47 @@
                             <source src="img/2nd-wind/animation-brand.mp4" type="video/mp4">
                         </video>
 
-                        <!-- Runner mood photo -->
-                        <img src="img/2nd-wind/photo-runner-blur.png" alt="Runner in motion, blurred">
-
-                        <!-- Full logo on dark frame -->
-                        <div class="tw-dark-frame">
-                            <img src="img/2nd-wind/logo-full.svg" alt="2nd Wind full logo: track symbol with wordmark">
+                        <!-- Brand-system badges: Single Origin Brazil + concentric rings -->
+                        <div class="tw-cream-frame" aria-label="2nd Wind brand badges">
+                            <img src="img/2nd-wind/badge-brazil.svg" alt="Single Origin Brazil badge">
+                            <img src="img/2nd-wind/badge-rings.svg" alt="Concentric rings badge">
                         </div>
 
-                        <!-- Three bottle variants: Classic, Race, Recovery -->
-                        <div class="tw-bottle-row" aria-label="2nd Wind cold brew range: Classic, Race, Recovery">
-                            <img src="img/2nd-wind/product-bottle-classic.png" alt="2nd Wind Classic cold brew bottle">
-                            <img src="img/2nd-wind/product-bottle-race.png" alt="2nd Wind Race cold brew bottle">
-                            <img src="img/2nd-wind/product-bottle-recovery.png" alt="2nd Wind Recovery cold brew bottle">
-                        </div>
+                        <!-- Product hero: three bottles on the brand backdrop -->
+                        <img src="img/2nd-wind/preview.png" alt="2nd Wind cold brew range: Classic, Race, Recovery on the brand backdrop">
 
-                        <!-- Wide product hero: race-day pouch -->
-                        <img src="img/2nd-wind/photo-product-pouch-race.png" alt="2nd Wind race-day pouch on track">
+                        <!-- Website shop view -->
+                        <img src="img/2nd-wind/mockup-website-shop.png" alt="2nd Wind website shop: three bottle variants on a laptop">
 
-                        <!-- Logo motion -->
-                        <div class="tw-dark-frame">
-                            <video autoplay loop muted playsinline>
-                                <source src="img/2nd-wind/animation-logo.mp4" type="video/mp4">
-                            </video>
-                        </div>
-
-                        <!-- Coffee cup mockup carrying the track pattern -->
+                        <!-- Takeaway coffee cup carrying the track pattern -->
                         <img src="img/2nd-wind/mockup-coffee-cup.png" alt="Takeaway coffee cup with 2nd Wind track pattern">
 
-                        <!-- Apparel: forest + natural tee -->
-                        <div class="tw-pair">
-                            <img src="img/2nd-wind/mockup-tshirt-forest.png" alt="2nd Wind forest-green tee">
-                            <img src="img/2nd-wind/mockup-tshirt-natural.png" alt="2nd Wind natural-cream tee">
+                        <!-- Apparel: t-shirt front + back -->
+                        <img src="img/2nd-wind/mockup-tshirt.png" alt="2nd Wind t-shirt, front and back">
+
+                        <!-- Apparel: tote bag with the runner silhouette -->
+                        <img src="img/2nd-wind/mockup-tote-bag.png" alt="2nd Wind tote bag with runner silhouette, on a chair">
+
+                        <!-- Apparel: branded cap, lifestyle still life -->
+                        <img src="img/2nd-wind/slide-629.png" alt="2nd Wind branded cap in a bowl of lemons">
+
+                        <!-- Editorial: 'Run. Recover. Repeat.' book on track -->
+                        <img src="img/2nd-wind/mockup-book-run-recover-repeat.png" alt="Run. Recover. Repeat. book lying on a running track">
+
+                        <!-- Phone frame template for mobile applications -->
+                        <div class="tw-cream-frame" aria-label="2nd Wind phone frame template">
+                            <img src="img/2nd-wind/frame-phone.svg" alt="Phone outline used as a mobile application frame">
                         </div>
 
-                        <!-- Editorial / sport photography -->
-                        <img src="img/2nd-wind/photo-track-meet.png" alt="Runner at a track meet">
-                        <img src="img/2nd-wind/photo-athlete-outdoor.png" alt="Athlete training outdoors">
+                        <!-- Social: Instagram grid -->
+                        <img src="img/2nd-wind/mockup-instagram-posts.png" alt="2nd Wind Instagram grid of quotes, photos, and product posts">
+
+                        <!-- Editorial photography: 3-up row -->
+                        <div class="tw-row-3" aria-label="2nd Wind editorial photography">
+                            <img src="img/2nd-wind/photography-1.png" alt="2nd Wind editorial photography 1">
+                            <img src="img/2nd-wind/photography-2.png" alt="2nd Wind editorial photography 2">
+                            <img src="img/2nd-wind/photography-3.png" alt="2nd Wind editorial photography 3">
+                        </div>
                     </div>
 
                     <!-- Text (Right Column) - 3 Sections -->

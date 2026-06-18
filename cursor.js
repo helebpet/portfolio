@@ -4,7 +4,7 @@
     // Touch-only devices: skip entirely
     if (window.matchMedia('(hover: none)').matches) return;
 
-    var LERP = 0.10;
+    var LERP = 0.32;
 
     /*
      * Two-element pattern for zero-layout-thrash cursor:
@@ -35,7 +35,6 @@
 
     /* ── State ───────────────────────────────────────────────────────── */
     var mx = 0, my = 0, cx = 0, cy = 0;
-    var lastX = null, lastY = null;
     var started = false;
 
     /* ── Mouse tracking ──────────────────────────────────────────────── */
@@ -72,19 +71,13 @@
     }, { passive: true });
 
     /* ── Animation loop ──────────────────────────────────────────────── */
+    // Sub-pixel translate3d: keeps slow motion smooth (no integer stairstep)
+    // and forces GPU compositing so the cursor doesn't stutter under load.
     function loop() {
         cx += (mx - cx) * LERP;
         cy += (my - cy) * LERP;
-
-        // Bitwise OR 0 = fast float→int; skip DOM write if position unchanged
-        var rx = cx | 0;
-        var ry = cy | 0;
-        if (rx !== lastX || ry !== lastY) {
-            outer.style.transform = 'translate(' + rx + 'px,' + ry + 'px)';
-            lastX = rx;
-            lastY = ry;
-        }
-
+        outer.style.transform =
+            'translate3d(' + cx.toFixed(2) + 'px,' + cy.toFixed(2) + 'px,0)';
         requestAnimationFrame(loop);
     }
     loop();
