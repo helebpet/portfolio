@@ -8,11 +8,220 @@
     <link rel="stylesheet" href="styles.css">
     <script src="dark-mode.js"></script>
     <style>
-        /* Cream frame for the brand-system SVGs (badges, phone outline).
-           Background picks up the sand tone from the brand palette so the
-           black outline marks read clearly without floating on white. */
+        /* ===== 2nd Wind case study: type + palette sections ===== */
+        @import url('https://fonts.googleapis.com/css2?family=B612+Mono:wght@400;700&family=Bowlby+One&display=swap');
+
+        /* Shared panel: brand-black canvas that anchors both the type spec
+           and any other system-reveal moments in the image column. */
+        .tw-slide {
+            background: #000;
+            color: #E2E2E2;
+            padding: 72px 56px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* Typography section (mirrors deck Slide 31) */
+        .tw-type {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 56px;
+            align-items: start;
+        }
+
+        .tt-labels {
+            display: flex;
+            flex-direction: column;
+            gap: 36px;
+        }
+
+        .tt-label-item .tt-cap {
+            font-family: 'B612 Mono', 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: #8C8C8C;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin: 0 0 6px;
+        }
+
+        .tt-label-item .tt-name {
+            font-family: 'B612 Mono', 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            color: #E2E2E2;
+            margin: 0;
+        }
+
+        .tt-samples {
+            display: flex;
+            flex-direction: column;
+            gap: 36px;
+        }
+
+        .tt-title {
+            font-family: 'Mono45 Headline', 'Bowlby One', 'Big Shoulders Display', Impact, sans-serif;
+            font-weight: 400;
+            font-size: clamp(40px, 5vw, 72px);
+            line-height: 0.95;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            margin: 0;
+        }
+
+        .tt-subtitle {
+            font-family: 'Mono45 Headline', 'Bowlby One', 'Big Shoulders Display', Impact, sans-serif;
+            font-weight: 400;
+            font-size: clamp(20px, 2vw, 28px);
+            line-height: 1;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .tt-body {
+            font-family: 'B612 Mono', 'JetBrains Mono', monospace;
+            font-size: clamp(14px, 1.05vw, 17px);
+            line-height: 1.55;
+            color: #E2E2E2;
+            letter-spacing: -0.02em;
+            margin: 0;
+            max-width: 32em;
+        }
+
+        .tt-caption {
+            font-family: 'B612 Mono', 'JetBrains Mono', monospace;
+            font-size: 13px;
+            letter-spacing: 0.04em;
+            color: #8C8C8C;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        /* Extended palette section: black canvas, horizontal-scroll strip of
+           4 colour families × 3 shades. Each family stagger-reveals its three
+           shades when the group scrolls into view inside the strip. */
+        .tw-color {
+            background: #000;
+            color: #E2E2E2;
+            padding-bottom: 96px;
+        }
+
+        .tc-heading {
+            font-family: 'Mono45 Headline', 'Bowlby One', Impact, sans-serif;
+            font-weight: 400;
+            font-size: 20px;
+            letter-spacing: 0.04em;
+            color: #E2E2E2;
+            text-transform: uppercase;
+            margin: 0 0 32px;
+        }
+
+        /* Horizontal-scroll strip: scroll left to walk through the families. */
+        .tc-strip {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            scroll-padding: 0 24px;
+            padding: 8px 8px 28px;
+            margin: 0 -8px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .tc-strip::-webkit-scrollbar { height: 6px; }
+        .tc-strip::-webkit-scrollbar-track { background: rgba(255,255,255,0.06); }
+        .tc-strip::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.32);
+            border-radius: 3px;
+        }
+
+        .tc-group {
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            width: clamp(280px, 56vw, 460px);
+        }
+        .tc-group-title {
+            font-family: 'Mono45 Headline', 'Bowlby One', Impact, sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            letter-spacing: 0.08em;
+            color: #E2E2E2;
+            text-transform: uppercase;
+            margin: 0 0 14px;
+        }
+        .tc-shades {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .tc-swatch {
+            aspect-ratio: 3 / 4;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 14px;
+            font-family: 'B612 Mono', 'JetBrains Mono', monospace;
+            background: var(--swatch);
+            color: var(--swatch-fg);
+            opacity: 0;
+            transform: translateX(36px);
+            transition:
+                opacity 0.7s ease,
+                transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+            will-change: transform, opacity;
+        }
+        .tc-group.is-visible .tc-swatch              { opacity: 1; transform: translateX(0); }
+        .tc-group.is-visible .tc-swatch:nth-child(2) { transition-delay: 0.12s; }
+        .tc-group.is-visible .tc-swatch:nth-child(3) { transition-delay: 0.24s; }
+        .tc-swatch .tc-name {
+            font-size: 11px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin: 0 0 4px;
+            line-height: 1.2;
+        }
+        .tc-swatch .tc-hex {
+            font-size: 10px;
+            letter-spacing: 0.04em;
+            opacity: 0.78;
+        }
+
+        /* Per-swatch fills — every shade from the brand's extended palette. */
+        .tc-sw-white    { --swatch: #FFFFFF; --swatch-fg: #000; box-shadow: inset 0 0 0 1px #E2E2E2; }
+        .tc-sw-offwhite { --swatch: #E2E2E2; --swatch-fg: #000; }
+        .tc-sw-black    { --swatch: #000000; --swatch-fg: #E2E2E2; box-shadow: inset 0 0 0 1px #2A2A2A; }
+        .tc-sw-ice-1    { --swatch: #758D8F; --swatch-fg: #FFF; }
+        .tc-sw-ice-2    { --swatch: #3D5C5F; --swatch-fg: #FFF; }
+        .tc-sw-ice-3    { --swatch: #001F22; --swatch-fg: #FFF; }
+        .tc-sw-gold-1   { --swatch: #C09645; --swatch-fg: #FFF; }
+        .tc-sw-gold-2   { --swatch: #A36805; --swatch-fg: #FFF; }
+        .tc-sw-gold-3   { --swatch: #7A2D00; --swatch-fg: #FFF; }
+        .tc-sw-trail-1  { --swatch: #818370; --swatch-fg: #FFF; }
+        .tc-sw-trail-2  { --swatch: #4D4F37; --swatch-fg: #FFF; }
+        .tc-sw-trail-3  { --swatch: #0E1000; --swatch-fg: #FFF; }
+
+        /* Dark mode: both panels stay intentional (black/black). */
+        html.dark .tw-slide { background: #000; color: #E2E2E2; }
+        html.dark .tw-color { background: #000; color: #E2E2E2; }
+        html.dark .tw-color .tc-heading { color: #E2E2E2; }
+
+        @media (max-width: 900px) {
+            .tw-slide   { padding: 48px 32px; }
+            .tw-type    { grid-template-columns: 1fr; gap: 28px; }
+            .tc-group   { width: clamp(260px, 78vw, 360px); }
+        }
+        @media (max-width: 560px) {
+            .tw-slide   { padding: 32px 22px; }
+            .tc-heading { margin-bottom: 22px; }
+            .tc-group   { width: 82vw; }
+        }
+
+        /* Neutral frame for the brand-system SVGs (badges, phone outline). */
         .tw-cream-frame {
-            background: #EAD9BC;
+            background: #E2E2E2;
             padding: 72px 40px;
             box-sizing: border-box;
             display: flex;
@@ -23,6 +232,29 @@
         .tw-cream-frame img {
             width: 22%;
             height: auto;
+            display: block;
+            background: transparent;
+        }
+        /* Slow, continuous spin on the circular badges only (not the phone frame). */
+        @keyframes tw-badge-spin { to { transform: rotate(360deg); } }
+        .tw-cream-frame img[src*="badge-"] {
+            animation: tw-badge-spin 32s linear infinite;
+            transform-origin: center center;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .tw-cream-frame img[src*="badge-"] { animation: none; }
+        }
+
+        /* Pair grid: two equal columns (used for the t-shirt front + back). */
+        .tw-pair {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .tw-pair img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             display: block;
             background: transparent;
         }
@@ -94,7 +326,7 @@
                 <h1>2nd Wind</h1>
                 <p>Spring 2026</p>
                 <p>Brand Identity, Packaging</p>
-                <p><a href="https://www.figma.com/proto/DWeOxrT9W8efJ8aUSf13Je/2ndWind?node-id=1-35&viewport=55%2C354%2C0.02&t=RiaS0eGXPV0KP9jD-1&scaling=contain&content-scaling=fixed&page-id=0%3A1" target="_blank">View Full Deck</a></p>
+                <p><a href="https://www.figma.com/proto/DWeOxrT9W8efJ8aUSf13Je/2ndWind?node-id=1-35&viewport=55%2C354%2C0.02&t=RiaS0eGXPV0KP9jD-1&scaling=contain&content-scaling=fixed&page-id=0%3A1" target="_blank">View Full Deck</a> · <a href="2nd-wind-site/2ndwind.html" target="_blank">View Live Site</a></p>
             </section>
 
             <!-- Project Details -->
@@ -102,10 +334,19 @@
                 <div class="project-grid">
                     <!-- Images (Left Column) -->
                     <div class="image-column">
+                        <!-- Product packaging: three bottles standing on the brand backdrop -->
+                        <img src="img/2nd-wind/mockup-product-bottles-trio.png" alt="2nd Wind cold brew range: Classic, Race, Recovery">
+
+                        <!-- Brand hero: editorial product shot -->
+                        <img src="img/2nd-wind/brand-hero.png" alt="2nd Wind brand hero photograph">
+
                         <!-- Brand animation: wordmark + track symbol coming together -->
                         <video autoplay loop muted playsinline>
                             <source src="img/2nd-wind/animation-brand.mp4" type="video/mp4">
                         </video>
+
+                        <!-- Full logo lockup -->
+                        <img src="img/2nd-wind/logo.png" alt="2nd Wind full logo lockup">
 
                         <!-- Brand-system badges: Single Origin Brazil + concentric rings -->
                         <div class="tw-cream-frame" aria-label="2nd Wind brand badges">
@@ -113,23 +354,105 @@
                             <img src="img/2nd-wind/badge-rings.svg" alt="Concentric rings badge">
                         </div>
 
+                        <!-- Typography usage (recreated from deck Slide 31) -->
+                        <div class="tw-slide tw-type" aria-label="2nd Wind typography usage">
+                            <div class="tt-labels">
+                                <div class="tt-label-item">
+                                    <p class="tt-cap">Title</p>
+                                    <p class="tt-name">Mono45 Headline,<br>Black, 0% tracking</p>
+                                </div>
+                                <div class="tt-label-item">
+                                    <p class="tt-cap">Subtitle</p>
+                                    <p class="tt-name">Mono45 Headline,<br>Bold, 0% tracking</p>
+                                </div>
+                                <div class="tt-label-item">
+                                    <p class="tt-cap">Body</p>
+                                    <p class="tt-name">B612 Mono,<br>Regular, -7% tracking</p>
+                                </div>
+                                <div class="tt-label-item">
+                                    <p class="tt-cap">Caption</p>
+                                    <p class="tt-name">B612 Mono,<br>Regular, -3% tracking</p>
+                                </div>
+                            </div>
+                            <div class="tt-samples">
+                                <h3 class="tt-title">Second Wind<br>Cold Brew Coffee</h3>
+                                <h4 class="tt-subtitle">Brewed for Runners</h4>
+                                <p class="tt-body">Cold brew extraction creates a smoother, lower acid coffee that works with your body, not against it. Caffeine that performs as hard as you do.</p>
+                                <p class="tt-caption">Single Origin · Cold Brewed · Organic</p>
+                            </div>
+                        </div>
+
+                        <!-- Extended palette: horizontal-scroll strip of 4 families.
+                             Each family stagger-reveals its 3 shades on scroll. -->
+                        <div class="tw-slide tw-color" aria-label="2nd Wind extended colour palette">
+                            <h3 class="tc-heading">Palette</h3>
+                            <div class="tc-strip" id="tc-strip">
+                                <div class="tc-group">
+                                    <p class="tc-group-title">Neutrals</p>
+                                    <div class="tc-shades">
+                                        <div class="tc-swatch tc-sw-white"><span class="tc-name">White</span><span class="tc-hex">#FFFFFF</span></div>
+                                        <div class="tc-swatch tc-sw-offwhite"><span class="tc-name">Off White</span><span class="tc-hex">#E2E2E2</span></div>
+                                        <div class="tc-swatch tc-sw-black"><span class="tc-name">Black</span><span class="tc-hex">#000000</span></div>
+                                    </div>
+                                </div>
+                                <div class="tc-group">
+                                    <p class="tc-group-title">Ice Bath</p>
+                                    <div class="tc-shades">
+                                        <div class="tc-swatch tc-sw-ice-1"><span class="tc-name">Ice Bath</span><span class="tc-hex">#758D8F</span></div>
+                                        <div class="tc-swatch tc-sw-ice-2"><span class="tc-name">Ice Dark</span><span class="tc-hex">#3D5C5F</span></div>
+                                        <div class="tc-swatch tc-sw-ice-3"><span class="tc-name">Ice Darkest</span><span class="tc-hex">#001F22</span></div>
+                                    </div>
+                                </div>
+                                <div class="tc-group">
+                                    <p class="tc-group-title">Golden Hour</p>
+                                    <div class="tc-shades">
+                                        <div class="tc-swatch tc-sw-gold-1"><span class="tc-name">Golden Hour</span><span class="tc-hex">#C09645</span></div>
+                                        <div class="tc-swatch tc-sw-gold-2"><span class="tc-name">Gold Dark</span><span class="tc-hex">#A36805</span></div>
+                                        <div class="tc-swatch tc-sw-gold-3"><span class="tc-name">Gold Darkest</span><span class="tc-hex">#7A2D00</span></div>
+                                    </div>
+                                </div>
+                                <div class="tc-group">
+                                    <p class="tc-group-title">Trail</p>
+                                    <div class="tc-shades">
+                                        <div class="tc-swatch tc-sw-trail-1"><span class="tc-name">Trail</span><span class="tc-hex">#818370</span></div>
+                                        <div class="tc-swatch tc-sw-trail-2"><span class="tc-name">Trail Dark</span><span class="tc-hex">#4D4F37</span></div>
+                                        <div class="tc-swatch tc-sw-trail-3"><span class="tc-name">Trail Darkest</span><span class="tc-hex">#0E1000</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pattern: logo tile system -->
+                        <img src="img/2nd-wind/pattern-logo-tiles.png" alt="2nd Wind logo-tile pattern">
+
                         <!-- Product hero: three bottles on the brand backdrop -->
                         <img src="img/2nd-wind/preview.png" alt="2nd Wind cold brew range: Classic, Race, Recovery on the brand backdrop">
 
+                        <!-- Website walkthrough: motion clip of the shop -->
+                        <video autoplay loop muted playsinline>
+                            <source src="img/2nd-wind/website.mp4" type="video/mp4">
+                        </video>
+
                         <!-- Website shop view -->
                         <img src="img/2nd-wind/mockup-website-shop.png" alt="2nd Wind website shop: three bottle variants on a laptop">
+
+                        <!-- Editorial: large-screen brand application -->
+                        <img src="img/2nd-wind/Large%20Screen%20Mockup.png" alt="2nd Wind brand on a large-screen editorial mockup">
 
                         <!-- Takeaway coffee cup carrying the track pattern -->
                         <img src="img/2nd-wind/mockup-coffee-cup.png" alt="Takeaway coffee cup with 2nd Wind track pattern">
 
                         <!-- Apparel: t-shirt front + back -->
-                        <img src="img/2nd-wind/mockup-tshirt.png" alt="2nd Wind t-shirt, front and back">
+                        <div class="tw-pair">
+                            <img src="img/2nd-wind/mockup-tshirt-front.png" alt="2nd Wind t-shirt, front">
+                            <img src="img/2nd-wind/mockup-tshirt-back.png" alt="2nd Wind t-shirt, back">
+                        </div>
 
                         <!-- Apparel: tote bag with the runner silhouette -->
                         <img src="img/2nd-wind/mockup-tote-bag.png" alt="2nd Wind tote bag with runner silhouette, on a chair">
 
-                        <!-- Apparel: branded cap, lifestyle still life -->
-                        <img src="img/2nd-wind/slide-629.png" alt="2nd Wind branded cap in a bowl of lemons">
+                        <!-- Apparel: branded cap -->
+                        <img src="img/2nd-wind/mockup-cap.png" alt="2nd Wind branded cap">
 
                         <!-- Editorial: 'Run. Recover. Repeat.' book on track -->
                         <img src="img/2nd-wind/mockup-book-run-recover-repeat.png" alt="Run. Recover. Repeat. book lying on a running track">
@@ -141,6 +464,9 @@
 
                         <!-- Social: Instagram grid -->
                         <img src="img/2nd-wind/mockup-instagram-posts.png" alt="2nd Wind Instagram grid of quotes, photos, and product posts">
+
+                        <!-- Editorial photography: runner silhouette -->
+                        <img src="img/2nd-wind/photo-runner-silhouette.png" alt="Runner silhouette in motion">
 
                         <!-- Editorial photography: 3-up row -->
                         <div class="tw-row-3" aria-label="2nd Wind editorial photography">
@@ -159,14 +485,14 @@
 
                         <div class="text-section">
                             <h2>Brand Identity</h2>
-                            <p>The identity is built around a "Running Track" idea: every mark in the system traces back to the oval geometry of a 400-metre track, from the stacked lanes of the symbol to the rounded letterforms of the wordmark. The wordmark uses the numeral "2" instead of spelling out "second" so the mark stays compact and distinct, and a separate track symbol with concentric lanes sits in a stacked oval, like a top-down view of a stadium, for moments where the full wordmark won't fit.</p>
-                            <p>Typography pairs Mono45 Headline, a condensed monospaced display face, with B612 Mono, originally drawn for in-flight displays, across Bold and Regular weights. The palette is grounded and athletic, anchored by Asphalt Black and Chalk White, with Sand, Ember, and Steel Blue accents that map directly onto the three product variants.</p>
+                            <p>The identity is built around a "Running Track" idea: every mark in the system traces back to the oval geometry of a 400-metre track, from the stacked lanes of the symbol to the rounded letterforms of the wordmark. The wordmark uses the numeral "2" instead of spelling out "second" so the mark stays compact and distinct, and a separate concentric-oval symbol sits like a top-down view of a stadium for moments where the full wordmark won't fit. The brand voice lands on "Brewed for Runners," carried by three product pillars: Single Origin, Cold Brewed, Organic.</p>
+                            <p>Typography pairs Mono45 Headline, a condensed monospaced display face, with B612 Mono Regular, originally drawn for in-flight displays. The palette is grounded and athletic: White and Off White set the page, Black anchors the brand, and three accents (Trail #818370 olive, Ice Bath #758D8F dusty teal, and Golden Hour #C09645 mustard) map directly onto the three product variants. Two custom round badges, "Single Origin Brazil" and a Berkeley Based stamp, echo the concentric-ring construction of the secondary symbol.</p>
                         </div>
 
                         <div class="text-section">
                             <h2>Applications</h2>
-                            <p>Three bottle variants share a single structural label: matte glass, screen-printed graphics, foil cap. Classic, Race, and Recovery each get their own accent colour and ingredient story, so the line reads as a family without losing each variant's identity.</p>
-                            <p>The system stretches into apparel, takeaway coffee cups, race-day pouches, editorial photography, and a black-led website, with the wordmark anchoring the homepage and the track symbol carrying the navigation.</p>
+                            <p>Three bottle variants share a single structural label: matte glass, screen-printed graphics, foil cap. Classic, Race, and Recovery each get their own accent colour and ingredient story, so the line reads as a family without losing each variant's identity. A grainy, high-contrast photography style sits alongside, leaning into motion blur, golden hour light, and real training settings.</p>
+                            <p>The system stretches into apparel (t-shirt, tote, cap), takeaway coffee cups, the "Run. Recover. Repeat." book, an Instagram-led social presence, and a black-led website where the wordmark anchors the homepage and the track symbol carries the navigation.</p>
                         </div>
                     </div>
                 </div>
@@ -193,5 +519,42 @@
     <div class="glass-bottom"></div>
     <script src="cursor.js"></script>
     <script src="screensaver.js?v=9"></script>
+
+    <!-- Palette: each family stagger-reveals its 3 shades as it scrolls into
+         view inside the horizontal strip. -->
+    <script>
+        (function () {
+            var strip = document.getElementById('tc-strip');
+            if (!strip) return;
+            var groups = strip.querySelectorAll('.tc-group');
+            if (!groups.length) return;
+
+            // Observe within the strip's scrollport so reveal fires on
+            // horizontal scrolling (not just vertical page scrolling).
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { root: strip, threshold: 0.35 });
+            groups.forEach(function (g) { observer.observe(g); });
+
+            // Fallback for browsers that don't fire intersection on horizontal
+            // overflow: also reveal whatever's visible after a scroll tick.
+            function syncOnScroll() {
+                var stripRect = strip.getBoundingClientRect();
+                groups.forEach(function (g) {
+                    var r = g.getBoundingClientRect();
+                    var visible = r.right > stripRect.left + 60
+                               && r.left  < stripRect.right - 60;
+                    if (visible) g.classList.add('is-visible');
+                });
+            }
+            strip.addEventListener('scroll', syncOnScroll, { passive: true });
+            window.addEventListener('resize', syncOnScroll);
+            syncOnScroll();
+        })();
+    </script>
 </body>
 </html>

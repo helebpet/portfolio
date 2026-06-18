@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2nd Wind — Cold Brew Coffee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Brand fonts: Adapter Mono PE Variable + Azeret Mono (Mono45 Headline stand-in). -->
+<link rel="stylesheet" href="https://use.typekit.net/zyx6svv.css">
+<!-- Web fallbacks if Typekit is blocked / Mono45 Headline isn't installed locally. -->
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Space+Mono:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* === BRAND TOKENS — 2nd Wind extended palette (deck, Mar 23 2026) === */
+  :root {
+    --black:            #000000;
+    --off-white:        #E2E2E2;
+    --white:            #FFFFFF;
+
+    --ice:              #758D8F;
+    --ice-dark:         #3D5C5F;
+    --ice-darkest:      #001F22;
+
+    --gold:             #C09645;
+    --gold-dark:        #A36805;
+    --gold-darkest:     #7A2D00;
+
+    --trail:            #818370;
+    --trail-dark:       #4D4F37;
+    --trail-darkest:    #0E1000;
+
+    --line:             rgba(0, 0, 0, 0.14);
+    --line-strong:      rgba(0, 0, 0, 0.34);
+
+    /* Mono45 Headline (titles) — Azeret Mono stand-in; Adapter Mono PE (body). */
+    --font-head: "Mono45 Headline", "azeret-mono", "Space Mono", monospace;
+    --font-body: "adapter-mono-pe-variable", "DM Mono", "IBM Plex Mono", monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: linear-gradient(168deg, var(--off-white) 0%, var(--white) 58%) no-repeat;
+    background-attachment: fixed;
+    color: var(--black);
+    font-family: var(--font-body);
+    font-weight: 400;
+    /* Adapter Mono PE Variable — light weight per brand spec; caption tracking default. */
+    font-variation-settings: "BORD" 300, "ital" 0, "slnt" 0, "wght" 200;
+    letter-spacing: -0.03em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  .headline {
+    font-family: var(--font-head);
+    font-weight: 700;
+    letter-spacing: 0;
+    font-variation-settings: normal;
+  }
+
+  /* Subtle paper grain over the light ground. */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    pointer-events: none;
+    opacity: 0.7;
+    z-index: 100;
+    mix-blend-mode: multiply;
+  }
+
+  /* === HEADER === */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 1.8rem;
+    background: linear-gradient(180deg, rgba(226,226,226,0.92) 0%, rgba(226,226,226,0.0) 100%);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+  }
+  .brand-lockup {
+    display: flex; align-items: center; gap: 0.7rem;
+    text-decoration: none; color: var(--black);
+  }
+  .brand-lockup .word { height: 18px; width: auto; display: block; }
+
+  nav.main-nav {
+    display: flex;
+    gap: 0;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  nav.main-nav a {
+    color: var(--black);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    opacity: 0.6;
+    transition: opacity 0.18s;
+  }
+  nav.main-nav a:hover, nav.main-nav a.active { opacity: 1; }
+
+  .cart-pill {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.55rem 1.1rem;
+    border: 1px solid var(--black);
+    border-radius: 100px;
+    background: transparent;
+    color: var(--black);
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+  }
+  .cart-pill:hover { background: var(--black); color: var(--white); }
+
+  /* === HERO === */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 7rem 1.8rem 3rem;
+    overflow: hidden;
+  }
+  .hero-runner {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* Melt the photo into the grey/white ground: soft at the left (empty side)
+       and the bottom edge, so there's no hard rectangle — it dissolves in. */
+    -webkit-mask-image:
+      linear-gradient(to right, transparent 0%, #000 38%),
+      linear-gradient(to bottom, #000 0%, #000 84%, transparent 100%);
+    mask-image:
+      linear-gradient(to right, transparent 0%, #000 38%),
+      linear-gradient(to bottom, #000 0%, #000 84%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+    will-change: opacity, transform;
+  }
+  /* Fill the hero from the top at any screen size; keep the runner (right side)
+     in frame and anchored up. */
+  .hero-runner img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: right top;
+    display: block;
+  }
+  .hero-symbol {
+    position: absolute;
+    left: 50%; top: 46%;
+    transform: translate(-50%, -50%);
+    width: min(52vw, 620px);
+    opacity: 0.05;
+    pointer-events: none;
+  }
+  .hero-symbol img { width: 100%; height: auto; display: block; }
+
+  .hero-inner { position: relative; z-index: 2; }
+  .hero h1 {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: clamp(2.6rem, 8vw, 7rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    max-width: 16ch;
+    margin-bottom: 2rem;
+  }
+  .hero h1 .accent { -webkit-text-stroke: 1.4px var(--black); color: transparent; }
+
+  .hero-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--line-strong);
+    max-width: 60ch;
+  }
+  .hero-meta p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--black);
+    letter-spacing: -0.01em;
+    max-width: 44ch;
+  }
+  .scroll-cue {
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .scroll-cue span { display: inline-block; animation: bob 1.6s infinite ease-in-out; }
+  @keyframes bob { 0%,100% { transform: translateY(0);} 50% { transform: translateY(4px);} }
+
+  /* === SECTION + CARDS === */
+  .grid-section { padding: 4rem 1.8rem 2rem; }
+  .section-label {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 2rem; margin-bottom: 2rem; padding-bottom: 1.1rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .section-label h2 {
+    font-family: var(--font-head);
+    font-size: 0.82rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .section-label .count {
+    font-size: 0.72rem; letter-spacing: 0.1em; opacity: 0.55;
+  }
+
+  /* Bento grid: a fixed row unit + uniform row spans, so every tile snaps to
+     the grid lines and rows always align — no ragged/half-cut boxes. */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: clamp(150px, 15.5vw, 205px);
+    gap: 1.2rem;
+  }
+  .card {
+    position: relative;
+    background: var(--white);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    grid-row: span 2;            /* default tile = two rows tall */
+    transition: border-color 0.3s, transform 0.4s cubic-bezier(0.2,0.6,0.2,1);
+  }
+  /* Only interactive (clickable) cards lift on hover. */
+  .product-card:hover { border-color: var(--line-strong); transform: translateY(-3px); }
+  .card.col-4 { grid-column: span 4; }
+  .card.col-6 { grid-column: span 6; }
+  .card.col-8 { grid-column: span 8; }
+  .card.col-12 { grid-column: span 12; }
+  .card.tall { grid-row: span 3; }   /* portrait tiles (bottles) */
+
+  .card-tag {
+    position: absolute; top: 1rem; left: 1rem;
+    font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--black); padding: 0.3rem 0.55rem;
+    background: rgba(255,255,255,0.7); border: 1px solid var(--line); z-index: 3;
+  }
+  .card-index {
+    position: absolute; top: 1rem; right: 1rem;
+    font-size: 0.62rem; letter-spacing: 0.12em; opacity: 0.5; z-index: 3;
+  }
+
+  /* === PRODUCT CARDS === */
+  .product-card {
+    display: flex; flex-direction: column;
+    background: var(--white); color: var(--black); cursor: pointer;
+  }
+  .product-card .top-row {
+    position: absolute; top: 1rem; left: 1rem; right: 1rem; z-index: 4;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.6;
+  }
+  /* Colour disc sits BEHIND the bottle; on hover it grows to flood the tile. */
+  .product-card .flood {
+    position: absolute; top: 50%; left: 50%;
+    width: 24px; height: 24px; margin: -12px 0 0 -12px;
+    border-radius: 50%;
+    background: var(--accent, var(--trail));
+    transform: scale(1);
+    transition: transform 0.6s cubic-bezier(0.62, 0, 0.2, 1);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .product-card:hover .flood { transform: scale(44); }
+  .product-card .bottle-wrap {
+    position: absolute; inset: 0; z-index: 2;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding: 3.2rem 0 3.6rem;
+  }
+  .product-card .bottle-wrap img {
+    width: auto; height: 92%; max-width: 86%;
+    object-fit: contain; object-position: bottom center; display: block;
+    filter: drop-shadow(0 14px 26px rgba(0,0,0,0.18));
+  }
+  .product-card .label-row {
+    position: absolute; bottom: 1rem; left: 1rem; right: 1rem; z-index: 4;
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  .product-card .label-row .name {
+    font-family: var(--font-head); font-weight: 700;
+    font-size: clamp(1.3rem, 2vw, 1.9rem);
+    letter-spacing: -0.01em; line-height: 1; text-transform: uppercase;
+  }
+  .product-card .label-row .meta {
+    display: flex; align-items: center; gap: 0.7rem;
+    font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .product-card .label-row .meta .price {
+    font-family: var(--font-head); font-weight: 700;
+    font-size: 1.3rem; letter-spacing: 0;
+  }
+  .product-card .add-btn {
+    width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+    border: 3px solid var(--black); background: var(--black); color: var(--white);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--font-body); font-weight: 700; font-size: 1.6rem; line-height: 1; padding-bottom: 3px;
+    cursor: pointer; box-shadow: 0 3px 0 0 var(--black);
+    transition: transform 0.18s ease, background 0.2s, color 0.2s, box-shadow 0.18s ease;
+  }
+  .product-card .add-btn:hover {
+    transform: translateY(-2px) scale(1.08);
+    background: var(--accent, var(--trail)); border-color: var(--black); color: var(--black);
+    box-shadow: 0 5px 0 0 var(--black), 0 8px 28px -4px var(--accent, var(--trail));
+  }
+  .product-card .add-btn:active { transform: translateY(1px) scale(1.04); box-shadow: 0 1px 0 0 var(--black); }
+  .product-card .add-btn.added {
+    background: var(--accent, var(--trail)); border-color: var(--black); color: var(--black);
+  }
+  .product-card.classic  { --accent: var(--trail); }
+  .product-card.race     { --accent: var(--gold); }
+  .product-card.recovery { --accent: var(--ice); }
+
+  /* === TEXT / MANIFESTO CARD === */
+  .text-card {
+    background: var(--white); color: var(--black); padding: 2rem;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .text-card .kicker {
+    font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase;
+    opacity: 0.55; margin-bottom: 1.4rem;
+  }
+  .text-card .body {
+    font-size: clamp(1rem, 1.35vw, 1.25rem); line-height: 1.6;
+    color: var(--black); letter-spacing: -0.01em;
+  }
+  .text-card .body strong {
+    font-family: var(--font-head); font-weight: 700; color: var(--black);
+    letter-spacing: -0.01em; text-transform: uppercase;
+    box-shadow: inset 0 -0.4em 0 rgba(192,150,69,0.32);
+  }
+  .text-card .signature {
+    margin-top: 2rem; display: flex; justify-content: space-between; align-items: flex-end;
+    font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.6;
+  }
+
+  /* === BADGE / LOGO CARDS === */
+  .badge-card {
+    background: var(--off-white);
+    display: flex; align-items: center; justify-content: center; padding: 2.4rem;
+  }
+  .badge-card img { width: 74%; height: auto; }
+  .badge-card.spin img { animation: slow-spin 40s linear infinite; }
+  @keyframes slow-spin { to { transform: rotate(360deg); } }
+
+  .logo-card {
+    background: var(--white);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1.4rem; padding: 2.4rem;
+  }
+  .logo-card img.symbol { width: 56%; height: auto; }
+  .logo-card img.word { width: 64%; height: auto; }
+
+  /* === SPEC CARD === */
+  .spec-card {
+    background: var(--off-white); padding: 1.8rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.2rem; align-content: center;
+  }
+  .spec-card .item { border-top: 1px solid var(--line-strong); padding-top: 0.5rem; }
+  .spec-card .item .k {
+    font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase;
+    opacity: 0.55; margin-bottom: 0.4rem;
+  }
+  .spec-card .item .v { font-size: 0.9rem; letter-spacing: -0.01em; }
+
+  /* === VIDEO / MOTION CARD === */
+  .clip-card { background: var(--black); position: relative; overflow: hidden; }
+  .clip-card video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .clip-card .card-tag { background: rgba(0,0,0,0.5); color: var(--white); border-color: rgba(255,255,255,0.25); }
+  .clip-card .card-label {
+    position: absolute; bottom: 1rem; left: 1rem; right: 1rem; z-index: 3;
+    display: flex; justify-content: space-between; align-items: flex-end; color: var(--white);
+  }
+  .clip-card .card-label h3 {
+    font-family: var(--font-head); font-weight: 700; font-size: 1.4rem;
+    letter-spacing: -0.01em; text-transform: uppercase;
+  }
+  .clip-card .card-label .meta {
+    font-size: 0.64rem; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.7;
+  }
+
+  /* === QUOTE CARDS === */
+  .quote-card {
+    background: var(--white); color: var(--black); padding: 2rem;
+    display: flex; flex-direction: column; justify-content: space-between;
+    border-top: 4px solid var(--accent, var(--trail));
+  }
+  .quote-card.classic  { --accent: var(--trail); }
+  .quote-card.race     { --accent: var(--gold); }
+  .quote-card.recovery { --accent: var(--ice); }
+  .quote-card .mark {
+    font-family: var(--font-body); font-size: 3.8rem;
+    font-weight: 900;
+    font-variation-settings: "BORD" 300, "ital" 0, "slnt" 0, "wght" 900;
+    line-height: 0.6; opacity: 0.25; margin-bottom: 0.6rem;
+  }
+  .quote-card blockquote {
+    font-family: var(--font-head); font-weight: 700;
+    font-size: clamp(1.3rem, 2vw, 2rem); line-height: 1.08;
+    letter-spacing: -0.02em; text-transform: uppercase;
+  }
+  .quote-card cite {
+    font-style: normal; font-size: 0.68rem; letter-spacing: 0.2em;
+    text-transform: uppercase; opacity: 0.6; margin-top: 1.5rem; display: block;
+  }
+
+  /* === LOGO ANIMATION — white band, inset to match the content gutter === */
+  .logo-section {
+    padding: 2rem 1.8rem;          /* same horizontal gutter as every section */
+  }
+  .logo-band {
+    background: var(--white);
+    width: 100%;
+    padding: 4rem 1.8rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-anim {
+    width: 100%;
+    max-width: 720px;
+    height: auto;
+    object-fit: contain;          /* letterboxes — the mark is never cut off */
+    display: block;
+    pointer-events: none;
+  }
+
+  /* === INGREDIENTS === */
+  .ingredients { padding: 4rem 1.8rem; }
+  .ingredients-list { list-style: none; border-top: 1px solid var(--line-strong); }
+  .ingredients-list li {
+    display: grid; grid-template-columns: 80px 1fr auto; align-items: center; gap: 1.5rem;
+    padding: 1.4rem 0; border-bottom: 1px solid var(--line);
+    transition: background 0.2s, padding-left 0.25s;
+  }
+  .ingredients-list li:hover { background: rgba(0,0,0,0.03); padding-left: 0.6rem; }
+  .ingredients-list .num { font-size: 0.78rem; opacity: 0.5; letter-spacing: 0.14em; }
+  .ingredients-list .name {
+    font-family: var(--font-head); font-weight: 700;
+    font-size: clamp(1.3rem, 2.2vw, 2rem); letter-spacing: -0.01em; text-transform: uppercase;
+  }
+  .ingredients-list .name em {
+    font-style: normal; font-family: var(--font-body); opacity: 0.5;
+    font-size: 0.5em; letter-spacing: 0.16em; margin-left: 1rem; text-transform: uppercase;
+  }
+  .ingredients-list .tag {
+    font-size: 0.64rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.55;
+  }
+
+  /* === FOOTER === */
+  footer { margin-top: 3rem; padding: 4rem 1.8rem 2rem; border-top: 1px solid var(--line-strong); }
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; padding-bottom: 3rem;
+  }
+  .footer-top h4 {
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    opacity: 0.55; margin-bottom: 1rem;
+  }
+  .footer-top .footer-word { width: 200px; max-width: 60%; height: auto; margin-bottom: 1.1rem; display: block; }
+  .footer-top .lead {
+    font-family: var(--font-head); font-weight: 700;
+    font-size: clamp(1.5rem, 2.4vw, 2.2rem); line-height: 1.02;
+    letter-spacing: -0.02em; text-transform: uppercase; max-width: 16ch;
+  }
+  .footer-top ul { list-style: none; }
+  .footer-top ul li { margin-bottom: 0.55rem; font-size: 0.85rem; letter-spacing: -0.01em; }
+  .footer-top ul a { color: inherit; text-decoration: none; opacity: 0.75; transition: opacity 0.18s; }
+  .footer-top ul a:hover { opacity: 1; }
+  .footer-bot {
+    border-top: 1px solid var(--line); padding-top: 1.4rem;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.6;
+  }
+
+  /* === BUTTONS === */
+  /* Animatable angle so the accent gradient ring can rotate. */
+  @property --bd-angle {
+    syntax: '<angle>'; inherits: false; initial-value: 0deg;
+  }
+  /* Every accent + its dark, looped back to the start for a seamless spin. */
+  @keyframes bd-spin { to { --bd-angle: 360deg; } }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    font-family: var(--font-body); font-size: 0.72rem;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 0.95rem 1.6rem;
+    /* Minimal black/white fill (padding-box) inside a moving accent gradient
+       border (border-box). */
+    --btn-fill: var(--black);
+    color: var(--white);
+    border: 2px solid transparent;
+    background:
+      linear-gradient(var(--btn-fill), var(--btn-fill)) padding-box,
+      conic-gradient(from var(--bd-angle),
+        #758D8F, #C09645, #818370, #3D5C5F, #A36805, #4D4F37, #758D8F) border-box;
+    text-decoration: none; cursor: pointer;
+    border-radius: 100px;
+    animation: bd-spin 6s linear infinite;
+    transition: transform 0.2s, box-shadow 0.25s ease;
+    box-shadow: 0 0 0 rgba(192, 150, 69, 0);
+  }
+  .btn:hover {
+    transform: translateY(-2px); animation-duration: 2.2s;
+    box-shadow: 0 6px 26px rgba(192, 150, 69, 0.45), 0 0 14px rgba(117, 141, 143, 0.35);
+  }
+  .btn.ghost { --btn-fill: var(--white); color: var(--black); }
+  .btn.ghost:hover { box-shadow: 0 6px 26px rgba(61, 92, 95, 0.3); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { animation: none; }
+  }
+  .hero-cta { display: flex; gap: 0.8rem; margin-top: 2.2rem; flex-wrap: wrap; }
+
+  /* === VALUE STRIP === */
+  .value-strip {
+    overflow: hidden;
+    padding: 1.3rem 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.85;
+    white-space: nowrap;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+            mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  }
+  .value-strip .track {
+    display: inline-flex; align-items: center;
+    will-change: transform;
+    animation: marquee 28s linear infinite;
+  }
+  .value-strip:hover .track { animation-play-state: paused; }
+  .value-strip .track span { display: inline-flex; align-items: center; padding: 0 1.6rem; }
+  .value-strip .track span::after {
+    content: "·"; margin-left: 3.2rem; opacity: 0.45;
+  }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .value-strip .track { animation: none; }
+  }
+
+  /* === FEATURE (two column) === */
+  .feature { padding: 5rem 1.8rem; }
+  .feature-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+  .feature.reverse .feature-media { order: 2; }
+  .feature .kicker {
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    opacity: 0.55; margin-bottom: 1.2rem;
+  }
+  .feature h2 {
+    font-family: var(--font-head); font-weight: 700;
+    font-size: clamp(1.8rem, 3.4vw, 3.1rem); line-height: 1.04;
+    letter-spacing: 0; text-transform: uppercase; margin-bottom: 1.3rem;
+  }
+  .feature p { font-size: 0.95rem; line-height: 1.65; max-width: 48ch; letter-spacing: -0.03em; }
+  .feature p + p { margin-top: 1rem; }
+  .feature .mini-list { list-style: none; margin-top: 1.6rem; }
+  .feature .mini-list li {
+    padding: 0.7rem 0; border-top: 1px solid var(--line);
+    font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase;
+    display: flex; gap: 0.7rem; align-items: center;
+  }
+  .feature .mini-list li::before { content: "•"; opacity: 0.5; }
+  .feature-media {
+    position: relative; aspect-ratio: 4/5; overflow: hidden;
+    border: 1px solid var(--line); background: var(--off-white);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .feature-media.ice { background: var(--ice); }
+  .feature-media.trail { background: var(--trail); }
+  .feature-media.gold { background: var(--gold); }
+  .feature-media img.bottle { height: 62%; width: auto; display: block; filter: drop-shadow(0 16px 26px rgba(0,0,0,0.22)); }
+  .feature-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* === BENEFITS === */
+  .benefits { padding: 4rem 1.8rem; }
+  .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--line-strong); }
+  .benefits-grid .b {
+    padding: 2.4rem 1.6rem 2rem 0; border-bottom: 1px solid var(--line); margin-right: 1.6rem;
+    position: relative;
+  }
+  /* Oversized outlined index — the loud top of the hierarchy. */
+  .benefits-grid .b .n {
+    font-family: var(--font-head); font-weight: 700;
+    font-size: clamp(3rem, 5.5vw, 4.6rem); line-height: 0.8;
+    letter-spacing: -0.03em; margin-bottom: 0.8rem; display: block;
+    color: transparent; -webkit-text-stroke: 1.5px var(--black); opacity: 0.3;
+    transition: opacity 0.3s ease, color 0.3s ease;
+  }
+  /* Mid tier — the claim. */
+  .benefits-grid .b h3 {
+    font-family: var(--font-head); font-weight: 700;
+    font-size: clamp(1.15rem, 1.7vw, 1.5rem);
+    letter-spacing: -0.01em; text-transform: uppercase; line-height: 1.02; margin-bottom: 0.65rem;
+  }
+  /* Quiet tier — the why. */
+  .benefits-grid .b p {
+    font-size: 0.82rem; line-height: 1.6; letter-spacing: -0.03em;
+    opacity: 0.6; max-width: 34ch;
+  }
+  .benefits-grid .b:hover .n { color: var(--black); opacity: 0.92; }
+
+  /* === ENDORSEMENT === */
+  .endorse { padding: 5.5rem 1.8rem; text-align: center; }
+  .endorse .seal { width: 84px; height: auto; margin: 0 auto 2rem; display: block; animation: slow-spin 44s linear infinite; }
+  .endorse .kicker { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.55; margin-bottom: 1.6rem; }
+  .endorse blockquote {
+    font-family: var(--font-head); font-weight: 700;
+    font-size: clamp(1.6rem, 3.6vw, 3.1rem); line-height: 1.1; letter-spacing: -0.01em;
+    text-transform: uppercase; max-width: 24ch; margin: 0 auto 1.8rem;
+  }
+  .endorse cite { font-style: normal; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.6; }
+  .endorse cite strong { display: block; font-family: var(--font-head); font-size: 1rem; letter-spacing: 0; opacity: 1; margin-bottom: 0.3rem; }
+
+  /* === USAGE === */
+  .usage { padding: 4rem 1.8rem; }
+  .usage-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+  .usage-col {
+    background: var(--white); border: 1px solid var(--line);
+    border-top: 4px solid var(--accent, var(--trail)); padding: 1.8rem 1.4rem;
+    display: flex; flex-direction: column;
+  }
+  .usage-col.classic { --accent: var(--trail); }
+  .usage-col.race { --accent: var(--gold); }
+  .usage-col.recovery { --accent: var(--ice); }
+  .usage-col .when { font-size: 0.64rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.55; margin-bottom: 0.8rem; }
+  .usage-col h3 { font-family: var(--font-head); font-weight: 700; font-size: 1.5rem; letter-spacing: 0; text-transform: uppercase; margin-bottom: 0.7rem; }
+  .usage-col p { font-size: 0.84rem; line-height: 1.55; letter-spacing: -0.03em; opacity: 0.8; }
+  .usage-col .dose { margin-top: auto; padding-top: 0.9rem; border-top: 1px solid var(--line); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; }
+  .usage-col p { margin-bottom: 1.2rem; }
+
+  /* === FAQ === */
+  .faq { padding: 4rem 1.8rem; }
+  .faq-list { border-top: 1px solid var(--line-strong); }
+  .faq details { border-bottom: 1px solid var(--line); }
+  .faq summary {
+    list-style: none; cursor: pointer; padding: 1.4rem 0;
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    font-family: var(--font-head); font-weight: 700; font-size: clamp(1rem, 1.6vw, 1.25rem);
+    letter-spacing: 0; text-transform: uppercase;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary .ic { font-family: var(--font-body); font-weight: 400; font-size: 1.3rem; transition: transform 0.2s; }
+  .faq details[open] summary .ic { transform: rotate(45deg); }
+  .faq .a { padding: 0 0 1.5rem; font-size: 0.9rem; line-height: 1.6; letter-spacing: -0.03em; max-width: 72ch; opacity: 0.82; }
+
+  /* === NEWSLETTER === */
+  .newsletter { padding: 5rem 1.8rem; text-align: center; }
+  .newsletter h2 { font-family: var(--font-head); font-weight: 700; font-size: clamp(1.8rem, 3.4vw, 3rem); letter-spacing: 0; text-transform: uppercase; margin-bottom: 0.8rem; }
+  .newsletter p { font-size: 0.9rem; letter-spacing: -0.03em; opacity: 0.75; margin-bottom: 2rem; }
+  .newsletter form { display: flex; gap: 0.6rem; max-width: 460px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+  .newsletter input {
+    flex: 1; min-width: 220px; padding: 0.95rem 1.1rem; border: 1px solid var(--black);
+    background: transparent; color: var(--black); font-family: var(--font-body); font-size: 0.85rem; letter-spacing: -0.03em;
+  }
+  .newsletter input::placeholder { color: rgba(0,0,0,0.4); }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 900px) {
+    .card.col-4, .card.col-6, .card.col-8 { grid-column: span 12; }
+    .card.col-4 { grid-column: span 6; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    nav.main-nav { display: none; }
+    .hero-runner { opacity: 0.4; }
+    .feature-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .feature.reverse .feature-media { order: 0; }
+    .benefits-grid { grid-template-columns: 1fr; }
+    .usage-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 540px) {
+    .cards { gap: 0.8rem; }
+    .grid-section { padding: 3rem 1rem 2rem; }
+    .hero { padding: 6rem 1rem 2rem; }
+    .footer-top { grid-template-columns: 1fr; }
+    .card.col-4 { grid-column: span 12; }
+  }
+
+  /* === BRAND TYPE STYLES — 2nd Wind Brand Identity, Mar 23 2026 === */
+  /* Title + Subtitle · Mono45 Headline Bold · 0% tracking */
+  .hero h1,
+  .section-label h2,
+  .product-card .label-row .name,
+  .product-card .label-row .meta .price,
+  .clip-card .card-label h3,
+  .quote-card blockquote,
+  .ingredients-list .name,
+  .footer-top .lead,
+  .text-card .body strong {
+    font-family: var(--font-head);
+    font-weight: 700;
+    letter-spacing: 0;
+    font-variation-settings: normal;
+  }
+  /* Body · Adapter Mono PE Variable · -7% tracking */
+  .text-card .body,
+  .hero-meta p {
+    font-family: var(--font-body);
+    letter-spacing: -0.07em;
+    font-variation-settings: "BORD" 300, "ital" 0, "slnt" 0, "wght" 200;
+  }
+  /* Caption · Adapter Mono PE Variable · -3% tracking */
+  .spec-card .item .v,
+  .footer-top ul li {
+    font-family: var(--font-body);
+    letter-spacing: -0.03em;
+    font-variation-settings: "BORD" 300, "ital" 0, "slnt" 0, "wght" 200;
+  }
+
+  /* === Same arrow cursor, just larger — ONLY on genuinely clickable things === */
+  @media (hover: hover) and (pointer: fine) {
+    a[href], button, .btn, .add-btn, .cart-pill, .product-card, [role="button"], [onclick], summary {
+      cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 28 28'><path fill='%23fff' stroke='%23000' stroke-width='1.4' stroke-linejoin='round' d='M4 3L4 23L9.2 18.1L12.3 25.2L15.1 24L12.1 17.1L19 17.1Z'/></svg>") 6 5, default;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- === HEADER === -->
+<header>
+  <a href="#home" class="brand-lockup" aria-label="2nd Wind">
+    <img class="word" src="img/2nd%20Windlogo.svg" alt="2nd Wind">
+  </a>
+
+  <nav class="main-nav">
+    <a href="#shop">Shop</a>
+    <a href="#science">Science</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+
+  <button class="cart-pill">Cart (0)</button>
+</header>
+
+<!-- === HERO === -->
+<section class="hero" id="home">
+  <div class="hero-symbol" aria-hidden="true"><img src="img/symbol.svg" alt=""></div>
+  <div class="hero-runner" aria-hidden="true"><img src="img/mascot.png" alt=""></div>
+
+  <div class="hero-inner">
+    <h1 class="headline">
+      Cold brew,<br>built to<br><span class="accent">go the distance.</span>
+    </h1>
+
+    <div class="hero-meta">
+      <p>Organic cold brew in three caffeine strengths — one for easy miles, one for hard sessions, one for recovery. Smooth enough to drink before you run: no jitters, no crash, no mid-run surprises.</p>
+      <div class="scroll-cue">Scroll <span>↓</span></div>
+    </div>
+
+    <div class="hero-cta">
+      <a href="#shop" class="btn">Shop the lineup</a>
+      <a href="#science" class="btn ghost">Why cold brew</a>
+    </div>
+  </div>
+</section>
+
+<!-- === VALUE STRIP === -->
+<div class="value-strip">
+  <div class="track" aria-hidden="false">
+    <span>Low acid</span>
+    <span>3 caffeine strengths</span>
+    <span>USDA organic</span>
+    <span>Single origin Brazil</span>
+    <span>No sugar &middot; no syrup &middot; no milk</span>
+    <span aria-hidden="true">Low acid</span>
+    <span aria-hidden="true">3 caffeine strengths</span>
+    <span aria-hidden="true">USDA organic</span>
+    <span aria-hidden="true">Single origin Brazil</span>
+    <span aria-hidden="true">No sugar &middot; no syrup &middot; no milk</span>
+  </div>
+</div>
+
+<!-- === SCIENCE / WHY COLD BREW === -->
+<section class="feature" id="science">
+  <div class="feature-inner">
+    <div class="feature-media trail">
+      <img class="bottle" src="img/image%20114.png" alt="2nd Wind Classic cold brew bottle">
+    </div>
+    <div>
+      <div class="kicker">Why cold brew</div>
+      <h2>Smoother coffee, by design</h2>
+      <p>Hot coffee is acidic and harsh — the last thing you want sloshing around before a hard effort. Cold brew extraction steeps our beans for 16 hours in cold water, pulling out flavour and caffeine while leaving most of the acid behind.</p>
+      <p>The result is up to <strong>67% less acid</strong> than hot coffee — a smoother, naturally sweet cup that sits light whether you drink it before a run or after one.</p>
+      <ul class="mini-list">
+        <li>Cold water only, never heated</li>
+        <li>Single-origin beans from Cerrado, Brazil</li>
+        <li>USDA Organic — nothing added</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- === BENEFITS === -->
+<section class="benefits">
+  <div class="section-label">
+    <h2>Made to perform</h2>
+    <span class="count">Before · during · after</span>
+  </div>
+  <div class="benefits-grid">
+    <div class="b">
+      <div class="n">01</div>
+      <h3>Match the dose to the day</h3>
+      <p>A lighter cup, a standard, and a double. Pick the strength your session needs instead of guessing.</p>
+    </div>
+    <div class="b">
+      <div class="n">02</div>
+      <h3>Settles before you start</h3>
+      <p>Light enough to drink 30 minutes out — no heaviness or stitch once the pace picks up.</p>
+    </div>
+    <div class="b">
+      <div class="n">03</div>
+      <h3>Five ingredients, tops</h3>
+      <p>Every bottle has a label you can read in one breath, and pronounce without trying.</p>
+    </div>
+    <div class="b">
+      <div class="n">04</div>
+      <h3>Electrolytes when it counts</h3>
+      <p>Recovery adds sea salt and potassium to put back what a hard run sweats out.</p>
+    </div>
+    <div class="b">
+      <div class="n">05</div>
+      <h3>Same hit, every bottle</h3>
+      <p>Cold-steeped in small lots and measured by batch, so the taste and the kick don't drift.</p>
+    </div>
+    <div class="b">
+      <div class="n">06</div>
+      <h3>Cold and ready</h3>
+      <p>Sealed and shelf-stable. Chill it, grab it, go — no brewing and no waiting around.</p>
+    </div>
+  </div>
+</section>
+
+<!-- === ENDORSEMENT === -->
+<section class="endorse">
+  <img class="seal" src="img/ms.svg" alt="">
+  <div class="kicker">Trusted by runners</div>
+  <blockquote>“I stopped getting side stitches mid-run — and I finally enjoy my pre-race coffee.”</blockquote>
+  <cite><strong>Maya Chen</strong>2:41 Marathoner · Berkeley Track Club</cite>
+</section>
+
+<!-- === SHOP THE LINEUP === -->
+<section class="grid-section" id="shop">
+  <div class="section-label">
+    <h2>Shop the lineup</h2>
+    <span class="count">3 blends</span>
+  </div>
+
+  <div class="cards">
+    <!-- CLASSIC -->
+    <article class="card product-card classic col-4 tall" onclick="location.href='product.html#classic'">
+      <span class="flood"></span>
+      <div class="top-row"><span>EVERYDAY</span><span>150MG CAFFEINE</span></div>
+      <div class="bottle-wrap">
+        <img class="bottle" src="img/image%20114.png" alt="2nd Wind Cold Brew Coffee — Classic, 10.1 fl oz">
+      </div>
+      <div class="label-row">
+        <h3 class="name">Classic</h3>
+        <div class="meta">
+          <span class="price">$6</span>
+          <button class="add-btn" aria-label="Add Classic to cart" data-name="Classic" data-price="6">+</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- RACE -->
+    <article class="card product-card race col-4 tall" onclick="location.href='product.html#race'">
+      <span class="flood"></span>
+      <div class="top-row"><span>PRE-RACE</span><span>200MG CAFFEINE</span></div>
+      <div class="bottle-wrap">
+        <img class="bottle" src="img/image%20118.png" alt="2nd Wind Cold Brew Coffee — Race, 10.1 fl oz">
+      </div>
+      <div class="label-row">
+        <h3 class="name">Race</h3>
+        <div class="meta">
+          <span class="price">$7</span>
+          <button class="add-btn" aria-label="Add Race to cart" data-name="Race" data-price="7">+</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- RECOVERY -->
+    <article class="card product-card recovery col-4 tall" onclick="location.href='product.html#recovery'">
+      <span class="flood"></span>
+      <div class="top-row"><span>POST-RUN</span><span>90MG + ELECTROLYTES</span></div>
+      <div class="bottle-wrap">
+        <img class="bottle" src="img/image%20117.png" alt="2nd Wind Cold Brew Coffee — Recovery, 10.1 fl oz">
+      </div>
+      <div class="label-row">
+        <h3 class="name">Recovery</h3>
+        <div class="meta">
+          <span class="price">$7</span>
+          <button class="add-btn" aria-label="Add Recovery to cart" data-name="Recovery" data-price="7">+</button>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- === HOW RUNNERS USE IT === -->
+<section class="usage" id="how">
+  <div class="section-label">
+    <h2>One for every effort</h2>
+    <span class="count">How runners use 2nd Wind</span>
+  </div>
+
+  <div class="usage-grid">
+    <div class="usage-col classic">
+      <div class="when">Easy &amp; base miles</div>
+      <h3>Classic</h3>
+      <p>Your everyday cup for shakeouts and base miles — about a strong coffee's worth of caffeine. ~120mg.</p>
+      <div class="dose">1 bottle · 30–45 min pre-run</div>
+    </div>
+    <div class="usage-col race">
+      <div class="when">Hard sessions &amp; race day</div>
+      <h3>Race</h3>
+      <p>Double the kick from organic green-coffee extract for intervals, tempos, and start lines. ~240mg.</p>
+      <div class="dose">1 bottle · 45 min before</div>
+    </div>
+    <div class="usage-col recovery">
+      <div class="when">After the finish</div>
+      <h3>Recovery</h3>
+      <p>Coffee with sea salt and potassium to rehydrate as you cool down. ~95mg.</p>
+      <div class="dose">1 bottle · within the hour post-run</div>
+    </div>
+  </div>
+</section>
+
+<!-- === REVIEWS === -->
+<section class="grid-section" id="reviews">
+  <div class="section-label">
+    <h2>Real runners, real results</h2>
+    <span class="count">Reviews</span>
+  </div>
+
+  <div class="cards">
+    <article class="card quote-card classic col-4">
+      <div class="mark">“</div>
+      <blockquote>I used to need two coffees. Now just one bottle and I'm out the door.</blockquote>
+      <cite>Radana Berger — 3:02 Marathoner</cite>
+    </article>
+
+    <article class="card quote-card race col-4">
+      <div class="mark">“</div>
+      <blockquote>Lighter legs in the workout, fresher legs the next day.</blockquote>
+      <cite>Jasper Okonkwo — 1:08 Half</cite>
+    </article>
+
+    <article class="card quote-card recovery col-4">
+      <div class="mark">“</div>
+      <blockquote>Caffeine that performs as hard as I do. No stomach drama.</blockquote>
+      <cite>Sam Whitford — Triathlon</cite>
+    </article>
+  </div>
+</section>
+
+<!-- === 04 — WHAT'S INSIDE === -->
+<section class="ingredients" id="ingredients">
+  <div class="section-label">
+    <h2>What's inside</h2>
+    <span class="count">Full transparency</span>
+  </div>
+
+  <ul class="ingredients-list">
+    <li><span class="num">01</span><span class="name">Filtered water <em>base</em></span><span class="tag">All variants</span></li>
+    <li><span class="num">02</span><span class="name">Organic Brazilian coffee <em>natural process</em></span><span class="tag">Single origin</span></li>
+    <li><span class="num">03</span><span class="name">Sea salt <em>trace</em></span><span class="tag">Recovery only</span></li>
+    <li><span class="num">04</span><span class="name">Potassium citrate <em>electrolyte</em></span><span class="tag">Recovery only</span></li>
+    <li><span class="num">05</span><span class="name">Green coffee extract <em>caffeine</em></span><span class="tag">Race only</span></li>
+    <li><span class="num">06</span><span class="name">Nothing else <em>no sugar / no syrup / no milk</em></span><span class="tag">Promise</span></li>
+  </ul>
+</section>
+
+<!-- === RITUAL === -->
+<section class="feature reverse">
+  <div class="feature-inner">
+    <div class="feature-media gold">
+      <img class="bottle" src="img/image%20118.png" alt="2nd Wind Race cold brew bottle">
+    </div>
+    <div>
+      <div class="kicker">The routine</div>
+      <h2>Same bottle. Every session.</h2>
+      <p>The best runners don't wing their pre-run fuel. Pick your strength, drink it at the same point in your warm-up, and get the same energy every time — no second-guessing on race morning.</p>
+      <ul class="mini-list">
+        <li>10.1 fl oz / 300ml — one serving</li>
+        <li>8-month sealed shelf life</li>
+        <li>Travels at room temp, chill to serve</li>
+        <li>Recyclable glass bottle</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- === LOGO ANIMATION === -->
+<section class="logo-section">
+  <div class="logo-band">
+    <video class="logo-anim" autoplay muted loop playsinline src="2ndwind-logo-white.mp4"></video>
+  </div>
+</section>
+
+<!-- === FAQ === -->
+<section class="faq" id="faq">
+  <div class="section-label">
+    <h2>Frequently asked questions</h2>
+    <span class="count">Good to know</span>
+  </div>
+
+  <div class="faq-list">
+    <details>
+      <summary>How much caffeine is in each bottle? <span class="ic">+</span></summary>
+      <div class="a">Classic is about 120mg — roughly a strong cup of coffee. Race steps up to ~240mg with organic green-coffee extract for hard efforts. Recovery is a lighter ~95mg so it won't keep you up after an evening run.</div>
+    </details>
+    <details>
+      <summary>Why cold brew instead of regular coffee? <span class="ic">+</span></summary>
+      <div class="a">Cold brewing steeps the grounds in cold water for 16 hours, which extracts far less acid than hot brewing — up to 67% less. That makes it smoother, naturally sweeter, and much easier on your stomach before and after running.</div>
+    </details>
+    <details>
+      <summary>When should I drink each one? <span class="ic">+</span></summary>
+      <div class="a">Classic for daily and easy miles, 30–45 minutes before you head out. Race about 45 minutes before a hard session or start line. Recovery within the hour after you finish, to rehydrate and refuel.</div>
+    </details>
+    <details>
+      <summary>Is it really organic? <span class="ic">+</span></summary>
+      <div class="a">Yes — USDA Organic certified, made with natural-process beans from a single farm in Cerrado, Brazil. No sugar, syrup, milk, or artificial anything.</div>
+    </details>
+    <details>
+      <summary>How should I store it, and how long does it keep? <span class="ic">+</span></summary>
+      <div class="a">Keep it refrigerated and enjoy cold. Sealed, it stays fresh for months; once opened, drink within 3 days for the best flavour.</div>
+    </details>
+    <details>
+      <summary>Is it safe for competition? <span class="ic">+</span></summary>
+      <div class="a">2nd Wind contains no banned substances — just organic coffee, water, and (in Recovery) basic electrolytes. Always check current rules for your federation if you compete at the elite level.</div>
+    </details>
+  </div>
+</section>
+
+<!-- === NEWSLETTER === -->
+<section class="newsletter">
+  <h2>Join the club</h2>
+  <p>Training tips, the science behind the brew, and the occasional first dibs on new drops.</p>
+  <form onsubmit="return false;">
+    <input type="email" placeholder="you@email.com" aria-label="Email address" required>
+    <button type="submit" class="btn">Sign up</button>
+  </form>
+</section>
+
+<!-- === FOOTER === -->
+<footer id="contact">
+  <div class="footer-top">
+    <div>
+      <img class="footer-word" src="img/2nd%20Windlogo.svg" alt="2nd Wind">
+      <p class="lead">Ready for your miles ahead.</p>
+    </div>
+    <div>
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#shop">Classic</a></li>
+        <li><a href="#shop">Race</a></li>
+        <li><a href="#shop">Recovery</a></li>
+        <li><a href="#shop">12-pack</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Learn</h4>
+      <ul>
+        <li><a href="#science">Why cold brew</a></li>
+        <li><a href="#how">How to use it</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:hello@2ndwind.co">hello@2ndwind.co</a></li>
+        <li>Berkeley, CA</li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Strava Club</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bot">
+    <span>© 2026 2nd Wind Coffee Co.</span>
+    <span>USDA Organic / Single Origin Brazil</span>
+    <span>Berkeley California</span>
+  </div>
+</footer>
+
+<script>
+  const links = document.querySelectorAll('nav.main-nav a');
+  const ids = ['shop','science','reviews','faq'];
+  const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => obs.observe(s));
+
+  // Hero runner dissolves into the background as you scroll the splash away.
+  const runner = document.querySelector('.hero-runner');
+  const hero = document.querySelector('.hero');
+  const dissolve = () => {
+    if (!runner || !hero) return;
+    const y = window.scrollY;
+    const p = Math.min(1, y / (hero.offsetHeight * 0.8));
+    runner.style.opacity = (1 - p).toFixed(3);
+    runner.style.transform = `translateY(${y * 0.12}px)`;
+  };
+  dissolve();
+  window.addEventListener('scroll', dissolve, { passive: true });
+
+  // Add-to-cart: bump the header count and flash the button in the variant colour.
+  let cartCount = 0;
+  const cartPill = document.querySelector('.cart-pill');
+  document.querySelectorAll('.product-card .add-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cartCount++;
+      if (cartPill) cartPill.textContent = `Cart (${cartCount})`;
+      btn.classList.add('added');
+      btn.textContent = '✓';
+      clearTimeout(btn._t);
+      btn._t = setTimeout(() => { btn.textContent = '+'; btn.classList.remove('added'); }, 900);
+    });
+  });
+
+  // If a bottle photo is missing, show a clean labelled fallback panel.
+  document.querySelectorAll('.product-card .bottle').forEach(img => {
+    img.addEventListener('error', () => {
+      const card = img.closest('.product-card');
+      const name = card.querySelector('.name').textContent.trim();
+      const wrap = img.parentElement;
+      wrap.innerHTML = `
+        <div style="
+          position:absolute; inset:18% 20% 14% 20%;
+          background: var(--off-white); color: var(--black);
+          display:flex; flex-direction:column; align-items:center; justify-content:center;
+          padding:1.2rem 1rem; text-align:center; border:1px solid var(--line-strong);
+          font-family: var(--font-body); font-size:0.6rem; letter-spacing:0.2em;
+          text-transform:uppercase; line-height:1.6;
+        ">
+          <div style="font-family:var(--font-head); font-weight:700; font-size:1.4rem; letter-spacing:-0.01em; margin-bottom:0.4rem;">2nd Wind</div>
+          <div>Cold Brew Coffee</div>
+          <div style="margin-top:0.6rem; font-family:var(--font-head); font-weight:700; font-size:1.1rem;">${name}</div>
+          <div style="margin-top:auto; padding-top:1rem;">10.1 fl oz / 300ml</div>
+        </div>`;
+    });
+  });
+
+</script>
+
+</body>
+</html>
