@@ -245,18 +245,29 @@
             .tw-cream-frame img[src*="badge-"] { animation: none; }
         }
 
-        /* Pair grid: two equal columns (used for the t-shirt front + back). */
-        .tw-pair {
+        /* T-shirt mockups sit on the brand's wave gradient and grow on hover. */
+        .tw-tshirts {
+            background: url('img/2nd-wind/background-wave.png') center/cover no-repeat;
+            padding: 56px 40px;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 24px;
+            box-sizing: border-box;
         }
-        .tw-pair img {
+        .tw-tshirts img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
             display: block;
             background: transparent;
+            transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+            transform-origin: center center;
+            will-change: transform;
+        }
+        .tw-tshirts img:hover {
+            transform: scale(1.14);
+        }
+        @media (max-width: 700px) {
+            .tw-tshirts { padding: 32px 20px; gap: 16px; }
         }
 
         /* Three-up editorial photography row. */
@@ -337,16 +348,13 @@
                         <!-- Product packaging: three bottles standing on the brand backdrop -->
                         <img src="img/2nd-wind/mockup-product-bottles-trio.png" alt="2nd Wind cold brew range: Classic, Race, Recovery">
 
-                        <!-- Brand hero: editorial product shot -->
-                        <img src="img/2nd-wind/brand-hero.png" alt="2nd Wind brand hero photograph">
+                        <!-- Editorial: large-screen brand application -->
+                        <img src="img/2nd-wind/Large%20Screen%20Mockup.png" alt="2nd Wind brand on a large-screen editorial mockup">
 
                         <!-- Brand animation: wordmark + track symbol coming together -->
                         <video autoplay loop muted playsinline>
                             <source src="img/2nd-wind/animation-brand.mp4" type="video/mp4">
                         </video>
-
-                        <!-- Full logo lockup -->
-                        <img src="img/2nd-wind/logo.png" alt="2nd Wind full logo lockup">
 
                         <!-- Brand-system badges: Single Origin Brazil + concentric rings -->
                         <div class="tw-cream-frame" aria-label="2nd Wind brand badges">
@@ -385,7 +393,7 @@
                         <!-- Extended palette: horizontal-scroll strip of 4 families.
                              Each family stagger-reveals its 3 shades on scroll. -->
                         <div class="tw-slide tw-color" aria-label="2nd Wind extended colour palette">
-                            <h3 class="tc-heading">Palette</h3>
+                            <h3 class="tc-heading">Color Palette</h3>
                             <div class="tc-strip" id="tc-strip">
                                 <div class="tc-group">
                                     <p class="tc-group-title">Neutrals</p>
@@ -436,14 +444,11 @@
                         <!-- Website shop view -->
                         <img src="img/2nd-wind/mockup-website-shop.png" alt="2nd Wind website shop: three bottle variants on a laptop">
 
-                        <!-- Editorial: large-screen brand application -->
-                        <img src="img/2nd-wind/Large%20Screen%20Mockup.png" alt="2nd Wind brand on a large-screen editorial mockup">
-
                         <!-- Takeaway coffee cup carrying the track pattern -->
                         <img src="img/2nd-wind/mockup-coffee-cup.png" alt="Takeaway coffee cup with 2nd Wind track pattern">
 
-                        <!-- Apparel: t-shirt front + back -->
-                        <div class="tw-pair">
+                        <!-- Apparel: t-shirt front + back on the wave gradient -->
+                        <div class="tw-tshirts" aria-label="2nd Wind t-shirt: front and back">
                             <img src="img/2nd-wind/mockup-tshirt-front.png" alt="2nd Wind t-shirt, front">
                             <img src="img/2nd-wind/mockup-tshirt-back.png" alt="2nd Wind t-shirt, back">
                         </div>
@@ -464,16 +469,6 @@
 
                         <!-- Social: Instagram grid -->
                         <img src="img/2nd-wind/mockup-instagram-posts.png" alt="2nd Wind Instagram grid of quotes, photos, and product posts">
-
-                        <!-- Editorial photography: runner silhouette -->
-                        <img src="img/2nd-wind/photo-runner-silhouette.png" alt="Runner silhouette in motion">
-
-                        <!-- Editorial photography: 3-up row -->
-                        <div class="tw-row-3" aria-label="2nd Wind editorial photography">
-                            <img src="img/2nd-wind/photography-1.png" alt="2nd Wind editorial photography 1">
-                            <img src="img/2nd-wind/photography-2.png" alt="2nd Wind editorial photography 2">
-                            <img src="img/2nd-wind/photography-3.png" alt="2nd Wind editorial photography 3">
-                        </div>
                     </div>
 
                     <!-- Text (Right Column) - 3 Sections -->
