@@ -196,10 +196,20 @@
     letter-spacing: -0.01em;
     max-width: 44ch;
   }
+  /* Hero scroll cue — pinned to the bottom of the hero, centered.
+     Opacity is driven by the dissolve JS so it vanishes on scroll. */
   .scroll-cue {
+    position: absolute;
+    left: 50%;
+    bottom: 2rem;
+    transform: translateX(-50%);
+    z-index: 3;
     font-size: 0.68rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
+    color: var(--black);
+    transition: opacity 0.2s ease;
+    will-change: opacity;
   }
   .scroll-cue span { display: inline-block; animation: bob 1.6s infinite ease-in-out; }
   @keyframes bob { 0%,100% { transform: translateY(0);} 50% { transform: translateY(4px);} }
@@ -420,23 +430,56 @@
     text-transform: uppercase; opacity: 0.6; margin-top: 1.5rem; display: block;
   }
 
-  /* === LOGO ANIMATION — white band, inset to match the content gutter === */
+  /* === LOGO ANIMATION — full-width white band, the track symbol draws
+         itself on (stroke-dashoffset), fills in, holds, fades, loops. === */
   .logo-section {
-    padding: 2rem 1.8rem;          /* same horizontal gutter as every section */
+    padding: 2rem 0;              /* full-width band, no horizontal gutter */
   }
   .logo-band {
     background: var(--white);
     width: 100%;
-    padding: 4rem 1.8rem;
+    padding: 5rem 1.8rem;
     display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
   }
   .logo-anim {
-    width: 100%;
-    max-width: 720px;
-    height: auto;
-    object-fit: contain;          /* letterboxes — the mark is never cut off */
+    width: auto;
+    max-width: 320px;
+    height: clamp(110px, 14vw, 180px);
     display: block;
     pointer-events: none;
+    overflow: visible;
+  }
+  /* Each lane outlines first, then fills in. Paths share a single keyframe
+     and are staggered with animation-delay so the lanes draw in sequence. */
+  .logo-anim path {
+    fill: #000;
+    stroke: #000;
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    fill-opacity: 0;
+    animation: logo-draw 6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    will-change: stroke-dashoffset, fill-opacity, opacity;
+  }
+  .logo-anim path:nth-child(1) { animation-delay: 0s;    }
+  .logo-anim path:nth-child(2) { animation-delay: 0.35s; }
+  .logo-anim path:nth-child(3) { animation-delay: 0.70s; }
+
+  @keyframes logo-draw {
+    0%        { stroke-dashoffset: 1; fill-opacity: 0; opacity: 1; }
+    35%       { stroke-dashoffset: 0; fill-opacity: 0; opacity: 1; }
+    50%, 82%  { stroke-dashoffset: 0; fill-opacity: 1; opacity: 1; }
+    95%       { stroke-dashoffset: 0; fill-opacity: 1; opacity: 0; }
+    100%      { stroke-dashoffset: 1; fill-opacity: 0; opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .logo-anim path {
+      animation: none;
+      stroke-dashoffset: 0;
+      fill-opacity: 1;
+    }
   }
 
   /* === INGREDIENTS === */
@@ -669,16 +712,27 @@
   .newsletter input::placeholder { color: rgba(0,0,0,0.4); }
 
   /* === RESPONSIVE === */
+  @media (max-width: 1100px) {
+    /* Runner sits in the right half of the source image — at narrower widths
+       the cover-scaling enlarges the photo and the right-anchor pulls the
+       runner leftward into the viewport. Lowering object-position-x shifts
+       the image left so the runner stays visually pinned to the right edge. */
+    .hero-runner img { object-position: 80% top; }
+  }
   @media (max-width: 900px) {
     .card.col-4, .card.col-6, .card.col-8 { grid-column: span 12; }
     .card.col-4 { grid-column: span 6; }
     .footer-top { grid-template-columns: 1fr 1fr; }
     nav.main-nav { display: none; }
     .hero-runner { opacity: 0.4; }
+    .hero-runner img { object-position: 70% top; }
     .feature-inner { grid-template-columns: 1fr; gap: 2rem; }
     .feature.reverse .feature-media { order: 0; }
     .benefits-grid { grid-template-columns: 1fr; }
     .usage-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 700px) {
+    .hero-runner img { object-position: 60% top; }
   }
   @media (max-width: 540px) {
     .cards { gap: 0.8rem; }
@@ -686,6 +740,7 @@
     .hero { padding: 6rem 1rem 2rem; }
     .footer-top { grid-template-columns: 1fr; }
     .card.col-4 { grid-column: span 12; }
+    .hero-runner img { object-position: 50% top; }
   }
 
   /* === BRAND TYPE STYLES — 2nd Wind Brand Identity, Mar 23 2026 === */
@@ -757,7 +812,6 @@
 
     <div class="hero-meta">
       <p>Organic cold brew in three caffeine strengths — one for easy miles, one for hard sessions, one for recovery. Smooth enough to drink before you run: no jitters, no crash, no mid-run surprises.</p>
-      <div class="scroll-cue">Scroll <span>↓</span></div>
     </div>
 
     <div class="hero-cta">
@@ -765,6 +819,8 @@
       <a href="#science" class="btn ghost">Why cold brew</a>
     </div>
   </div>
+
+  <div class="scroll-cue">Scroll <span>↓</span></div>
 </section>
 
 <!-- === VALUE STRIP === -->
@@ -1006,7 +1062,11 @@
 <!-- === LOGO ANIMATION === -->
 <section class="logo-section">
   <div class="logo-band">
-    <video class="logo-anim" autoplay muted loop playsinline src="2ndwind-logo-white.mp4"></video>
+    <svg class="logo-anim" viewBox="0 0 727 388" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="2nd Wind track symbol">
+      <path pathLength="1" d="M315.889 0L293.937 38.0127H190.588C106.437 38.0128 38.0128 106.437 38.0127 190.588V196.527C38.0127 256.54 72.8905 308.571 123.4 333.47H123.399C143.689 343.448 166.496 349.103 190.587 349.103H536.411C620.562 349.102 688.985 280.679 688.985 196.527V190.636C688.985 106.484 620.562 38.0608 536.411 38.0605H293.935L315.888 0.0478516H536.411V0C641.517 0.00025891 726.999 85.482 726.999 190.588V196.48C726.999 301.586 641.517 387.068 536.411 387.068H190.587C159.559 387.068 130.289 379.608 104.393 366.398V366.397C42.5269 334.894 0 270.605 0 196.527V190.636C0 85.5296 85.4818 0.0476013 190.588 0H315.889Z"/>
+      <path pathLength="1" d="M533.134 335.465C610.585 335.465 673.544 272.458 673.544 195.054V192.108C673.544 114.657 610.538 51.6975 533.134 51.6975H286.096L264.144 89.7106H533.134C589.631 89.7106 635.531 135.659 635.531 192.108V195.054C635.531 251.504 589.583 297.452 533.134 297.452H193.867C178.139 297.452 163.266 293.793 149.962 287.426L130.86 320.497C149.819 330.048 171.202 335.465 193.867 335.465H533.086H533.134Z"/>
+      <path pathLength="1" d="M529.807 103.302C579.604 103.302 620.088 143.786 620.088 193.583C620.088 243.38 579.604 283.864 529.807 283.864H197.192C182.89 283.864 169.443 280.442 157.421 274.503V274.502C127.581 259.772 106.911 229.077 106.911 193.583C106.911 143.786 147.395 103.302 197.192 103.302H529.807ZM197.192 141.315C168.35 141.316 144.925 164.741 144.925 193.583C144.925 215.013 157.944 233.497 176.476 241.527C182.843 244.283 189.828 245.851 197.192 245.851H529.807C558.649 245.85 582.074 222.425 582.074 193.583C582.074 164.741 558.649 141.316 529.807 141.315H197.192Z"/>
+    </svg>
   </div>
 </section>
 
@@ -1113,14 +1173,22 @@
   sections.forEach(s => obs.observe(s));
 
   // Hero runner dissolves into the background as you scroll the splash away.
+  // The scroll cue fades out fast — it's a one-time hint, not a persistent label.
   const runner = document.querySelector('.hero-runner');
   const hero = document.querySelector('.hero');
+  const scrollCue = document.querySelector('.scroll-cue');
   const dissolve = () => {
-    if (!runner || !hero) return;
+    if (!hero) return;
     const y = window.scrollY;
-    const p = Math.min(1, y / (hero.offsetHeight * 0.8));
-    runner.style.opacity = (1 - p).toFixed(3);
-    runner.style.transform = `translateY(${y * 0.12}px)`;
+    if (runner) {
+      const p = Math.min(1, y / (hero.offsetHeight * 0.8));
+      runner.style.opacity = (1 - p).toFixed(3);
+      runner.style.transform = `translateY(${y * 0.12}px)`;
+    }
+    if (scrollCue) {
+      const cueP = Math.min(1, y / 200);   // gone by 200px of scroll
+      scrollCue.style.opacity = (1 - cueP).toFixed(3);
+    }
   };
   dissolve();
   window.addEventListener('scroll', dissolve, { passive: true });
