@@ -512,7 +512,7 @@ footer {
 @media (max-width: 768px) {
     body {
         background: #fff;
-        padding: 20px;
+        padding: 12px;
     }
 
     .layout-wrapper {
@@ -660,6 +660,10 @@ footer {
 }
 
 @media (max-width: 480px) {
+    body {
+        padding: 8px;
+    }
+
     .hero h1 {
         font-size: 30px;
     }
