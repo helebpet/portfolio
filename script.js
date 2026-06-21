@@ -1,20 +1,11 @@
 // Rotating words
-const designTypes = [
-    { text: 'editorial', article: 'an' },
-    { text: 'graphic', article: 'a' },
-    { text: 'web', article: 'a' },
-    { text: 'UI', article: 'a' },
-    { text: 'UX', article: 'a' }
-];
+const designTypes = ['UX', 'UI', 'brand', 'graphic'];
 
-let currentIndex = 1; // Start with 'graphic'
+let currentIndex = 3; // Start with 'graphic' (matches the HTML default)
 
 function rotateWord() {
     currentIndex = (currentIndex + 1) % designTypes.length;
-    const current = designTypes[currentIndex];
-    
-    document.getElementById('rotating-article').textContent = current.article;
-    document.getElementById('rotating-word').textContent = current.text;
+    document.getElementById('rotating-word').textContent = designTypes[currentIndex];
 }
 
 // Rotate every 2 seconds

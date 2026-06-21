@@ -1,6 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Xanh+Mono:ital@0;1&display=swap');
 @import url('https://use.typekit.net/vzz8cwm.css');
 
+/* Brand accent colors */
+:root {
+    --accent-green: #BDFDAA;
+    --accent-purple: #E4AAFD;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -81,7 +87,8 @@ nav a::before {
 }
 
 nav a.active::before {
-    background: #4CAF50;
+    background: var(--accent-green);
+    border: 1px solid #000;
 }
 
 .spacer {
@@ -188,6 +195,8 @@ nav a.active::before {
     border-radius: 50%;
     font-style: italic;
     white-space: nowrap;
+    background: var(--accent-purple);
+    color: #000;
 }
 
 .hero p {
@@ -749,8 +758,13 @@ html.dark .arrow-circle {
     border-color: #e8e8e8;
 }
 
-html.dark .circle {
+html.dark nav a.active::before {
     border-color: #e8e8e8;
+}
+
+html.dark .circle {
+    border-color: #000;
+    color: #000;
 }
 
 html.dark .hero p {
