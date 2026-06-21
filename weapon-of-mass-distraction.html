@@ -8,54 +8,55 @@
     <link rel="stylesheet" href="styles.css">
     <script src="dark-mode.js"></script>
     <style>
+        /* Slideshow holds absolutely-positioned images, so it needs its own
+           height. aspect-ratio matches the source photos (3000x4000) so the
+           images are never stretched or cropped to fit a neighbour. */
         .slideshow-container {
             position: relative;
             width: 100%;
-            height: 100%;
+            aspect-ratio: 3 / 4;
             overflow: hidden;
         }
-        
+
         .slideshow-image {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             position: absolute;
             top: 0;
             left: 0;
             opacity: 0;
             transition: opacity 1s ease-in-out;
         }
-        
+
         .slideshow-image.active {
             opacity: 1;
         }
-        
+
+        /* Two images side by side, each kept at its natural proportions and
+           aligned to the top (no stretching to match the taller one). */
         .image-row-2col {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-            align-items: stretch;
+            align-items: start;
         }
-        
-        .image-row-2col > * {
-            height: 100%;
-            width: 100%;
-        }
-        
+
         .image-row-2col img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
+            object-fit: contain;
         }
-        
+
         @keyframes fadeInOut {
             0% { opacity: 0; }
             10% { opacity: 1; }
             90% { opacity: 1; }
             100% { opacity: 0; }
         }
-        
-        @media (max-width: 768px) {
+
+        /* One image per screen on phones and small tablets */
+        @media (max-width: 900px) {
             .image-row-2col {
                 grid-template-columns: 1fr;
             }
