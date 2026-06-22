@@ -98,8 +98,9 @@ function setup() {
     // Attach canvas to specific HTML element (assumes div with id='p5-container' exists)
     canvas.parent('p5-container');
     
-    // Initialize webcam capture with VIDEO constant from p5.js
-    capture = createCapture(VIDEO);
+    // Initialize webcam capture. Request the front (selfie) camera and no audio
+    // so it behaves correctly on phones (otherwise they often open the rear cam).
+    capture = createCapture({ audio: false, video: { facingMode: 'user' } });
     // Set capture resolution to standard 640x480 for consistent performance
     capture.size(640, 480);
     // Hide the default video element since we'll draw it manually on canvas
