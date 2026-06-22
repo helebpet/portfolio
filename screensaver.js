@@ -362,8 +362,13 @@
     document.addEventListener('DOMContentLoaded', function () {
         setup();
 
-        // Show immediately only on the very first page load of the session
-        if (!sessionStorage.getItem('ss_visited')) {
+        // Show the intro immediately only on the home page, and only on the
+        // first page load of the session. On project case studies and other
+        // pages it never covers the content on load — it only appears on idle.
+        var path = location.pathname.replace(/\/+$/, '');
+        var isHome = path === '' || /\/index$/.test(path) || /\/index\.html$/.test(path);
+
+        if (isHome && !sessionStorage.getItem('ss_visited')) {
             sessionStorage.setItem('ss_visited', '1');
             activate();
         } else {

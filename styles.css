@@ -246,19 +246,16 @@ nav a.active::before {
     text-decoration: none;
     color: #000;
     display: block;
-    transition: opacity 0.3s;
-}
-
-.project-card:hover {
-    opacity: 0.7;
 }
 
 .project-image {
+    position: relative;
     width: 100%;
     aspect-ratio: 4/3;
     background: #ddd;
     margin-bottom: 12px;
     overflow: hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .project-image img,
@@ -267,6 +264,28 @@ nav a.active::before {
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.6s ease, filter 0.5s ease;
+}
+
+/* Black and white by default. */
+.project-image:not(.framed-pewter) img,
+.project-image:not(.framed-pewter) video {
+    filter: grayscale(1);
+}
+
+/* Hover: reveal true color and grow the image. */
+.project-card:hover .project-image {
+    transform: translateY(-5px);
+}
+
+.project-card:hover .project-image:not(.framed-pewter) img,
+.project-card:hover .project-image:not(.framed-pewter) video {
+    filter: none;
+}
+
+.project-card:hover .project-image img,
+.project-card:hover .project-image video {
+    transform: scale(1.1);
 }
 
 .project-image video {
@@ -886,6 +905,7 @@ html.dark .project-year {
 html.dark .project-title a {
     color: #e8e8e8;
 }
+
 
 html.dark .project-image {
     background: #2a2a2a;
