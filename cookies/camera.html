@@ -3,13 +3,20 @@
   <head>
     <title>We Got You!</title>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <link rel="stylesheet" type="text/css" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;700&display=swap" rel="stylesheet">
-  
+
     <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/addons/p5.sound.min.js"></script>
-    <script src="duotone.js"></script>
     <link rel="icon" type="image/png" href="camerafavicon.png">
+    <style>
+      /* Full-bleed canvas; block touch gestures so dragging scrolls the film
+         strip instead of panning/zooming the page. */
+      html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #cc0000; }
+      body { touch-action: none; overscroll-behavior: none; }
+      #p5-container canvas { display: block; }
+    </style>
   </head>
   <body>
     <main>

@@ -81,6 +81,10 @@ let beepOsc, beepEnv;    // Oscillator + envelope used for all short beeps
 let audioReady = false;  // True once the audio context is started by a user gesture
 let lastRadarPing = 0;   // Timing for the ambient radar ping
 
+// Responsive layout, recomputed each frame (handles desktop + mobile/portrait)
+let L = null;
+let cameraReadyTime = 0; // When the camera became ready (used to auto-start the feed)
+
 // Duotone filter control variables
 let duotoneEnabled = true; // Boolean to toggle duotone effect on/off
 let shadowColorHex = '#000000';   // Hex color for dark areas in duotone effect (black)
@@ -117,10 +121,14 @@ function draw() {
     // Set background to surveillance red color (RGB: 204, 0, 0)
     background(204, 0, 0);
 
+    // Recompute responsive layout (desktop side-by-side vs. mobile stacked)
+    L = computeLayout();
+
     // Detect the moment the user grants camera access and the feed is ready.
     // Only then do the timer and the surveillance messages begin.
     if (!cameraReady && capture && capture.loadedmetadata) {
         cameraReady = true;
+        cameraReadyTime = millis();
         startTime = millis();       // Start the elapsed-time counter now
         lastMessageTime = millis(); // Message progression counts from here too
     }
@@ -132,123 +140,179 @@ function draw() {
     }
 
     // Call each drawing function in layered order (back to front)
-    drawSeparatorLine();    // Vertical line dividing screenshot area from camera area
-    drawScreenshots();      // Display captured screenshot thumbnails on left side
-    drawLargeCameraView();  // Main webcam feed display on right side
-    drawSurveillanceText(); // Fake surveillance messages and title
-    drawTimeDisplay();      // Elapsed time counter in top right
-    drawInteractiveFace();  // Small face that tracks mouse movement
+    if (!L.portrait) drawSeparatorLine(); // Divider only exists in the desktop layout
+    drawScreenshots();      // Film strip of captured mugshots
+    drawLargeCameraView();  // Main webcam feed display
+    drawSurveillanceText(); // Title + surveillance/data feed
+    drawTimeDisplay();      // Elapsed time counter
+    drawInteractiveFace();  // Small face that tracks the pointer/touch
 }
 
 // ==================== LAYOUT HELPER FUNCTIONS ====================
 
-function getSeparatorX() {
-    let padding = 40; // Standard padding from screen edges
-    let frameWidth = 160; // Width of individual screenshot frames
-    let screenshotsRightEdge = padding + frameWidth; // Calculate rightmost pixel of screenshot area
-    
-    let cameraLeftEdge = screenshotsRightEdge + 80; // Add gap before camera area begins
-    let cameraAreaLeft = cameraLeftEdge; // Alias for clarity
-    
-    // Return x-coordinate for separator line (halfway between screenshot area and camera area)
-    return (screenshotsRightEdge + cameraAreaLeft) / 2;
+// Build the layout for the current canvas size. Desktop ( >= 760px wide ) keeps
+// the film strip on the left and camera on the right; narrower screens stack
+// everything vertically: camera on top, feed in the middle, film strip below.
+function computeLayout() {
+    let portrait = width < 760;
+    let out = { portrait: portrait };
+
+    if (!portrait) {
+        let pad = 40;
+        let holeMargin = 16;
+        let photoW = SHOT_FRAME_W;
+        let separatorX = pad + photoW + 40;
+        let camX = separatorX + pad;
+        let camH = height * 0.6;
+
+        out.pad = pad;
+        out.separatorX = separatorX;
+        out.film = {
+            x: pad - holeMargin, w: photoW + holeMargin * 2, photoX: pad,
+            top: 0, bottom: height, viewTop: pad, viewHeight: height - pad * 2,
+            photoW: photoW, photoH: SHOT_PHOTO_H, labelH: SHOT_LABEL_H,
+            gap: SHOT_FRAME_GAP
+        };
+        out.cam = { x: camX, y: pad, w: width - camX - pad, h: camH };
+        out.msg = {
+            x: camX, titleY: pad + camH + 50, titleSize: 32,
+            top: pad + camH + 90, bottom: height - pad,
+            fontSize: 14, lineSpacing: 22
+        };
+        out.timer = { x: width - pad, y: pad + camH + 50, size: 14 };
+        out.face = { x: width - pad - 40, y: height - pad - 40, size: 60 };
+    } else {
+        let pad = 14;
+        let camH = height * 0.30;
+        let camY = pad + 22; // leave room for the timer along the very top
+        let titleY = camY + camH + 24;
+        let msgTop = titleY + 16;
+        let msgBottom = msgTop + height * 0.22;
+        let filmTop = msgBottom + 12;
+        let filmBottom = height - pad;
+        let bandX = pad, bandW = width - pad * 2;
+        let photoW = Math.min(120, bandW - 24);
+
+        out.pad = pad;
+        out.separatorX = null;
+        out.film = {
+            x: bandX, w: bandW, photoX: bandX + (bandW - photoW) / 2,
+            top: filmTop, bottom: filmBottom, viewTop: filmTop,
+            viewHeight: filmBottom - filmTop,
+            photoW: photoW, photoH: photoW, labelH: 30, gap: 12
+        };
+        out.cam = { x: pad, y: camY, w: width - pad * 2, h: camH };
+        out.msg = {
+            x: pad, titleY: titleY, titleSize: 16,
+            top: msgTop, bottom: msgBottom,
+            fontSize: 10, lineSpacing: 15
+        };
+        out.timer = { x: width - pad, y: pad + 14, size: 12 };
+        out.face = { x: width - pad - 20, y: camY + 20, size: 34 };
+    }
+    return out;
+}
+
+// Is a point inside the film-strip region (used to separate scroll vs. capture)
+function inFilm(x, y) {
+    if (!L) return false;
+    let f = L.film;
+    return x >= f.x && x <= f.x + f.w && y >= f.top && y <= f.bottom;
 }
 
 function drawSeparatorLine() {
-    let separatorX = getSeparatorX(); // Get calculated x-position for vertical divider
-    let padding = 40; // Match padding used throughout sketch
-    
-    stroke(0); // Set line color to black
-    strokeWeight(1); // Set line thickness to 1 pixel
-    // Draw vertical line from top padding to bottom padding
-    line(separatorX, padding, separatorX, height - padding);
-    noStroke(); // Disable stroke for subsequent drawing operations
+    let pad = L.pad;
+    stroke(0);
+    strokeWeight(1);
+    line(L.separatorX, pad, L.separatorX, height - pad);
+    noStroke();
 }
 
 // ==================== SCREENSHOT FUNCTIONALITY ====================
 
 function drawScreenshots() {
-    let padding = 40;            // Distance from left edge of screen
-    let frameW = SHOT_FRAME_W;   // Photo width
-    let photoH = SHOT_PHOTO_H;   // Square photo height
-    let frameH = SHOT_FRAME_H;   // Total height of one film frame (photo + label)
-    let gap = SHOT_FRAME_GAP;    // Vertical gap between frames
-    let holeMargin = 16;         // Sprocket-hole strip width on each side
-    let bandX = padding - holeMargin;       // Left edge of the black film band
-    let bandW = frameW + holeMargin * 2;    // Total film band width
+    let f = L.film;
+    let frameH = f.photoH + f.labelH; // Total height of one film frame
+    let gap = f.gap;
 
     // Ease the strip back to rest so each new capture slides down smoothly
     filmOffset += (0 - filmOffset) * 0.18;
     if (Math.abs(filmOffset) < 0.3) filmOffset = 0;
 
     // Compute how far the user can scroll back through the whole tape
-    let viewTop = padding;
-    let viewHeight = height - padding * 2;
+    let viewTop = f.viewTop;
+    let viewHeight = f.viewHeight;
     let contentHeight = screenshots.length * (frameH + gap);
     maxFilmScroll = Math.max(0, contentHeight - viewHeight);
     filmScroll = constrain(filmScroll, 0, maxFilmScroll);
 
     // Combined offset: animation slide + user scroll position
     let scrollY = filmOffset - filmScroll;
+    let bandH = f.bottom - f.top;
 
-    // --- Film base: near-black band running the full height ---
+    // --- Film base: near-black band over the film region ---
     noStroke();
     fill(12);
-    rect(bandX, 0, bandW, height);
+    rect(f.x, f.top, f.w, bandH);
 
     // --- Sprocket holes down both edges, scrolling with the film ---
     let holeSpacing = 26;
     let holeW = 8, holeH = 14;
     fill(196, 32, 24); // red background shows through the holes
-    let startY = (scrollY % holeSpacing) - holeSpacing;
-    for (let y = startY; y < height + holeSpacing; y += holeSpacing) {
-        rect(bandX + 4, y, holeW, holeH, 2);
-        rect(bandX + bandW - 4 - holeW, y, holeW, holeH, 2);
+    let startY = f.top + ((scrollY % holeSpacing) - holeSpacing);
+    for (let y = startY; y < f.bottom + holeSpacing; y += holeSpacing) {
+        rect(f.x + 4, y, holeW, holeH, 2);
+        rect(f.x + f.w - 4 - holeW, y, holeW, holeH, 2);
     }
 
-    // --- Photo frames, newest at the top, clipped to the film band ---
+    // --- Photo frames, newest first, clipped to the film region ---
     drawingContext.save();
     drawingContext.beginPath();
-    drawingContext.rect(bandX, 0, bandW, height);
+    drawingContext.rect(f.x, f.top, f.w, bandH);
     drawingContext.clip();
 
-    for (let i = 0; i < screenshots.length; i++) {
-        let frameY = padding + scrollY + i * (frameH + gap);
-        // Skip frames scrolled fully off-screen
-        if (frameY > height || frameY + frameH < 0) continue;
+    let idSize = L.portrait ? 10 : 13;
+    let timeSize = L.portrait ? 9 : 11;
+    let idGap = L.portrait ? 15 : 20;
+    let timeGap = L.portrait ? 27 : 38;
 
-        let photoX = padding;
+    for (let i = 0; i < screenshots.length; i++) {
+        let frameY = viewTop + scrollY + i * (frameH + gap);
+        // Skip frames scrolled fully off-screen
+        if (frameY > f.bottom || frameY + frameH < f.top) continue;
+
+        let photoX = f.photoX;
         let photoY = frameY;
 
         // White booking-photo border around the mugshot
         noFill();
         stroke(235);
         strokeWeight(2);
-        rect(photoX - 4, photoY - 4, frameW + 8, photoH + 8);
+        rect(photoX - 4, photoY - 4, f.photoW + 8, f.photoH + 8);
         noStroke();
 
         // Grayscale mugshot image (already grayscaled at capture time)
         if (screenshots[i].image) {
-            image(screenshots[i].image, photoX, photoY, frameW, photoH);
+            image(screenshots[i].image, photoX, photoY, f.photoW, f.photoH);
         }
 
         // Booking placard: subject id + capture time
         textFont('Azeret Mono');
         textAlign(LEFT);
         fill(235);
-        textSize(13);
+        textSize(idSize);
         let idStr = 'SUBJECT #' + screenshots[i].id.toString().padStart(4, '0');
-        text(idStr, photoX, photoY + photoH + 20);
+        text(idStr, photoX, photoY + f.photoH + idGap);
         fill(170);
-        textSize(11);
-        text(screenshots[i].timestamp, photoX, photoY + photoH + 38);
+        textSize(timeSize);
+        text(screenshots[i].timestamp, photoX, photoY + f.photoH + timeGap);
     }
 
     drawingContext.restore();
 
     // --- Scroll indicator on the right edge of the band ---
     if (maxFilmScroll > 0) {
-        let trackX = bandX + bandW - 4;
+        let trackX = f.x + f.w - 4;
         let thumbH = Math.max(24, viewHeight * (viewHeight / contentHeight));
         let thumbY = viewTop + (viewHeight - thumbH) * (filmScroll / maxFilmScroll);
         noStroke();
@@ -270,7 +334,8 @@ function captureScreenshot() {
         let cropY = (cameraImg.height - size) / 2; // Center vertically
         // Extract square region from center of camera feed
         let croppedImg = cameraImg.get(cropX, cropY, size, size);
-        croppedImg.filter(GRAY); // Grayscale once here so drawing stays cheap while scrolling
+        croppedImg.filter(GRAY);      // Grayscale once here so drawing stays cheap while scrolling
+        croppedImg.filter(BLUR, 1);   // Light skin-smoothing so saved mugshots glow (fewer blemishes)
 
         // Generate timestamp string in 12-hour format (HH:MM:SS AM/PM)
         let now = new Date(); // Get current date/time
@@ -309,15 +374,12 @@ function captureScreenshot() {
 function drawLargeCameraView() {
     // Only draw if webcam is loaded and ready
     if (capture && capture.loadedmetadata) {
-        let padding = 40; // Standard screen padding
-        let separatorX = getSeparatorX(); // Get divider line position
-        
-        // Calculate target rectangle for camera display (right side of screen)
-        let targetX = separatorX + padding; // Start after separator with padding
-        let targetY = padding; // Start at top padding
-        let targetWidth = width - targetX - padding; // Fill remaining width minus padding
-        let targetHeight = height * 0.6; // Use 60% of screen height
-        
+        // Camera display rectangle from the responsive layout
+        let targetX = L.cam.x;
+        let targetY = L.cam.y;
+        let targetWidth = L.cam.w;
+        let targetHeight = L.cam.h;
+
         // Calculate aspect ratios to determine how to crop camera feed
         let cameraAspect = 640 / 480; // Webcam aspect ratio (4:3)
         let targetAspect = targetWidth / targetHeight; // Display area aspect ratio
@@ -345,35 +407,53 @@ function drawLargeCameraView() {
         if (duotoneEnabled) {
             applyDuotone(croppedImg, shadowColorHex, highlightColorHex);
         }
-        
-        // Draw processed webcam feed to calculated target area
+
+        // Soft-focus "beauty" pass: a lightly blurred base smooths skin and
+        // blemishes, and a brighter, heavily blurred layer is screen-blended on
+        // top for a flattering glow. Done with the GPU-accelerated canvas filter
+        // so it stays fast (including on mobile), and clipped to the camera rect
+        // so the blur doesn't bleed into the rest of the UI.
+        let ctx = drawingContext;
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(targetX, targetY, targetWidth, targetHeight);
+        ctx.clip();
+
+        ctx.filter = 'blur(1.6px)';
         image(croppedImg, targetX, targetY, targetWidth, targetHeight);
+
+        ctx.filter = 'blur(9px) brightness(1.3)';
+        ctx.globalCompositeOperation = 'screen';
+        ctx.globalAlpha = 0.5;
+        image(croppedImg, targetX, targetY, targetWidth, targetHeight);
+
+        ctx.restore();
     }
 }
 
 // ==================== TEXT DISPLAY FUNCTIONS ====================
 
 function drawSurveillanceText() {
-    let padding = 40; // Standard screen padding
-    let separatorX = getSeparatorX(); // Get divider position for alignment
-    let cameraHeight = height * 0.6; // Match camera display height
-    
+    let m = L.msg;
+
     // Draw main title
-    fill(0); // Black text color
-    textAlign(LEFT); // Left-align text
-    textSize(32); // Large text for prominence
-    textFont('Azeret Mono'); // Monospace font for technical/surveillance aesthetic
-    // Position title below camera area
-    text("SURVEILLANCE IN PROGRESS", separatorX + padding, padding + cameraHeight + 50);
+    fill(0);
+    textAlign(LEFT);
+    textSize(m.titleSize);
+    textFont('Azeret Mono');
+    text("SURVEILLANCE IN PROGRESS", m.x, m.titleY);
 
     // Messages only appear once the user has allowed the camera.
     if (!cameraReady || feed.length === 0) return;
 
+    // Auto-start the feed shortly after the camera is ready, so it also works on
+    // touch devices where there is no mouse-move event to trigger it.
+    let autoStart = cameraReadyTime && millis() - cameraReadyTime > 2000;
+
     // Handle feed progression logic. The "click to get out" line is the
     // second-to-last item; the final line shows only after the user clicks.
     let waitIndex = feed.length - 2;
-    if (mouseHasMoved && currentMessageIndex < 0) {
-        // Start streaming the feed when the mouse first moves
+    if ((mouseHasMoved || autoStart) && currentMessageIndex < 0) {
         currentMessageIndex = 0;
         lastMessageTime = millis();
         playLineBeep(currentMessageIndex);
@@ -385,7 +465,7 @@ function drawSurveillanceText() {
             playLineBeep(currentMessageIndex);
         }
     } else if (currentMessageIndex === waitIndex) {
-        // Show "click anywhere" line and wait for the user to click
+        // Show "click anywhere" line and wait for the user to click/tap
         waitingForClick = true;
         if (userHasClicked) {
             currentMessageIndex++;
@@ -395,13 +475,12 @@ function drawSurveillanceText() {
     }
     // Final line stays visible once shown.
 
-    // Draw a scrolling window of the most recent feed lines (messages + data).
-    // The number of visible lines adapts so the log never runs below the bottom
-    // margin (where the tracking face sits).
-    textSize(14);
-    let lineSpacing = 22;
-    let yStart = padding + cameraHeight + 90;
-    let bottomLimit = height - padding; // stay within the bottom margin
+    // Draw a scrolling window of the most recent feed lines (messages + data),
+    // adapting the visible count so it stays within its region.
+    textSize(m.fontSize);
+    let lineSpacing = m.lineSpacing;
+    let yStart = m.top;
+    let bottomLimit = m.bottom;
     let visibleCount = Math.max(1, Math.floor((bottomLimit - yStart) / lineSpacing));
     let startI = Math.max(0, currentMessageIndex - visibleCount + 1);
     let row = 0;
@@ -410,7 +489,7 @@ function drawSurveillanceText() {
         // Data items read live from harvestData so the battery line stays current
         let line = item.t === 'data' ? harvestData[item.i] : item.s;
         fill(0);
-        text(line, separatorX + padding, yStart + row * lineSpacing);
+        text(line, m.x, yStart + row * lineSpacing);
         row++;
     }
 }
@@ -419,15 +498,12 @@ function drawTimeDisplay() {
     // The elapsed-time counter only runs once the user has allowed the camera.
     if (!cameraReady) return;
 
-    let padding = 40; // Standard screen padding
-    let cameraHeight = height * 0.6; // Match camera area height for alignment
-
     // Configure text appearance
     fill(0); // Black text
     textAlign(RIGHT); // Right-align for top-right positioning
-    textSize(14); // Small text size
+    textSize(L.timer.size); // Small text size
     textFont('Azeret Mono'); // Monospace font for digital clock aesthetic
-    
+
     // Calculate elapsed time since sketch started (keeping milliseconds)
     let totalMs = millis() - startTime; // Total elapsed milliseconds
     let elapsed = totalMs / 1000; // Convert to seconds for hour/minute calculations
@@ -438,8 +514,8 @@ function drawTimeDisplay() {
     let seconds = Math.floor(elapsed % 60).toString().padStart(2, '0');
     let milliseconds = Math.floor((totalMs % 1000) / 10).toString().padStart(2, '0'); // Get first two digits of milliseconds (00-99)
     
-    // Display formatted time with two millisecond digits in top-right corner
-    text(`${hours}:${minutes}:${seconds}:${milliseconds}`, width - padding, padding + cameraHeight + 50);
+    // Display formatted time at the layout's timer position
+    text(`${hours}:${minutes}:${seconds}:${milliseconds}`, L.timer.x, L.timer.y);
 }
 
 // ==================== REAL CLIENT-DATA HARVEST ====================
@@ -529,54 +605,50 @@ function buildFeed() {
 // ==================== INTERACTIVE FACE ELEMENT ====================
 
 function drawInteractiveFace() {
-    // Position face in bottom-right corner
-    let padding = 40;
-    let faceX = width - padding - 40; // X-position (from right edge)
-    let faceY = height - padding - 40; // Y-position (from bottom edge)
-    let faceSize = 60; // Diameter of face circle
-    
+    // Position and size come from the responsive layout
+    let faceX = L.face.x;
+    let faceY = L.face.y;
+    let faceSize = L.face.size;
+    let s = faceSize / 60; // Scale factor relative to the original 60px face
+
     // Draw face outline circle
-    noFill(); // No fill color (transparent)
-    stroke(0); // Black outline
-    strokeWeight(1); // Thin line
+    noFill();
+    stroke(0);
+    strokeWeight(1);
     circle(faceX, faceY, faceSize);
-    
-    // Calculate eye direction based on mouse position
-    let mouseAngle = atan2(mouseY - faceY, mouseX - faceX); // Angle from face center to mouse
-    let eyeDistance = 6; // How far eyes move from center
-    // Calculate eye offset coordinates using trigonometry
+
+    // Calculate eye direction based on pointer/touch position
+    let mouseAngle = atan2(mouseY - faceY, mouseX - faceX);
+    let eyeDistance = 6 * s;
     eyeX = cos(mouseAngle) * eyeDistance;
     eyeY = sin(mouseAngle) * eyeDistance;
-    
-    // Configure eye drawing
-    fill(0); // Black eyes
-    noStroke(); // No outline on eyes
-    
+
+    fill(0);
+    noStroke();
+
     // Handle automatic blinking animation
-    blinkTimer++; // Increment blink timer each frame
-    if (blinkTimer > 180) { // After 3 seconds (180 frames at 60fps)
-        isBlinking = true; // Start blink
-        if (blinkTimer > 190) { // After 10 frames of blinking
-            isBlinking = false; // End blink
-            blinkTimer = 0; // Reset timer for next blink cycle
+    blinkTimer++;
+    if (blinkTimer > 180) {
+        isBlinking = true;
+        if (blinkTimer > 190) {
+            isBlinking = false;
+            blinkTimer = 0;
         }
     }
-    
-    // Draw eyes based on blink state
+
+    // Draw eyes based on blink state (all offsets scaled to the face size)
     if (!isBlinking) {
-        // Draw normal circular eyes that track mouse
-        circle(faceX - 12 + eyeX * 0.3, faceY - 8 + eyeY * 0.3, 6); // Left eye
-        circle(faceX + 12 + eyeX * 0.3, faceY - 8 + eyeY * 0.3, 6); // Right eye
+        circle(faceX - 12 * s + eyeX * 0.3, faceY - 8 * s + eyeY * 0.3, 6 * s);
+        circle(faceX + 12 * s + eyeX * 0.3, faceY - 8 * s + eyeY * 0.3, 6 * s);
     } else {
-        // Draw closed eyes as horizontal ellipses
-        ellipse(faceX - 12, faceY - 8, 12, 2); // Left closed eye
-        ellipse(faceX + 12, faceY - 8, 12, 2); // Right closed eye
+        ellipse(faceX - 12 * s, faceY - 8 * s, 12 * s, 2 * s);
+        ellipse(faceX + 12 * s, faceY - 8 * s, 12 * s, 2 * s);
     }
-    
-    // Draw mouth as horizontal line
-    fill(0); // Black mouth
-    noStroke(); // No outline
-    rect(faceX - 10, faceY + 12, 20, 1); // Rectangular mouth (20px wide, 1px tall)
+
+    // Draw mouth as a thin horizontal bar
+    fill(0);
+    noStroke();
+    rect(faceX - 10 * s, faceY + 12 * s, 20 * s, Math.max(1, 1 * s));
 }
 
 // ==================== EVENT HANDLERS ====================
@@ -607,15 +679,37 @@ function mouseWheel(event) {
     // Scroll through the film strip when the cursor is over the band, so the
     // user can reach the very first photos. Returns false to stop the page
     // itself from scrolling.
-    let padding = 40;
-    let holeMargin = 16;
-    let bandX = padding - holeMargin;
-    let bandW = SHOT_FRAME_W + holeMargin * 2;
-
-    if (mouseX >= bandX && mouseX <= bandX + bandW) {
+    if (inFilm(mouseX, mouseY)) {
         filmScroll = constrain(filmScroll + event.delta, 0, maxFilmScroll);
         return false;
     }
+}
+
+// ---- Touch input (mobile) ----
+
+function touchStarted() {
+    initAudio();                 // Start audio on the first touch
+    mouseHasMoved = true;        // Counts as the trigger that starts the feed
+
+    if (waitingForClick) {
+        userHasClicked = true;   // Tapping anywhere acts as the "click to get out"
+    }
+
+    // Tapping outside the film strip captures a photo; touching the strip is
+    // reserved for scrolling (handled in touchMoved).
+    if (!inFilm(mouseX, mouseY)) {
+        captureScreenshot();
+    }
+    return false; // Prevent the browser's default scroll/zoom on the canvas
+}
+
+function touchMoved() {
+    mouseHasMoved = true;
+    // Drag over the film strip to scroll through the whole tape
+    if (inFilm(mouseX, mouseY)) {
+        filmScroll = constrain(filmScroll + (pmouseY - mouseY), 0, maxFilmScroll);
+    }
+    return false; // Prevent page scrolling while interacting with the canvas
 }
 
 function windowResized() {
