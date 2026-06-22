@@ -265,6 +265,271 @@ nav a.active::before {
     transform: translate(1px, -1px);
 }
 
+/* CV page */
+.cv-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding-bottom: 60px;
+}
+
+/* Stage holds the fixed-size A4 sheet and is scaled to fit by JS. */
+.cv-stage {
+    width: 100%;
+    overflow: hidden;
+}
+
+/* A4 sheet: a fixed A4 box (true 1 : 1.414 ratio). Content is shrunk to fit it
+   and the box is scaled to fit the column, so it always stays A4 and prints to
+   one page. */
+.cv-page {
+    position: relative;
+    width: 794px;              /* A4 width at 96dpi */
+    height: 1123px;            /* A4 height at 96dpi */
+    box-sizing: border-box;
+    margin: 0 auto;
+    background: #fff;
+    color: #1a1a1a;
+    overflow: hidden;
+    transform-origin: top center;
+}
+
+.cv-page-inner {
+    width: 794px;
+    box-sizing: border-box;
+    padding: 26px 30px;
+    transform-origin: top center;
+}
+
+.cv-download {
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Xanh Mono', monospace;
+    font-style: italic;
+    font-size: 18px;
+    color: #000;
+    text-decoration: none;
+    background: var(--accent-purple);
+    border: 1px solid #000;
+    border-radius: 30px;
+    padding: 12px 28px;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.cv-download:hover {
+    background: var(--accent-green);
+    transform: translateY(-2px);
+}
+
+.cv-download .arrow-circle {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    background: #f5f5f5;
+}
+
+.cv-intro {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+    align-items: start;
+    margin-bottom: 6px;
+}
+
+.cv-photo img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+}
+
+.cv-doc-name {
+    font-family: "gyst-variable", sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 1.05;
+    color: #1a1a1a;
+    margin: 0 0 12px;
+}
+
+
+/* Let the two columns grow to fill the A4 sheet so spare space pools at the
+   very bottom rather than leaving a gap in the middle. */
+/* Keep blocks from splitting when printing. */
+.cv-block,
+.cv-entry {
+    break-inside: avoid;
+}
+
+/* Print: output only the A4 sheet as the PDF, nothing else from the site. */
+@media print {
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    html, body {
+        background: #fff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .left-column,
+    .top-line,
+    .center-top-line,
+    .hero,
+    .footer-wrapper,
+    .glass-bottom,
+    .cv-download {
+        display: none !important;
+    }
+
+    .layout-wrapper {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: none !important;
+    }
+
+    .right-column,
+    .cv-content,
+    .cv-stage {
+        display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    /* Print the fixed A4 box; reset only the screen width-scale. The content's
+       own scale (set by JS, on an in-flow element) is kept so it fits one page
+       without overlapping. */
+    .cv-page {
+        box-shadow: none !important;
+        margin: 0 auto !important;
+        width: 794px !important;
+        height: 1123px !important;
+        overflow: hidden !important;
+        transform: none !important;
+    }
+
+    .cv-page,
+    .cv-page * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+.cv-about {
+    margin-bottom: 8px;
+}
+
+.cv-about p {
+    font-size: 12.5px;
+    line-height: 1.5;
+    margin: 0 0 8px;
+    max-width: none;
+}
+
+.cv-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    margin-top: 20px;
+    align-items: stretch;
+}
+
+.cv-block {
+    margin-bottom: 20px;
+    break-inside: avoid;
+}
+
+.cv-block h3 {
+    font-family: 'Xanh Mono', monospace;
+    font-weight: 400;
+    font-size: 13.5px;
+    margin: 0 0 9px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #ddd;
+}
+
+.cv-entry {
+    margin-bottom: 13px;
+    break-inside: avoid;
+}
+
+.cv-entry h4 {
+    font-size: 12.5px;
+    font-weight: 600;
+    margin: 0 0 2px;
+}
+
+.cv-meta {
+    display: block;
+    font-style: italic;
+    font-size: 11.5px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.cv-block ul {
+    margin: 0;
+    padding-left: 15px;
+}
+
+.cv-block li {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 3px;
+}
+
+.cv-tags {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.cv-tags li {
+    font-family: 'Xanh Mono', monospace;
+    font-size: 11px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 2px 10px;
+}
+
+.cv-contact-item {
+    margin-bottom: 9px;
+}
+
+.cv-contact-label {
+    display: block;
+    font-family: 'Xanh Mono', monospace;
+    font-size: 10px;
+    color: #666;
+    margin-bottom: 2px;
+}
+
+.cv-contact-item a {
+    display: block;
+    color: #000;
+    font-size: 12.5px;
+}
+
+@media (max-width: 768px) {
+    .cv-columns {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
 /* Projects Grid */
 .projects-grid {
     display: grid;
@@ -440,6 +705,27 @@ footer {
     flex-wrap: wrap;
     gap: 24px;
     margin-bottom: 8px;
+}
+
+/* The two action buttons (contact / back to top) stacked together */
+.footer-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+/* On mobile, stack the footer vertically and left-align the buttons so they
+   sit neatly below each other instead of floating at opposite corners. */
+@media (max-width: 768px) {
+    .footer-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+    }
+    .footer-actions {
+        align-items: flex-start;
+    }
 }
 
 .footer-brand {
@@ -1106,6 +1392,20 @@ html.dark .footer-top-link {
 
 html.dark .footer-contact {
     color: #e8e8e8;
+}
+
+html.dark .cv-download {
+    color: #000;
+}
+
+html.dark .cv-download .arrow-circle {
+    border-color: #000;
+}
+
+/* The A4 sheet stays a white document regardless of theme. */
+html.dark .cv-page {
+    background: #fff;
+    color: #1a1a1a;
 }
 
 html.dark .text-column h2,
