@@ -407,6 +407,114 @@ footer {
     margin-bottom: 20px;
 }
 
+.text-column p a.inline-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #000;
+    text-decoration: none;
+    font-style: italic;
+    background: var(--accent-purple);
+    border: 1px solid #000;
+    border-radius: 20px;
+    padding: 1px 5px 1px 12px;
+    vertical-align: baseline;
+    transition: background 0.3s;
+}
+
+.text-column p a.inline-link .arrow-circle {
+    width: 18px;
+    height: 18px;
+    background: #f5f5f5;
+    font-size: 9px;
+    transition: transform 0.3s;
+}
+
+.text-column p a.inline-link:hover {
+    background: var(--accent-green);
+}
+
+.text-column p a.inline-link:hover .arrow-circle {
+    transform: translate(1px, -1px);
+}
+
+/* Call to action */
+.cta-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    text-align: center;
+    margin: 100px 0 80px;
+}
+
+.cta-section p {
+    font-style: italic;
+    font-size: 52px;
+    line-height: 1.25;
+}
+
+.cta-button {
+    font-family: 'Xanh Mono', monospace;
+    font-style: italic;
+    font-size: 26px;
+    color: #000;
+    background: var(--accent-purple);
+    border: 1px solid #000;
+    border-radius: 40px;
+    padding: 18px 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.cta-button .arrow-circle {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    background: #f5f5f5;
+    transition: transform 0.3s;
+}
+
+.cta-button:hover {
+    background: var(--accent-green);
+    transform: translateX(-4px);
+}
+
+.cta-button:hover .arrow-circle {
+    transform: translateX(-3px);
+}
+
+/* Glow triggered on the contact links when the CTA is clicked.
+   No box, just soft light blooming off the text and dividers. */
+.contact-links.glow a:not(.no-glow) {
+    animation: contactTextGlow 1s ease-in-out 3;
+}
+
+@keyframes contactTextGlow {
+    0%, 100% {
+        text-shadow: none;
+        border-bottom-color: currentColor;
+        filter: none;
+    }
+    25% {
+        text-shadow: 0 0 16px var(--accent-green), 0 0 32px var(--accent-green), 0 0 48px var(--accent-green);
+        border-bottom-color: var(--accent-green);
+        filter: drop-shadow(0 0 10px var(--accent-green));
+    }
+    50% {
+        text-shadow: 0 0 20px var(--accent-purple), 0 0 40px var(--accent-purple), 0 0 60px var(--accent-purple);
+        border-bottom-color: var(--accent-purple);
+        filter: drop-shadow(0 0 14px var(--accent-purple));
+    }
+    75% {
+        text-shadow: 0 0 16px var(--accent-green), 0 0 32px var(--accent-green), 0 0 48px var(--accent-green);
+        border-bottom-color: var(--accent-green);
+        filter: drop-shadow(0 0 10px var(--accent-green));
+    }
+}
+
 /* Project Grid Styling */
 .project-grid {
     display: grid;
@@ -807,6 +915,22 @@ html.dark footer {
 html.dark .text-column h2,
 html.dark .text-column p {
     color: #e8e8e8;
+}
+
+html.dark .text-column p a {
+    color: #000;
+}
+
+html.dark .text-column p a.inline-link .arrow-circle {
+    border-color: #000;
+}
+
+html.dark .cta-button {
+    color: #000;
+}
+
+html.dark .cta-button .arrow-circle {
+    border-color: #000;
 }
 
 html.dark .theme-toggle {

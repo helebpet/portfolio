@@ -21,7 +21,7 @@
             
             <div class="spacer"></div>
             
-            <div class="contact-links">
+            <div class="contact-links" id="contact-links">
                 <a href="mailto:petrahelebrantova@email.cz">
                     email
                     <span class="arrow-circle">→</span>
@@ -34,7 +34,7 @@
                     linkedin
                     <span class="arrow-circle">→</span>
                 </a>
-                <a href="https://drive.google.com/file/d/1Na4DG4BrRFdsfdnuB2XAb_mwU41mTYej/view?usp=sharing" target="_blank">
+                <a class="no-glow" href="https://drive.google.com/file/d/1Na4DG4BrRFdsfdnuB2XAb_mwU41mTYej/view?usp=sharing" target="_blank">
                     cv <span class="arrow-circle">→</span>
                 </a>
             </div>
@@ -54,13 +54,18 @@
                         <img src="img/about.jpg" alt="Picture of Petra Helebrantová">
                     </div>
                     <div class="text-column">
-                        <p>Hello, my name is Petra Helebrantová. I'm a Czech multidisciplinary digital designer with a special interest in UX and UI design, based in San Francisco and Prague. I'm in my third year at the University of San Francisco, studying design with a minor in UX/UI.</p>
-                        <p>I work with HTML, CSS, and P5.js for coding projects, and I'm well-versed in Adobe Creative Suite (Photoshop, Illustrator, InDesign, Premiere Pro) and Figma for UX/UI work. I've also built interactive websites using Webflow and Readymag.</p>
-                        <p>Right now, I'm working as a Technology Design Tutor at USF, helping students navigate coding and design software. Last semester, I got to work with the Entrepreneurship and Innovation Hub at USF through a studio-based design class, which was an incredibly valuable experience. This past summer (2025), I completed a month-long full-time design internship at Newlogic Digital in Prague.</p>
+                        <p>Hello, my name is Petra Helebrantová. I'm a Czech multidisciplinary digital designer with a special interest in UX/UI design and branding, based in San Francisco and Prague. I'm studying design with a minor in UX/UI at the University of San Francisco, and this fall (2026) I'm heading into my senior year.</p>
+                        <p>I move comfortably between design and code. I build interactive, hand-coded websites, and I work fluently across Adobe Creative Suite (Photoshop, Illustrator, InDesign, Premiere Pro) and Figma for UX/UI and branding work. I also have experience with website builders like Webflow and Readymag.</p>
+                        <p>Right now, I'm working as a Technology Design Tutor at USF, helping students navigate coding and design software. I also completed an internship at & Design Studio at the University of San Francisco, where I developed the brand identity for the studio itself while continuing my work for the Entrepreneurship and Innovation Hub that I began the previous semester. In spring 2026 I also took a UX research course, and you can see the work that came out of it in my <a class="inline-link" href="https://www.figma.com/deck/W5k0ZzqrfumQoMwCyK1d8Y/Petra-Helebrantov%C3%A1?node-id=782-144&viewport=288%2C251%2C0.21&t=PliJOZpNjVaXat7U-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank">UXR portfolio<span class="arrow-circle">↗</span></a>. This past summer (2025), I completed a month-long full-time design internship at Newlogic Digital in Prague.</p>
                         <p>I'm especially drawn to design projects focused on sustainability, environmental responsibility, and improving user experiences, particularly in health, wellness, sports, and environmental spaces. My design approach is informed by my life beyond the screen or sketchbook, from running and photography to time spent in nature.</p>
                         <p>For me, great design should be sustainable, distinctive, intuitive, and carefully considered. That's what drives my work, and I'm always excited to collaborate with brands and organizations working toward meaningful change and deeper human connections.</p>
                     </div>
                 </div>
+            </section>
+
+            <section class="cta-section">
+                <p>Think we could be a great fit?</p>
+                <button class="cta-button" id="cta-button" type="button">Let's talk</button>
             </section>
         </div>
     </div>
@@ -74,5 +79,20 @@
     <div class="glass-bottom"></div>
     <script src="cursor.js"></script>
     <script src="screensaver.js?v=9"></script>
+    <script>
+        const ctaButton = document.getElementById('cta-button');
+        const contactLinks = document.getElementById('contact-links');
+        if (ctaButton && contactLinks) {
+            ctaButton.addEventListener('click', () => {
+                contactLinks.classList.remove('glow');
+                // force reflow so the animation can restart on repeat clicks
+                void contactLinks.offsetWidth;
+                contactLinks.classList.add('glow');
+            });
+            contactLinks.addEventListener('animationend', () => {
+                contactLinks.classList.remove('glow');
+            });
+        }
+    </script>
 </body>
 </html>
