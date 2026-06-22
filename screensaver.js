@@ -360,6 +360,11 @@
 
     /* ── Boot ────────────────────────────────────────────────────────── */
     document.addEventListener('DOMContentLoaded', function () {
+        // Never run when embedded in an iframe (e.g. as the cookies project's
+        // background) — there is no interaction inside the frame to dismiss it,
+        // so it would otherwise cover the page forever.
+        if (window.self !== window.top) return;
+
         setup();
 
         // Show the intro immediately only on the home page, and only on the
