@@ -224,14 +224,45 @@ nav a.active::before {
 }
 
 .hero p a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-family: 'Xanh Mono', monospace;
+    font-style: italic;
+    color: #000;
+    text-decoration: none;
+    background: var(--accent-purple);
+    border: 1px solid #000;
+    border-radius: 20px;
+    padding: 1px 5px 1px 12px;
+    vertical-align: baseline;
+    transition: background 0.3s;
+}
+
+/* Circled external-link arrow, matching the about page inline-link */
+.hero p a::after {
+    content: "\2197"; /* ↗ */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    background: #f5f5f5;
     font-style: normal;
-    color: #0066cc;
-    text-decoration: underline;
+    font-size: 9px;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: transform 0.3s;
 }
 
 .hero p a:hover {
-    color: #004999;
+    background: var(--accent-green);
+}
+
+.hero p a:hover::after {
+    transform: translate(1px, -1px);
 }
 
 /* Projects Grid */
@@ -346,6 +377,48 @@ nav a.active::before {
 .footer-wrapper {
     grid-column: 1 / -1;
     margin-top: 50px;
+    position: relative;
+    z-index: 0;
+}
+
+/* Accent glow rising from the bottom of the page, only visible once you scroll
+   down to the footer (green from the left, purple from the right). */
+.footer-wrapper::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    pointer-events: none;
+    /* Multi-stop green/purple band that travels left-right as it animates, so
+       the colour visibly drifts inside the masked glow. Uniform across the
+       width so the middle isn't dimmer. */
+    background-image: linear-gradient(100deg,
+        rgba(189, 253, 170, 0.7) 0%,
+        rgba(228, 170, 253, 0.7) 30%,
+        rgba(189, 253, 170, 0.7) 60%,
+        rgba(228, 170, 253, 0.7) 100%);
+    background-size: 220% 100%;
+    animation: footerGlowShift 12s ease-in-out infinite alternate;
+    /* Strongest at the very bottom, fading to nothing by the top of the footer. */
+    -webkit-mask-image: linear-gradient(to top, black 0%, transparent 100%);
+    mask-image: linear-gradient(to top, black 0%, transparent 100%);
+}
+
+html.dark .footer-wrapper::before {
+    background-image: linear-gradient(100deg,
+        rgba(189, 253, 170, 0.32) 0%,
+        rgba(228, 170, 253, 0.32) 30%,
+        rgba(189, 253, 170, 0.32) 60%,
+        rgba(228, 170, 253, 0.32) 100%);
+}
+
+@keyframes footerGlowShift {
+    from { background-position: 0% 0; }
+    to   { background-position: 100% 0; }
 }
 
 .footer-divider {
@@ -355,11 +428,98 @@ nav a.active::before {
 }
 
 footer {
-    text-align: center;
-    padding-bottom: 60px;
-    font-size: 12px;
-    color: #666;
+    padding-bottom: 80px;
     font-family: "gyst-variable", sans-serif;
+    color: #666;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 8px;
+}
+
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.footer-name {
+    font-family: 'Xanh Mono', monospace;
+    font-size: 34px;
+    line-height: 1.1;
+    color: #000;
+}
+
+.footer-tagline {
+    font-size: 15px;
+    color: #666;
+}
+
+.footer-contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Xanh Mono', monospace;
+    font-size: 13px;
+    color: #000;
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: none;
+}
+
+.footer-contact .arrow-circle {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.footer-contact:hover .arrow-circle {
+    background: var(--accent-purple);
+    transform: translateY(-2px);
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.footer-bottom p {
+    font-size: 11px;
+    color: #666;
+    margin: 0;
+}
+
+.footer-top-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Xanh Mono', monospace;
+    font-size: 13px;
+    color: #000;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.footer-top-link .arrow-circle {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.footer-top-link:hover .arrow-circle {
+    background: var(--accent-green);
+    transform: translateY(-2px);
 }
 
 /* Project Navigation */
@@ -898,6 +1058,10 @@ html.dark .hero p {
     color: #999;
 }
 
+html.dark .hero p a {
+    color: #000;
+}
+
 html.dark .project-year {
     color: #999;
 }
@@ -930,6 +1094,18 @@ html.dark .nav-button-left:hover {
 
 html.dark footer {
     color: #999;
+}
+
+html.dark .footer-name {
+    color: #e8e8e8;
+}
+
+html.dark .footer-top-link {
+    color: #e8e8e8;
+}
+
+html.dark .footer-contact {
+    color: #e8e8e8;
 }
 
 html.dark .text-column h2,
