@@ -93,11 +93,21 @@
         const ctaButton = document.getElementById('cta-button');
         const contactLinks = document.getElementById('contact-links');
         if (ctaButton && contactLinks) {
-            ctaButton.addEventListener('click', () => {
+            const glow = () => {
                 contactLinks.classList.remove('glow');
                 // force reflow so the animation can restart on repeat clicks
                 void contactLinks.offsetWidth;
                 contactLinks.classList.add('glow');
+            };
+            ctaButton.addEventListener('click', () => {
+                // On mobile the contacts sit above the content, so scroll up to
+                // them first, then glow. On desktop they're already in view.
+                if (window.matchMedia('(max-width: 768px)').matches) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    setTimeout(glow, 450);
+                } else {
+                    glow();
+                }
             });
             contactLinks.addEventListener('animationend', () => {
                 contactLinks.classList.remove('glow');
