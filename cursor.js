@@ -28,7 +28,7 @@
         'background:rgba(255,255,255,0.04);' +
         'border:1px solid rgba(200,200,200,0.20);' +
         'opacity:0;' +
-        'transition:width 0.22s ease,height 0.22s ease,opacity 0.3s ease;';
+        'transition:width 0.22s ease,height 0.22s ease,background 0.22s ease,border-color 0.22s ease,opacity 0.3s ease;';
 
     outer.appendChild(inner);
     document.body.appendChild(outer);
@@ -55,11 +55,13 @@
         if (started) inner.style.opacity = '1';
     });
 
-    /* ── Grow on interactive elements ────────────────────────────────── */
+    /* ── Grow + accent fill on interactive elements ──────────────────── */
     document.addEventListener('mouseover', function (e) {
         if (e.target.closest('a, button, [role="button"]')) {
-            inner.style.width  = '66px';
-            inner.style.height = '66px';
+            inner.style.width  = '64px';
+            inner.style.height = '64px';
+            inner.style.background = 'rgba(189, 253, 170, 0.45)'; // accent green
+            inner.style.borderColor = 'rgba(0, 0, 0, 0.4)';
         }
     }, { passive: true });
 
@@ -67,6 +69,8 @@
         if (e.target.closest('a, button, [role="button"]')) {
             inner.style.width  = '40px';
             inner.style.height = '40px';
+            inner.style.background = 'rgba(255,255,255,0.04)';
+            inner.style.borderColor = 'rgba(200,200,200,0.20)';
         }
     }, { passive: true });
 
