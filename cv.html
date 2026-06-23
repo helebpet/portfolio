@@ -158,21 +158,12 @@
                                     <span class="cv-contact-label">Email</span>
                                     <a href="mailto:petrahelebrantova@email.cz">petrahelebrantova@email.cz</a>
                                 </div>
-                                <div class="cv-contact-item">
-                                    <span class="cv-contact-label">Phone</span>
-                                    <a href="tel:+420605969604">+420 605 969 604</a>
-                                    <a href="tel:+14153755366">+1 (415) 375-5366</a>
-                                </div>
                             </section>
                         </div>
                     </div>
                     </div>
                 </article>
                 </div>
-
-                <button class="cv-download" type="button" onclick="window.print()">
-                    download PDF <span class="arrow-circle">↓</span>
-                </button>
             </section>
         </div>
     </div>
@@ -210,6 +201,14 @@
             if (!stage || !page || !inner) return;
             var A4_W = 794, A4_H = 1123;
             function fit() {
+                // On mobile the CV reflows (via CSS) into a readable single
+                // column, so drop the A4 scaling entirely.
+                if (window.matchMedia('(max-width: 768px)').matches) {
+                    inner.style.transform = 'none';
+                    page.style.transform = 'none';
+                    stage.style.height = 'auto';
+                    return;
+                }
                 // 1) shrink the content so it fits within the A4 height
                 inner.style.transform = 'none';
                 var natural = inner.offsetHeight;
