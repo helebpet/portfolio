@@ -19,8 +19,14 @@ document.addEventListener('DOMContentLoaded', function () {
     btn.innerHTML = '<span class="toggle-switch"><span class="toggle-knob"></span></span><span class="toggle-label"></span>';
     var label = btn.querySelector('.toggle-label');
 
+    btn.setAttribute('aria-label', 'Dark mode');
+
     function updateButton() {
-        label.textContent = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+        var isDark = document.documentElement.classList.contains('dark');
+        label.textContent = isDark ? 'dark' : 'light';
+        // The visible label already changes, but the state has to be exposed
+        // programmatically too, not only visually (WCAG 4.1.2).
+        btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
     }
 
     updateButton();
