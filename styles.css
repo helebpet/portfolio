@@ -424,7 +424,6 @@ nav a.active::before {
     margin: 0 0 12px;
 }
 
-
 /* Let the two columns grow to fill the A4 sheet so spare space pools at the
    very bottom rather than leaving a gap in the middle. */
 /* Keep blocks from splitting when printing. */
@@ -1006,7 +1005,6 @@ footer {
     transform: translate(2px, -2px);
 }
 
-
 /* Project Grid Styling */
 .project-grid {
     display: grid;
@@ -1288,16 +1286,6 @@ footer {
 
     .image-column > img,
     .image-column > video,
-    .image-column > .video-wrap,
-    .picture-column > img {
-        position: static;
-        left: auto;
-        right: auto;
-        width: 100%;
-        max-width: 100%;
-        margin-left: 0;
-        margin-right: 0;
-    }
 }
 
 @media (max-width: 480px) {
@@ -1947,74 +1935,6 @@ html.dark .is-active > .cursor-ring {
 }
 
 /* The card link already spans the thumbnail, so it clears 44px on its own. */
-
-/* ── Video pause control (WCAG 2.2.2) ────────────────────────────────────
-   Autoplaying loops need a way to stop them. The button is inserted by
-   media.js, sits inside the video's own box, and clears the 44px target. */
-/* Layout-transparent: the wrapper takes exactly the slot the <video> had, so
-   the grid and column rules behave as if it were not there. */
-.video-wrap {
-    position: relative;
-    display: block;
-    width: 100%;
-    line-height: 0;
-    font-size: 0;
-}
-
-.video-wrap > video {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-.video-toggle {
-    position: absolute;
-    right: 12px;
-    bottom: 12px;
-    width: 44px;
-    height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    border: 1px solid rgba(0, 0, 0, 0.45);
-    border-radius: 50%;
-    background: rgba(245, 245, 245, 0.86);
-    -webkit-backdrop-filter: blur(6px);
-            backdrop-filter: blur(6px);
-    color: #000;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 200ms ease, background-color 200ms ease;
-}
-
-.video-toggle svg {
-    width: 15px;
-    height: 15px;
-    fill: currentColor;
-}
-
-/* Visible on hover, and always visible once focused or already paused, so it
-   can never be a control only a mouse user can find. */
-.video-wrap:hover .video-toggle,
-.video-toggle:focus-visible,
-.video-toggle[aria-pressed="false"] {
-    opacity: 1;
-}
-
-.video-toggle:hover {
-    background: var(--accent-green);
-}
-
-@media (hover: none) {
-    .video-toggle { opacity: 1; }
-}
-
-html.dark .video-toggle {
-    border-color: rgba(232, 232, 232, 0.45);
-    background: rgba(20, 20, 20, 0.86);
-    color: #e8e8e8;
-}
 
 /* ── Visually hidden ─────────────────────────────────────────────────────
    Text for screen readers only, e.g. the new-tab warning on external links. */
