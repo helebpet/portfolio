@@ -678,7 +678,10 @@ nav a.active::before {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 40px 30px;
-    margin-bottom: 80px;
+    /* No bottom margin: .footer-wrapper already sets the gap to the footer, and
+       stacking both left the last row floating much further from the footer
+       than the rows sit from each other. */
+    margin-bottom: 0;
 }
 
 .project-card {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2nd Wind — Cold Brew Coffee</title>
+<title>2nd Wind: Cold Brew Coffee</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Brand fonts: Adapter Mono PE Variable + Azeret Mono (Mono45 Headline stand-in). -->
@@ -438,7 +438,7 @@
   .logo-band {
     background: var(--white);
     width: 100%;
-    padding: 5rem 1.8rem;
+    padding: 3.25rem 1.8rem;
     display: flex; align-items: center; justify-content: center;
     overflow: hidden;
   }
@@ -467,11 +467,14 @@
   .logo-anim path:nth-child(2) { animation-delay: 0.35s; }
   .logo-anim path:nth-child(3) { animation-delay: 0.70s; }
 
+  /* The hold is long and the blank reset is as short as it can be: this band is
+     full-width and tall, so any moment the mark is invisible reads as a void to
+     someone scrolling past rather than as part of the loop. */
   @keyframes logo-draw {
     0%        { stroke-dashoffset: 1; fill-opacity: 0; opacity: 1; }
-    35%       { stroke-dashoffset: 0; fill-opacity: 0; opacity: 1; }
-    50%, 82%  { stroke-dashoffset: 0; fill-opacity: 1; opacity: 1; }
-    95%       { stroke-dashoffset: 0; fill-opacity: 1; opacity: 0; }
+    28%       { stroke-dashoffset: 0; fill-opacity: 0; opacity: 1; }
+    42%, 90%  { stroke-dashoffset: 0; fill-opacity: 1; opacity: 1; }
+    97%       { stroke-dashoffset: 0; fill-opacity: 1; opacity: 0; }
     100%      { stroke-dashoffset: 1; fill-opacity: 0; opacity: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -831,7 +834,7 @@
     </h1>
 
     <div class="hero-meta">
-      <p>Organic cold brew in three caffeine strengths — one for easy miles, one for hard sessions, one for recovery. Smooth enough to drink before you run: no jitters, no crash, no mid-run surprises.</p>
+      <p>Organic cold brew in three caffeine strengths: one for easy miles, one for hard sessions, one for recovery. Smooth enough to drink before you run: no jitters, no crash, no mid-run surprises.</p>
     </div>
 
     <div class="hero-cta">
@@ -868,12 +871,12 @@
     <div>
       <div class="kicker">Why cold brew</div>
       <h2>Smoother coffee, by design</h2>
-      <p>Hot coffee is acidic and harsh — the last thing you want sloshing around before a hard effort. Cold brew extraction steeps our beans for 16 hours in cold water, pulling out flavour and caffeine while leaving most of the acid behind.</p>
-      <p>The result is up to <strong>67% less acid</strong> than hot coffee — a smoother, naturally sweet cup that sits light whether you drink it before a run or after one.</p>
+      <p>Hot coffee is acidic and harsh, the last thing you want sloshing around before a hard effort. Cold brew extraction steeps our beans for 16 hours in cold water, pulling out flavour and caffeine while leaving most of the acid behind.</p>
+      <p>The result is up to <strong>67% less acid</strong> than hot coffee, a smoother and naturally sweet cup that sits light whether you drink it before a run or after one.</p>
       <ul class="mini-list">
         <li>Cold water only, never heated</li>
         <li>Single-origin beans from Cerrado, Brazil</li>
-        <li>USDA Organic — nothing added</li>
+        <li>USDA Organic, nothing added</li>
       </ul>
     </div>
   </div>
@@ -894,7 +897,7 @@
     <div class="b">
       <div class="n">02</div>
       <h3>Settles before you start</h3>
-      <p>Light enough to drink 30 minutes out — no heaviness or stitch once the pace picks up.</p>
+      <p>Light enough to drink 30 minutes out, with no heaviness or stitch once the pace picks up.</p>
     </div>
     <div class="b">
       <div class="n">03</div>
@@ -914,7 +917,7 @@
     <div class="b">
       <div class="n">06</div>
       <h3>Cold and ready</h3>
-      <p>Sealed and shelf-stable. Chill it, grab it, go — no brewing and no waiting around.</p>
+      <p>Sealed and shelf-stable. Chill it, grab it, go. No brewing and no waiting around.</p>
     </div>
   </div>
 </section>
@@ -923,7 +926,7 @@
 <section class="endorse">
   <img class="seal" src="img/ms.svg" alt="">
   <div class="kicker">Trusted by runners</div>
-  <blockquote>“I stopped getting side stitches mid-run — and I finally enjoy my pre-race coffee.”</blockquote>
+  <blockquote>“I stopped getting side stitches mid-run, and I finally enjoy my pre-race coffee.”</blockquote>
   <cite><strong>Maya Chen</strong>2:41 Marathoner · Berkeley Track Club</cite>
 </section>
 
@@ -940,7 +943,7 @@
       <span class="flood"></span>
       <div class="top-row"><span>EVERYDAY</span><span>150MG CAFFEINE</span></div>
       <div class="bottle-wrap">
-        <img class="bottle" src="img/image%20114.png" alt="2nd Wind Cold Brew Coffee — Classic, 10.1 fl oz">
+        <img class="bottle" src="img/image%20114.png" alt="2nd Wind Cold Brew Coffee, Classic, 10.1 fl oz">
       </div>
       <div class="label-row">
         <h3 class="name">Classic</h3>
@@ -956,7 +959,7 @@
       <span class="flood"></span>
       <div class="top-row"><span>PRE-RACE</span><span>200MG CAFFEINE</span></div>
       <div class="bottle-wrap">
-        <img class="bottle" src="img/image%20118.png" alt="2nd Wind Cold Brew Coffee — Race, 10.1 fl oz">
+        <img class="bottle" src="img/image%20118.png" alt="2nd Wind Cold Brew Coffee, Race, 10.1 fl oz">
       </div>
       <div class="label-row">
         <h3 class="name">Race</h3>
@@ -972,7 +975,7 @@
       <span class="flood"></span>
       <div class="top-row"><span>POST-RUN</span><span>90MG + ELECTROLYTES</span></div>
       <div class="bottle-wrap">
-        <img class="bottle" src="img/image%20117.png" alt="2nd Wind Cold Brew Coffee — Recovery, 10.1 fl oz">
+        <img class="bottle" src="img/image%20117.png" alt="2nd Wind Cold Brew Coffee, Recovery, 10.1 fl oz">
       </div>
       <div class="label-row">
         <h3 class="name">Recovery</h3>
@@ -996,7 +999,7 @@
     <div class="usage-col classic">
       <div class="when">Easy &amp; base miles</div>
       <h3>Classic</h3>
-      <p>Your everyday cup for shakeouts and base miles — about a strong coffee's worth of caffeine. ~120mg.</p>
+      <p>Your everyday cup for shakeouts and base miles, about a strong coffee's worth of caffeine. ~120mg.</p>
       <div class="dose">1 bottle · 30–45 min pre-run</div>
     </div>
     <div class="usage-col race">
@@ -1025,24 +1028,24 @@
     <article class="card quote-card classic col-4">
       <div class="mark">“</div>
       <blockquote>I used to need two coffees. Now just one bottle and I'm out the door.</blockquote>
-      <cite>Radana Berger — 3:02 Marathoner</cite>
+      <cite>Radana Berger, 3:02 Marathoner</cite>
     </article>
 
     <article class="card quote-card race col-4">
       <div class="mark">“</div>
       <blockquote>Lighter legs in the workout, fresher legs the next day.</blockquote>
-      <cite>Jasper Okonkwo — 1:08 Half</cite>
+      <cite>Jasper Okonkwo, 1:08 Half</cite>
     </article>
 
     <article class="card quote-card recovery col-4">
       <div class="mark">“</div>
       <blockquote>Caffeine that performs as hard as I do. No stomach drama.</blockquote>
-      <cite>Sam Whitford — Triathlon</cite>
+      <cite>Sam Whitford, Triathlon</cite>
     </article>
   </div>
 </section>
 
-<!-- === 04 — WHAT'S INSIDE === -->
+<!-- === 04: WHAT'S INSIDE === -->
 <section class="ingredients" id="ingredients">
   <div class="section-label">
     <h2>What's inside</h2>
@@ -1068,9 +1071,9 @@
     <div>
       <div class="kicker">The routine</div>
       <h2>Same bottle. Every session.</h2>
-      <p>The best runners don't wing their pre-run fuel. Pick your strength, drink it at the same point in your warm-up, and get the same energy every time — no second-guessing on race morning.</p>
+      <p>The best runners don't wing their pre-run fuel. Pick your strength, drink it at the same point in your warm-up, and get the same energy every time, with no second-guessing on race morning.</p>
       <ul class="mini-list">
-        <li>10.1 fl oz / 300ml — one serving</li>
+        <li>10.1 fl oz / 300ml, one serving</li>
         <li>8-month sealed shelf life</li>
         <li>Travels at room temp, chill to serve</li>
         <li>Recyclable glass bottle</li>
@@ -1100,11 +1103,11 @@
   <div class="faq-list">
     <details>
       <summary>How much caffeine is in each bottle? <span class="ic">+</span></summary>
-      <div class="a">Classic is about 120mg — roughly a strong cup of coffee. Race steps up to ~240mg with organic green-coffee extract for hard efforts. Recovery is a lighter ~95mg so it won't keep you up after an evening run.</div>
+      <div class="a">Classic is about 120mg, roughly a strong cup of coffee. Race steps up to ~240mg with organic green-coffee extract for hard efforts. Recovery is a lighter ~95mg so it won't keep you up after an evening run.</div>
     </details>
     <details>
       <summary>Why cold brew instead of regular coffee? <span class="ic">+</span></summary>
-      <div class="a">Cold brewing steeps the grounds in cold water for 16 hours, which extracts far less acid than hot brewing — up to 67% less. That makes it smoother, naturally sweeter, and much easier on your stomach before and after running.</div>
+      <div class="a">Cold brewing steeps the grounds in cold water for 16 hours, which extracts far less acid than hot brewing, up to 67% less. That makes it smoother, naturally sweeter, and much easier on your stomach before and after running.</div>
     </details>
     <details>
       <summary>When should I drink each one? <span class="ic">+</span></summary>
@@ -1112,7 +1115,7 @@
     </details>
     <details>
       <summary>Is it really organic? <span class="ic">+</span></summary>
-      <div class="a">Yes — USDA Organic certified, made with natural-process beans from a single farm in Cerrado, Brazil. No sugar, syrup, milk, or artificial anything.</div>
+      <div class="a">Yes. USDA Organic certified, made with natural-process beans from a single farm in Cerrado, Brazil. No sugar, syrup, milk, or artificial anything.</div>
     </details>
     <details>
       <summary>How should I store it, and how long does it keep? <span class="ic">+</span></summary>
@@ -1120,7 +1123,7 @@
     </details>
     <details>
       <summary>Is it safe for competition? <span class="ic">+</span></summary>
-      <div class="a">2nd Wind contains no banned substances — just organic coffee, water, and (in Recovery) basic electrolytes. Always check current rules for your federation if you compete at the elite level.</div>
+      <div class="a">2nd Wind contains no banned substances, just organic coffee, water, and (in Recovery) basic electrolytes. Always check current rules for your federation if you compete at the elite level.</div>
     </details>
   </div>
 </section>

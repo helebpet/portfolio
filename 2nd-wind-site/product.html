@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2nd Wind — Cold Brew Coffee</title>
+<title>2nd Wind: Cold Brew Coffee</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://use.typekit.net/zyx6svv.css">
@@ -354,7 +354,7 @@
     <div class="pdp-media">
       <span class="tag-float" id="tag-float">EVERYDAY</span>
       <span class="caff-float" id="caff-float">150MG CAFFEINE</span>
-      <img class="bottle" id="bottle" src="img/image%20114.png" alt="2nd Wind Cold Brew — Classic">
+      <img class="bottle" id="bottle" src="img/image%20114.png" alt="2nd Wind Cold Brew, Classic">
     </div>
 
     <!-- INFO -->
@@ -384,7 +384,7 @@
 
       <p class="ingredients" id="ingredients"></p>
 
-      <div class="packs-label">Choose your pack — save more per bottle</div>
+      <div class="packs-label">Choose your pack and save more per bottle</div>
       <div class="packs" id="packs"><!-- pack options injected by JS --></div>
 
       <div class="buy-row">
@@ -447,10 +447,10 @@
   const PRODUCTS = {
     classic: {
       name: "Classic", price: 6, tag: "EVERYDAY",
-      img: "img/image%20114.png",
+      img: "img/image%20114.jpg",
       accent: "var(--trail)", accentDark: "var(--trail-dark)", accentHex: "#818370",
       eyebrow: "Single-origin Brazil · Cold brew",
-      blurb: "Your daily driver. A smooth, balanced cold brew with just enough lift for easy miles and slow mornings — clean enough to sip black, mellow enough to never get in the way.",
+      blurb: "Your daily driver. A smooth, balanced cold brew with just enough lift for easy miles and slow mornings, clean enough to sip black, mellow enough to never get in the way.",
       caffeine: "150 mg", calories: "15 cal", volume: "300 ml", roast: "Medium",
       bestfor: ["Easy runs", "Mornings", "Daily fuel", "Desk work"],
       notes: ["Dark cocoa", "Toasted oat", "Smooth finish"],
@@ -458,10 +458,10 @@
     },
     race: {
       name: "Race", price: 7, tag: "PRE-RACE",
-      img: "img/image%20118.png",
+      img: "img/image%20118.jpg",
       accent: "var(--gold)", accentDark: "var(--gold-dark)", accentHex: "#C09645",
       eyebrow: "Single-origin Brazil · Double strength",
-      blurb: "Built for the hard stuff. Double-strength cold brew that hits fast and clean — the pre-race, pre-tempo, pre-long-run pour when you need real horsepower without the jitters or the crash.",
+      blurb: "Built for the hard stuff. Double-strength cold brew that hits fast and clean, the pre-race, pre-tempo, pre-long-run pour when you need real horsepower without the jitters or the crash.",
       caffeine: "200 mg", calories: "20 cal", volume: "300 ml", roast: "Dark",
       bestfor: ["Race day", "Tempo runs", "Long efforts", "Early starts"],
       notes: ["Bittersweet chocolate", "Dried fig", "Bold + punchy"],
@@ -469,10 +469,10 @@
     },
     recovery: {
       name: "Recovery", price: 7, tag: "POST-RUN",
-      img: "img/image%20117.png",
+      img: "img/image%20117.jpg",
       accent: "var(--ice)", accentDark: "var(--ice-dark)", accentHex: "#758D8F",
       eyebrow: "Single-origin Brazil · With electrolytes",
-      blurb: "The wind-down. Lower caffeine with added electrolytes to help you rehydrate and settle after a hard effort — a soft, malty cold brew for recovery days and late-afternoon miles.",
+      blurb: "The wind-down. Lower caffeine with added electrolytes to help you rehydrate and settle after a hard effort, a soft and malty cold brew for recovery days and late-afternoon miles.",
       caffeine: "90 mg", calories: "25 cal", volume: "300 ml", roast: "Medium",
       bestfor: ["After your run", "Recovery days", "Afternoons", "Rehydrating"],
       notes: ["Caramel", "Malt", "Soft + rounded"],
@@ -481,7 +481,7 @@
   };
   const ORDER = ["classic", "race", "recovery"];
 
-  // === VALUE PACKS — more bottles, better price per bottle ===
+  // === VALUE PACKS: more bottles, better price per bottle ===
   const PACKS = [
     { id: "single", label: "Single bottle", bottles: 1,  off: 0,    badge: "" },
     { id: "six",    label: "6-pack",        bottles: 6,  off: 0.10, badge: "" },
@@ -524,7 +524,7 @@
     el("price").textContent = "$" + p.price;
     el("blurb").textContent = p.blurb;
     el("ingredients").innerHTML = p.ingredients;
-    document.title = `2nd Wind — ${p.name} Cold Brew`;
+    document.title = `2nd Wind: ${p.name} Cold Brew`;
 
     el("specs").innerHTML = `
       <div class="cell"><div class="k">Caffeine</div><div class="v">${p.caffeine}</div></div>
@@ -540,7 +540,7 @@
     bottle.classList.add("swapping");
     setTimeout(() => {
       bottle.src = p.img;
-      bottle.alt = `2nd Wind Cold Brew — ${p.name}`;
+      bottle.alt = `2nd Wind Cold Brew, ${p.name}`;
       bottle.classList.remove("swapping");
     }, 180);
 
