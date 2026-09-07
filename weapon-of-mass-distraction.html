@@ -33,21 +33,6 @@
             opacity: 1;
         }
 
-        /* Two images side by side, each kept at its natural proportions and
-           aligned to the top (no stretching to match the taller one). */
-        .image-row-2col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            align-items: start;
-        }
-
-        .image-row-2col img {
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-        }
-
         @keyframes fadeInOut {
             0% { opacity: 0; }
             10% { opacity: 1; }
@@ -55,55 +40,19 @@
             100% { opacity: 0; }
         }
 
-        /* One image per screen on phones and small tablets */
-        @media (max-width: 900px) {
-            .image-row-2col {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
 <body>
+    <header class="top-bar" id="top">
+        <nav class="top-nav">
+            <a href="index.html">selected work</a>
+            <a href="about.html">about</a>
+        </nav>
+        <button class="theme-toggle" id="theme-toggle"></button>
+    </header>
+
     <div class="layout-wrapper">
-        <!-- Left Column - Navigation -->
-        <div class="left-column">
-            <div class="top-line"></div>
-            <nav>
-                <button class="theme-toggle" id="theme-toggle"></button>
-                <a href="index.html">selected work</a>
-                <a href="about.html">about</a>
-            </nav>
-            <div class="spacer"></div>
-            <div class="contact-links">
-                <a href="mailto:petrahelebrantova@email.cz">
-                    email <span class="arrow-circle">→</span>
-                </a>
-                <a href="https://instagram.com/phelebrantova" target="_blank">
-                    instagram <span class="arrow-circle">→</span>
-                </a>
-                <a href="https://www.linkedin.com/in/petra-helebrantová-684729240" target="_blank">
-                    linkedin <span class="arrow-circle">→</span>
-                </a>
-                <a class="no-glow" href="cv.html">
-                    cv <span class="arrow-circle">→</span>
-                </a>
-            </div>
-            
-            <!-- Project Navigation at bottom -->
-            <div class="project-navigation-left">
-                <a href="beyond-the-address.html" class="nav-button-left prev-project">
-                    ← Previous
-                </a>
-                <a href="2nd-wind.html" class="nav-button-left next-project">
-                    Next →
-                </a>
-            </div>
-        </div>
-
-        <!-- Right Column - Main Content -->
-        <div class="right-column">
-            <div class="center-top-line"></div>
-
+        <main class="right-column">
             <!-- Project Title -->
             <section class="hero project-hero">
                 <h1>Weapon of Mass Distraction</h1>
@@ -117,37 +66,37 @@
                     <!-- Images (Left Column) -->
                     <div class="image-column">
                         <!-- First image full width -->
-                        <img src="img/weapon-of-mass-distraction/1.jpg" alt="Process image 1">
+                        <img src="img/weapon-of-mass-distraction/1.jpg" alt="Process image 1" loading="eager" fetchpriority="high" decoding="async" width="2400" height="1889">
                         
                         <!-- Two columns: Slideshow and static image -->
                         <div class="image-row-2col">
                             <!-- Slideshow for images 2-6 -->
                             <div class="slideshow-container" id="posterSlideshow">
-                                <img src="img/weapon-of-mass-distraction/2.jpg" class="slideshow-image active" alt="Process image 2">
-                                <img src="img/weapon-of-mass-distraction/3.jpg" class="slideshow-image" alt="Process image 3">
-                                <img src="img/weapon-of-mass-distraction/4.jpg" class="slideshow-image" alt="Process image 4">
-                                <img src="img/weapon-of-mass-distraction/5.jpg" class="slideshow-image" alt="Process image 5">
-                                <img src="img/weapon-of-mass-distraction/6.jpg" class="slideshow-image" alt="Process image 6">
+                                <img src="img/weapon-of-mass-distraction/2.jpg" class="slideshow-image active" alt="Process image 2" loading="lazy" decoding="async" width="1800" height="2400">
+                                <img src="img/weapon-of-mass-distraction/3.jpg" class="slideshow-image" alt="Process image 3" loading="lazy" decoding="async" width="1800" height="2400">
+                                <img src="img/weapon-of-mass-distraction/4.jpg" class="slideshow-image" alt="Process image 4" loading="lazy" decoding="async" width="1800" height="2400">
+                                <img src="img/weapon-of-mass-distraction/5.jpg" class="slideshow-image" alt="Process image 5" loading="lazy" decoding="async" width="1800" height="2400">
+                                <img src="img/weapon-of-mass-distraction/6.jpg" class="slideshow-image" alt="Process image 6" loading="lazy" decoding="async" width="1800" height="2400">
                             </div>
-                            <img src="img/weapon-of-mass-distraction/originalphoto.jpg" alt="Original photo before manipulation">
+                            <img src="img/weapon-of-mass-distraction/originalphoto.jpg" alt="Original photo before manipulation" loading="lazy" decoding="async" width="1553" height="2400">
                         </div>
                         
                         <!-- Two columns: Original poster and Poster 1 -->
                         <div class="image-row-2col">
-                            <img src="img/weapon-of-mass-distraction/OriginalPoster.jpg" alt="Original uncorrupted poster design">
-                            <img src="img/weapon-of-mass-distraction/Poster1.jpg" alt="Weapon of Mass Distraction poster variation 1">
+                            <img src="img/weapon-of-mass-distraction/OriginalPoster.jpg" alt="Original uncorrupted poster design" loading="lazy" decoding="async" width="1553" height="2400">
+                            <img src="img/weapon-of-mass-distraction/Poster1.jpg" alt="Weapon of Mass Distraction poster variation 1" loading="lazy" decoding="async" width="792" height="1224">
                         </div>
                         
                         <!-- Two columns: Poster 2 and Poster 5 -->
                         <div class="image-row-2col">
-                            <img src="img/weapon-of-mass-distraction/Poster2.jpg" alt="Weapon of Mass Distraction poster variation 2">
-                            <img src="img/weapon-of-mass-distraction/poster5.jpg" alt="Weapon of Mass Distraction poster variation 5">
+                            <img src="img/weapon-of-mass-distraction/Poster2.jpg" alt="Weapon of Mass Distraction poster variation 2" loading="lazy" decoding="async" width="990" height="1530">
+                            <img src="img/weapon-of-mass-distraction/poster5.jpg" alt="Weapon of Mass Distraction poster variation 5" loading="lazy" decoding="async" width="990" height="1530">
                         </div>
                         
                         <!-- Two columns: Poster 3 and Poster 4 -->
                         <div class="image-row-2col">
-                            <img src="img/weapon-of-mass-distraction/Poster3.jpg" alt="Weapon of Mass Distraction poster variation 3">
-                            <img src="img/weapon-of-mass-distraction/Poster4.jpg" alt="Weapon of Mass Distraction poster variation 4">
+                            <img src="img/weapon-of-mass-distraction/Poster3.jpg" alt="Weapon of Mass Distraction poster variation 3" loading="lazy" decoding="async" width="792" height="1224">
+                            <img src="img/weapon-of-mass-distraction/Poster4.jpg" alt="Weapon of Mass Distraction poster variation 4" loading="lazy" decoding="async" width="792" height="1224">
                         </div>
                     </div>
                     
@@ -180,28 +129,44 @@
                     Next →
                 </a>
             </div>
-        </div>
+        </main>
     </div>
 
     <div class="footer-wrapper">
-        <div class="footer-divider"></div>
         <footer>
-            <div class="footer-top">
-                <div class="footer-brand">
-                    <span class="footer-name">Petra Helebrantová</span>
-                    <span class="footer-tagline">Brand and UX/UI designer, based in San Francisco &amp; Prague</span>
+            <div class="footer-wordmark" aria-hidden="true"></div>
+
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h2 class="footer-heading">Contact</h2>
+                    <ul class="footer-links">
+                        <li><a href="mailto:petrahelebrantova@email.cz"><svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="3.5" width="13" height="9" rx="1"/><path d="M1.8 4.3 8 8.8l6.2-4.5"/></svg> Email <span class="go" aria-hidden="true">&#8599;</span></a></li>
+                        <li><a href="https://www.linkedin.com/in/petra-helebrantov&#225;-684729240" target="_blank" rel="noopener"><svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13" rx="1.5"/><path d="M4.6 6.8v4.6M4.6 4.7v.1M7.6 11.4V6.8m0 1.6c.3-1 1-1.6 1.9-1.6 1.1 0 1.9.7 1.9 2.1v2.5"/></svg> LinkedIn <span class="go" aria-hidden="true">&#8599;</span></a></li>
+                        <li><a href="https://instagram.com/phelebrantova" target="_blank" rel="noopener"><svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13" rx="4"/><circle cx="8" cy="8" r="3.1"/><path d="M11.9 4.1v.1"/></svg> Instagram <span class="go" aria-hidden="true">&#8599;</span></a></li>
+                        <li><a href="cv.html"><svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M9.2 1.6H4.5a1 1 0 0 0-1 1v10.8a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V4.9z"/><path d="M9.2 1.6v3.3h3.3"/><path d="M5.9 8.6h4.2M5.9 11.2h3"/></svg> CV <span class="go" aria-hidden="true">&#8599;</span></a></li>
+                    </ul>
                 </div>
-                <div class="footer-actions">
-                    <button class="footer-contact" id="footer-contact" type="button">contact <span class="arrow-circle">↑</span></button>
-                    <a href="#" class="footer-top-link">back to top <span class="arrow-circle">↑</span></a>
+
+                <div class="footer-col">
+                    <h2 class="footer-heading">Navigate</h2>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Selected work <span class="go" aria-hidden="true">&#8599;</span></a></li>
+                        <li><a href="about.html">About <span class="go" aria-hidden="true">&#8599;</span></a></li>
+                        <li><a href="#top">Back to top <span class="go" aria-hidden="true">&#8593;</span></a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h2 class="footer-heading">Elsewhere</h2>
+                    <p class="footer-note">San Francisco &amp; Prague<br>Available for projects, 2026</p>
                 </div>
             </div>
+
             <div class="footer-bottom">
-                <p>© 2024-2026 Petra Helebrantová. All rights reserved.</p>
+                <p>&#169; 2024-2026 Petra Helebrantov&#225;. All rights reserved.</p>
             </div>
         </footer>
     </div>
-
     <script>
         // Slideshow functionality
         let currentSlide = 0;
@@ -217,10 +182,8 @@
         // Change slide every 4 seconds
         setInterval(showNextSlide, 4000);
     </script>
-    <div class="glass-bottom"></div>
     <script src="typography.js"></script>
     <script src="cursor.js"></script>
     <script src="screensaver.js?v=11"></script>
-    <script src="contact.js"></script>
 </body>
 </html>

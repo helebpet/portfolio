@@ -1,7 +1,12 @@
 (function () {
     'use strict';
 
-    var IDLE_MS  = 60000;
+    /* Idle before the screensaver appears. Case-study pages get much longer:
+       someone reading the Wavia writeup slowly should not have the screen taken
+       out from under them at one minute. */
+    var IDLE_HOME_MS    = 60000;
+    var IDLE_READING_MS = 240000;
+    var IDLE_MS = IDLE_HOME_MS;
     var CELL     = 12;
     var PAD      = 2;
     var FRAME_MS = 1000 / 30;
@@ -38,7 +43,7 @@
         overlay = document.createElement('div');
         overlay.style.cssText =
             'position:fixed;inset:0;z-index:9999;display:none;cursor:none;' +
-            'opacity:0;transition:opacity 1s ease;';
+            'opacity:0;transition:opacity 1s ease;';   // dismissal overrides this to 400ms
         canvas = document.createElement('canvas');
         canvas.style.cssText = 'display:block;width:100%;height:100%;';
         overlay.appendChild(canvas);
@@ -77,6 +82,8 @@
         eyeScale = eyeScaleT = pupilScale = pupilScaleT = 1;
         mode = 'normal'; actionClock = 0; nextAction = 0.4;
         overlay.style.display = 'block';
+        overlay.style.transition = 'opacity 1s ease';
+        document.documentElement.classList.add('screensaver-active');
         requestAnimationFrame(function () { overlay.style.opacity = '1'; });
         animId = requestAnimationFrame(frame);
     }
@@ -84,9 +91,13 @@
     function dismiss() {
         if (!active) return;
         active = false;
+        // Asymmetric on purpose: 1s to arrive so it drifts in, 400ms to leave
+        // because the visitor has just acted and wants their page back.
+        overlay.style.transition = 'opacity 400ms ease-out';
         overlay.style.opacity = '0';
+        document.documentElement.classList.remove('screensaver-active');
         cancelAnimationFrame(animId);
-        setTimeout(function () { overlay.style.display = 'none'; }, 1000);
+        setTimeout(function () { overlay.style.display = 'none'; }, 400);
         scheduleIdle();
     }
 
@@ -365,20 +376,24 @@
         // so it would otherwise cover the page forever.
         if (window.self !== window.top) return;
 
+        // A full-screen canvas of moving eyes is a lot of involuntary motion,
+        // and it is a screensaver that burns battery. Reduced-motion users opt
+        // out of it entirely.
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
         setup();
 
-        // Show the intro immediately only on the home page, and only on the
-        // first page load of the session. On project case studies and other
-        // pages it never covers the content on load — it only appears on idle.
+        // Never auto-show. A full-screen takeover before the visitor has seen a
+        // single project works against them: a recruiter with twenty seconds
+        // should land on the work, not on an animation. It is idle-triggered
+        // only, on every page including the home page.
         var path = location.pathname.replace(/\/+$/, '');
         var isHome = path === '' || /\/index$/.test(path) || /\/index\.html$/.test(path);
+        var isReading = !isHome || document.querySelector('.project-details, .about-content, .cv-content');
 
-        if (isHome && !sessionStorage.getItem('ss_visited')) {
-            sessionStorage.setItem('ss_visited', '1');
-            activate();
-        } else {
-            scheduleIdle();
-        }
+        IDLE_MS = isReading ? IDLE_READING_MS : IDLE_HOME_MS;
+
+        scheduleIdle();
 
         // After user interacts: dismiss + restart idle timer
         ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'].forEach(function (type) {
