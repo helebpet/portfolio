@@ -37,7 +37,27 @@
         #desktop-only h1 { font-size: 22px; font-weight: 700; margin: 0; }
         #desktop-only p { font-size: 13px; line-height: 1.5; max-width: 22em; margin: 0; opacity: 0.92; }
       }
-    </style>
+    
+    /* ---------------------------------------------------------------------
+       Rag control: no widows, no orphans. `balance` evens short display text
+       so headings never drop a lone word; `pretty` protects the tail of body
+       copy. The inline script below hard-binds the last two words for
+       browsers without support.
+    --------------------------------------------------------------------- */
+    h1, h2, h3, h4, h5, h6,
+    .headline, .lead, .blurb, .eyebrow, figcaption, blockquote {
+      text-wrap: balance;
+    }
+
+    p, li, dd {
+      text-wrap: pretty;
+    }
+
+    p, li, h1, h2, h3, h4, h5, h6 {
+      hyphens: none;
+      -webkit-hyphens: none;
+    }
+  </style>
   </head>
   <body>
     <main>
@@ -61,5 +81,48 @@
         }
       })();
     </script>
-  </body>
+  
+  <script>
+  /* Bind the last two words of each block with a non-breaking space so no line
+     is left carrying a single word. Mirrors typography.js on the main site. */
+  (function () {
+    var SELECTOR = 'h1, h2, h3, h4, h5, h6, p, li, figcaption, blockquote';
+    var MAX_PAIR_LENGTH = 18;
+
+    function lastTextNode(el) {
+      for (var i = el.childNodes.length - 1; i >= 0; i--) {
+        var node = el.childNodes[i];
+        if (node.nodeType === 3 && node.nodeValue.trim() !== '') return node;
+        if (node.nodeType === 1) {
+          var nested = lastTextNode(node);
+          if (nested) return nested;
+        }
+      }
+      return null;
+    }
+
+    function run() {
+      var blocks = document.querySelectorAll(SELECTOR);
+      for (var i = 0; i < blocks.length; i++) {
+        var el = blocks[i];
+        if (el.querySelector('br')) continue;
+        var node = lastTextNode(el);
+        if (!node) continue;
+        var text = node.nodeValue;
+        var trimmed = text.replace(/\s+$/, '');
+        var words = trimmed.split(/\s+/);
+        if (words.length < 3) continue;
+        if ((words[words.length - 2] + words[words.length - 1]).length > MAX_PAIR_LENGTH) continue;
+        node.nodeValue = trimmed.replace(/\s+(\S+)$/, '\u00A0$1') + text.slice(trimmed.length);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', run);
+    } else {
+      run();
+    }
+  })();
+  </script>
+</body>
 </html>

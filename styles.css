@@ -13,9 +13,9 @@
     box-sizing: border-box;
 }
 
-/* Clip any horizontal overflow (e.g. the 100vw footer glow / full-bleed images
-   being a scrollbar-width wider than the content) without creating a scroll
-   container, so it doesn't break the sticky sidebar. */
+/* Clip any horizontal overflow (e.g. full-bleed images being a scrollbar-width
+   wider than the content) without creating a scroll container, so it doesn't
+   break the sticky sidebar. */
 html {
     overflow-x: clip;
 }
@@ -33,6 +33,48 @@ body {
     color: #000;
     line-height: 1.6;
     padding: 0 40px;
+}
+
+/* ---------------------------------------------------------------------------
+   Rag control: no widows, no orphans.
+   `balance` evens the line lengths of short display text so a heading never
+   drops a lone word onto its last line. `pretty` does the same for the tail of
+   longer body copy. Both fall back to normal wrapping where unsupported, and
+   typography.js adds a hard non-breaking space as a belt-and-braces pass.
+--------------------------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6,
+.hero p,
+.footer-tagline,
+.footer-name,
+.cta-section p,
+.project-title,
+.project-year,
+.cv-doc-name,
+.cv-meta,
+.cv-entry h4,
+figcaption,
+blockquote,
+.caption,
+nav a,
+.contact-links a,
+button {
+    text-wrap: balance;
+}
+
+p,
+li,
+dd,
+.text-column p,
+.cv-about p,
+.cv-entry p,
+.project-details p {
+    text-wrap: pretty;
+}
+
+/* Never break a word across lines, and never strand a hyphenated fragment. */
+p, li, h1, h2, h3, h4, h5, h6 {
+    hyphens: none;
+    -webkit-hyphens: none;
 }
 
 .layout-wrapper {
@@ -438,6 +480,20 @@ nav a.active::before {
         margin: 0;
     }
 
+    /* Never strand a single line of a paragraph at the top or bottom of a page. */
+    p, li, blockquote, .cv-entry, .cv-block {
+        orphans: 3;
+        widows: 3;
+    }
+
+    .cv-block, .cv-entry, h1, h2, h3, h4 {
+        break-inside: avoid;
+    }
+
+    h1, h2, h3, h4 {
+        break-after: avoid;
+    }
+
     html, body {
         background: #fff !important;
         margin: 0 !important;
@@ -728,59 +784,21 @@ nav a.active::before {
 /* Footer */
 .footer-wrapper {
     grid-column: 1 / -1;
-    margin-top: 50px;
+    margin-top: 140px;
     position: relative;
     z-index: 0;
 }
 
-/* Accent glow rising from the bottom of the page, only visible once you scroll
-   down to the footer (green from the left, purple from the right). */
-.footer-wrapper::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100vw;
-    top: 0;
-    bottom: 0;
-    z-index: -1;
-    pointer-events: none;
-    /* Multi-stop green/purple band that travels left-right as it animates, so
-       the colour visibly drifts inside the masked glow. Uniform across the
-       width so the middle isn't dimmer. */
-    background-image: linear-gradient(100deg,
-        rgba(189, 253, 170, 0.7) 0%,
-        rgba(228, 170, 253, 0.7) 30%,
-        rgba(189, 253, 170, 0.7) 60%,
-        rgba(228, 170, 253, 0.7) 100%);
-    background-size: 220% 100%;
-    animation: footerGlowShift 12s ease-in-out infinite alternate;
-    /* Strongest at the very bottom, fading to nothing by the top of the footer. */
-    -webkit-mask-image: linear-gradient(to top, black 0%, transparent 100%);
-    mask-image: linear-gradient(to top, black 0%, transparent 100%);
-}
-
-html.dark .footer-wrapper::before {
-    background-image: linear-gradient(100deg,
-        rgba(189, 253, 170, 0.32) 0%,
-        rgba(228, 170, 253, 0.32) 30%,
-        rgba(189, 253, 170, 0.32) 60%,
-        rgba(228, 170, 253, 0.32) 100%);
-}
-
-@keyframes footerGlowShift {
-    from { background-position: 0% 0; }
-    to   { background-position: 100% 0; }
-}
-
+/* Full-bleed rule marking the start of the footer, with generous air on both
+   sides so the footer reads as its own zone. */
 .footer-divider {
     height: 1px;
     background: #000;
-    margin: 15px 0;
+    margin: 0 0 60px;
 }
 
 footer {
-    padding-bottom: 80px;
+    padding-bottom: 120px;
     font-family: "gyst-variable", sans-serif;
     color: #666;
 }
@@ -790,8 +808,8 @@ footer {
     justify-content: space-between;
     align-items: flex-end;
     flex-wrap: wrap;
-    gap: 24px;
-    margin-bottom: 44px;
+    gap: 32px;
+    margin-bottom: 72px;
 }
 
 /* The two action buttons (contact / back to top) stacked together */
@@ -851,6 +869,8 @@ footer {
     align-items: center;
     flex-wrap: wrap;
     gap: 12px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .footer-bottom p {
@@ -957,13 +977,19 @@ footer {
 
 .about-grid {
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 40px;
+    grid-template-columns: 1.1fr 1.4fr;
+    gap: 56px;
     align-items: start;
+}
+
+.picture-column {
+    position: sticky;
+    top: 40px;
 }
 
 .picture-column img {
     width: 100%;
+    display: block;
     object-fit: cover;
 }
 
@@ -1298,11 +1324,20 @@ footer {
     }
 
     .footer-wrapper {
+        margin-top: 90px;
         margin-bottom: 0;
     }
 
     .footer-divider {
-        margin-bottom: 30px;
+        margin-bottom: 40px;
+    }
+
+    footer {
+        padding-bottom: 70px;
+    }
+
+    .footer-top {
+        margin-bottom: 48px;
     }
 
     .project-navigation {
@@ -1329,6 +1364,7 @@ footer {
     }
 
     .picture-column {
+        position: static;
         margin-bottom: 20px;
     }
 
@@ -1504,6 +1540,10 @@ html.dark .nav-button-left:hover {
 
 html.dark footer {
     color: #999;
+}
+
+html.dark .footer-bottom {
+    border-top-color: rgba(232, 232, 232, 0.18);
 }
 
 html.dark .footer-name {
