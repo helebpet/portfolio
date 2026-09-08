@@ -1695,7 +1695,7 @@ html.reveal-ready .project-card.is-revealed {
     /* Must match the viewBox in img/footername.svg. The element is empty, so
        it has no intrinsic height and this is what gives it one. Re-export the
        artwork at a different shape and this is the one value to update. */
-    --wordmark-ratio: 1808 / 130;
+    --wordmark-ratio: 534 / 45;
 }
 
 html.dark {
