@@ -1971,12 +1971,22 @@ html.dark .is-active > .cursor-ring {
    One US Letter page (612x792pt = 0.773), so the frame holds that ratio and
    the document never needs its own scrollbar. */
 .cv-frame {
+    width: 100%;
     max-width: 900px;
     margin: 0 auto;
     aspect-ratio: 612 / 792;
     background: #fff;
     border: 1px solid rgba(0, 0, 0, 0.14);
     overflow: hidden;
+}
+
+/* Laptop and up: take the whole content column rather than sitting at 900px
+   inside an 1180px measure. The document is the point of this page, so the
+   type wants to be as large as the column allows. */
+@media (min-width: 1024px) {
+    .cv-frame {
+        max-width: 100%;
+    }
 }
 
 html.dark .cv-frame {
