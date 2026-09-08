@@ -51,9 +51,45 @@
         }, 2000);
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', run);
-    } else {
+    /* Footer wordmark: each letter settles into place as the footer arrives.
+     *
+     * Same safety shape as above. The displaced state lives behind the
+     * `wordmark-ready` flag, which only this function sets, so without JS the
+     * name renders in place. The per-letter delay is in CSS, driven by --i. */
+    function wordmark() {
+        var marks = document.querySelectorAll('.footer-wordmark');
+        if (!marks.length) return;
+
+        if (!('IntersectionObserver' in window)) return;
+
+        document.documentElement.classList.add('wordmark-ready');
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                observer.unobserve(entry.target);   // once only
+                entry.target.classList.add('is-set');
+            });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.2 });
+
+        Array.prototype.forEach.call(marks, function (el) { observer.observe(el); });
+
+        // If anything stalls, set it anyway rather than leaving a blank footer.
+        setTimeout(function () {
+            Array.prototype.forEach.call(marks, function (el) {
+                el.classList.add('is-set');
+            });
+        }, 2500);
+    }
+
+    function init() {
         run();
+        wordmark();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
     }
 })();

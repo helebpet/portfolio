@@ -1684,18 +1684,14 @@ html.reveal-ready .project-card.is-revealed {
 }
 
 /* ── Tier 1: the wordmark lockup ─────────────────────────────────────────
-   img/footername.svg is a single black path. An <img> can't be restyled, so it
-   is used as a mask instead and the colour comes from background-color, which
-   gives us a light and a dark state from one file.
+   The artwork from img/footername.svg, inlined and split into one <g> per
+   letter so each can settle into place on scroll. Colour comes from `fill`,
+   which gives a light and a dark state from one set of paths.
 
    Greys carry a slight warm bias so they sit with the off-white ground rather
-   than reading as a neutral screen grey. Adjust these two values to taste. */
+   than reading as a neutral screen grey. */
 :root {
     --wordmark-ink: #6B6A64;
-    /* Must match the viewBox in img/footername.svg. The element is empty, so
-       it has no intrinsic height and this is what gives it one. Re-export the
-       artwork at a different shape and this is the one value to update. */
-    --wordmark-ratio: 534 / 45;
 }
 
 html.dark {
@@ -1703,31 +1699,45 @@ html.dark {
 }
 
 .footer-wordmark {
-    /* Margin, not padding: a mask covers the padding box too, so padding here
-       would squash the artwork instead of insetting it. */
+    display: block;
+    width: calc(100% - 80px);
+    height: auto;                 /* the viewBox supplies the ratio */
     margin: 0 40px 56px;
-    aspect-ratio: var(--wordmark-ratio);
-    background-color: var(--wordmark-ink);
-
-    -webkit-mask-image: url('img/footername.svg');
-            mask-image: url('img/footername.svg');
-    -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-            mask-position: center;
-    /* contain, not 100% 100%: if the ratio above ever drifts from the artwork,
-       this letterboxes instead of stretching the letterforms. */
-    -webkit-mask-size: contain;
-            mask-size: contain;
+    fill: var(--wordmark-ink);
+    /* Letters travel above and below their final position on the way in, and
+       must not be clipped by the viewBox while they do. */
+    overflow: visible;
 }
 
-/* Without mask support, show the artwork itself rather than a solid grey bar. */
-@supports not ((-webkit-mask-image: url('img/footername.svg')) or (mask-image: url('img/footername.svg'))) {
-    .footer-wordmark {
-        background-color: transparent;
-        background-image: url('img/footername.svg');
-        background-repeat: no-repeat;
-        background-size: contain;
+.wm-l {
+    /* fill-box so each letter rotates about its own centre, not the origin of
+       the whole lockup. */
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+}
+
+/* Displaced state only exists once the script is running. Without JS, or if it
+   throws, every letter simply renders in place. */
+html.wordmark-ready .wm-l {
+    opacity: 0;
+    transform: translateY(var(--dy)) rotate(var(--rot));
+    transition:
+        opacity 520ms cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i) * 38ms),
+        transform 640ms cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i) * 38ms);
+}
+
+html.wordmark-ready .footer-wordmark.is-set .wm-l {
+    opacity: 1;
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* The whole point of this animation is movement, so there is no reduced
+       variant: the letters are simply already where they belong. */
+    html.wordmark-ready .wm-l {
+        opacity: 1;
+        transform: none;
+        transition: none;
     }
 }
 
@@ -1842,6 +1852,7 @@ html.dark .footer-links a {
 /* ── Mobile: stack the wordmark into two clipped bands ──────────────── */
 @media (max-width: 768px) {
     .footer-wordmark {
+        width: calc(100% - (var(--page-margin) * 2));
         margin: 0 var(--page-margin) 40px;
     }
 
