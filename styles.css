@@ -90,21 +90,70 @@ p, li, h1, h2, h3, h4, h5, h6 {
 
 /* ── Top bar: nav left, theme toggle far right, one full-width rule under it.
    This rule is the merge of the old .top-line and .center-top-line. ── */
+/* Three tracks rather than flex: the middle one is the only `auto`, so the nav
+   sits dead centre of the header no matter how wide the name or the toggle
+   are. Flex would only centre it when both sides happened to match. */
 .top-bar {
-    padding-top: 20px;
-    display: flex;
+    padding-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
-    gap: 24px;
+    gap: 32px;
     border-bottom: 2px solid #000;
     padding-bottom: 14px;
+}
+
+.top-mark { justify-self: start; }
+.top-nav  { justify-self: center; }
+.top-bar .theme-toggle { justify-self: end; }
+
+/* The name, same artwork as the footer. Used as a mask rather than an <img> so
+   it takes the page's ink in both themes, and stays one cached file instead of
+   19KB of inline paths on every page. */
+.top-mark {
+    display: block;
+    flex: 0 0 auto;
+    width: 178px;
+    aspect-ratio: 534 / 45;
+    background-color: #000;
+    -webkit-mask-image: url('img/footername.svg');
+            mask-image: url('img/footername.svg');
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+    -webkit-mask-position: left center;
+            mask-position: left center;
+    -webkit-mask-size: contain;
+            mask-size: contain;
+    transition: opacity 200ms ease;
+}
+
+.top-mark:hover {
+    opacity: 0.6;
+}
+
+html.dark .top-mark {
+    background-color: #e8e8e8;
+}
+
+/* Without mask support, fall back to showing the artwork itself. */
+@supports not ((-webkit-mask-image: url('img/footername.svg')) or (mask-image: url('img/footername.svg'))) {
+    .top-mark {
+        background-color: transparent;
+        background-image: url('img/footername.svg');
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+}
+
+.top-bar .theme-toggle {
+    width: auto;
 }
 
 .top-nav {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 28px;
+    gap: 44px;
     margin-bottom: 0;
 }
 
@@ -308,7 +357,7 @@ nav a.active::before {
     transition: background 0.3s;
 }
 
-/* Circled external-link arrow, matching the about page inline-link */
+/* Circled external-link arrow on project-hero links. */
 .hero p a::after {
     content: "\2197"; /* ↗ */
     display: inline-flex;
@@ -688,15 +737,83 @@ nav a.active::before {
     }
 }
 
-/* Projects Grid */
+/* Projects Grid
+   ---------------------------------------------------------------------------
+   A twelve-column field, eight rows deep, with the ten projects laid out as
+   interlocking blocks rather than equal thirds. Every block is a rectangle and
+   together they tile the field exactly, so the grid reads as one filled shape
+   with no stranded card and no ragged edge.
+
+        a a a a a b b b c c c c
+        a a a a a b b b c c c c
+        a a a a a d d d c c c c
+        e e e e e d d d c c c c
+        e e e e e f f f g g g g
+        h h h h h f f f g g g g
+        h h h h h i i i i j j j
+        h h h h h i i i i j j j
+
+   The blocks step across each other rather than lining up in bands: `a` is
+   three rows deep against `b` and `d` at two, and `c` runs the full four down
+   the right. That offset is what stops it reading as stripes. */
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px 30px;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-areas:
+        "a a a a a b b b c c c c"
+        "a a a a a b b b c c c c"
+        "a a a a a d d d c c c c"
+        "e e e e e d d d c c c c"
+        "e e e e e f f f g g g g"
+        "h h h h h f f f g g g g"
+        "h h h h h i i i i j j j"
+        "h h h h h i i i i j j j";
+    grid-auto-rows: 110px;
+    gap: 30px;
     /* No bottom margin: .footer-wrapper already sets the gap to the footer, and
        stacking both left the last row floating much further from the footer
        than the rows sit from each other. */
     margin-bottom: 0;
+}
+
+.projects-grid .project-card:nth-child(1)  { grid-area: a; }
+.projects-grid .project-card:nth-child(2)  { grid-area: b; }
+.projects-grid .project-card:nth-child(3)  { grid-area: c; }
+.projects-grid .project-card:nth-child(4)  { grid-area: d; }
+.projects-grid .project-card:nth-child(5)  { grid-area: e; }
+.projects-grid .project-card:nth-child(6)  { grid-area: f; }
+.projects-grid .project-card:nth-child(7)  { grid-area: g; }
+.projects-grid .project-card:nth-child(8)  { grid-area: h; }
+.projects-grid .project-card:nth-child(9)  { grid-area: i; }
+.projects-grid .project-card:nth-child(10) { grid-area: j; }
+
+/* Each card fills its block: the thumbnail takes whatever height is left once
+   the title line has taken its own, so the blocks butt up against each other
+   with nothing hanging below them. */
+.projects-grid .project-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+/* The card's only child is the link, so it has to stretch and become the flex
+   context itself; otherwise the flex rule below lands on a non-flex parent and
+   the thumbnail never picks up the leftover height. */
+.projects-grid .project-card-link {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.projects-grid .project-card .project-image {
+    flex: 1 1 auto;
+    aspect-ratio: auto;
+    min-height: 0;
+}
+
+.projects-grid .project-card .project-info {
+    flex: 0 0 auto;
 }
 
 .project-card {
@@ -775,6 +892,9 @@ nav a.active::before {
 .project-title {
     font-weight: 400;
     font-size: 13px;
+    /* Project names are set italic wherever they appear: the case-study H1, the
+       cards here, and any mention inside the body copy. */
+    font-style: italic;
 }
 
 /* The title is plain text inside the card link now, not a second link. */
@@ -923,35 +1043,96 @@ footer {
     margin-bottom: 20px;
 }
 
-.text-column p a.inline-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: #000;
-    text-decoration: none;
+/* A project name inside the copy: italic, but no other change in weight or
+   colour, so it reads as a title rather than as emphasis. */
+.text-column p em,
+.text-section p em {
     font-style: italic;
-    background: var(--accent-purple);
-    border: 1px solid #000;
-    border-radius: 20px;
-    padding: 1px 5px 1px 12px;
-    vertical-align: baseline;
-    transition: background 0.3s;
+    font-weight: inherit;
 }
 
-.text-column p a.inline-link .arrow-circle {
-    width: 18px;
-    height: 18px;
-    background: #f5f5f5;
-    font-size: 9px;
-    transition: transform 0.3s;
+/* A plain underlined link. It sits inside running copy, so it takes the
+   weight and colour of the text around it and is marked only by the rule
+   under it. */
+.text-column p a.inline-link {
+    position: relative;
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 200ms ease;
 }
 
 .text-column p a.inline-link:hover {
-    background: var(--accent-green);
+    text-decoration-color: var(--accent-purple);
 }
 
-.text-column p a.inline-link:hover .arrow-circle {
-    transform: translate(1px, -1px);
+/* On hover, a small bubble above the link names where it goes. Content comes
+   from data-tip. Pseudo-element text is not reliably announced, so the same
+   wording is repeated in a visually-hidden span inside the link. */
+.text-column p a.inline-link::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 12px);
+    z-index: 5;
+    transform: translate(-50%, 5px);
+    white-space: nowrap;
+    font-family: 'Xanh Mono', monospace;
+    font-style: normal;
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 0;
+    padding: 9px 14px;
+    border-radius: 30px;
+    background: #000;
+    color: #f5f5f5;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease, transform 180ms var(--ease-out);
+}
+
+/* The bubble's tail. */
+.text-column p a.inline-link::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 6px);
+    z-index: 5;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #000;
+    transform: translate(-50%, 5px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease, transform 180ms var(--ease-out);
+}
+
+.text-column p a.inline-link:hover::after,
+.text-column p a.inline-link:focus-visible::after,
+.text-column p a.inline-link:hover::before,
+.text-column p a.inline-link:focus-visible::before {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+html.dark .text-column p a.inline-link::after {
+    background: #e8e8e8;
+    color: #141414;
+}
+
+html.dark .text-column p a.inline-link::before {
+    border-top-color: #e8e8e8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .text-column p a.inline-link::after,
+    .text-column p a.inline-link::before {
+        transition: opacity 180ms ease;
+        transform: translate(-50%, 0);
+    }
 }
 
 /* Call to action */
@@ -1135,8 +1316,23 @@ footer {
 
 /* Responsive */
 @media (max-width: 1200px) {
+    /* Not enough width for the composition to read. Drop the areas and fall
+       back to an even two-up, which also divides ten exactly, and give the
+       thumbnails their fixed crop back. */
     .projects-grid {
         grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: none;
+        grid-auto-rows: auto;
+        gap: 40px 30px;
+    }
+
+    .projects-grid .project-card:nth-child(n) {
+        grid-area: auto;
+    }
+
+    .projects-grid .project-card .project-image {
+        flex: 0 0 auto;
+        aspect-ratio: 4 / 3;
     }
 }
 
@@ -1471,12 +1667,11 @@ html.dark .text-column p {
     color: #e8e8e8;
 }
 
-html.dark .text-column p a {
-    color: #000;
-}
-
-html.dark .text-column p a.inline-link .arrow-circle {
-    border-color: #000;
+/* The inline link takes the body colour in both themes now that it is a plain
+   underline; #000 here was for the old purple pill and would be invisible on
+   the dark ground. */
+html.dark .text-column p a.inline-link {
+    color: inherit;
 }
 
 html.dark .cta-button {
@@ -1709,35 +1904,27 @@ html.dark {
     overflow: visible;
 }
 
-.wm-l {
-    /* fill-box so each letter rotates about its own centre, not the origin of
-       the whole lockup. */
-    transform-box: fill-box;
-    transform-origin: 50% 50%;
+/* The letters take their colour from a radial gradient whose centre follows
+   the cursor, so a wash of the brand accents travels across the name. The
+   gradient is defined inside the svg; JS only moves its centre. */
+.footer-wordmark {
+    fill: url(#wm-spot);
 }
 
-/* Displaced state only exists once the script is running. Without JS, or if it
-   throws, every letter simply renders in place. */
-html.wordmark-ready .wm-l {
-    opacity: 0;
-    transform: translateY(var(--dy)) rotate(var(--rot));
-    transition:
-        opacity 520ms cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i) * 38ms),
-        transform 640ms cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i) * 38ms);
+:root {
+    --wm-spot-1: #E4AAFD;
+    --wm-spot-2: #BDFDAA;
 }
 
-html.wordmark-ready .footer-wordmark.is-set .wm-l {
-    opacity: 1;
-    transform: none;
+html.dark {
+    --wm-spot-1: #E4AAFD;
+    --wm-spot-2: #BDFDAA;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    /* The whole point of this animation is movement, so there is no reduced
-       variant: the letters are simply already where they belong. */
-    html.wordmark-ready .wm-l {
-        opacity: 1;
-        transform: none;
-        transition: none;
+/* No pointer to follow, so no wash: fall back to flat ink. */
+@media (hover: none) {
+    .footer-wordmark {
+        fill: var(--wordmark-ink);
     }
 }
 
@@ -1874,6 +2061,15 @@ html.dark .footer-links a {
         gap: 12px;
         padding-top: 14px;
         padding-bottom: 12px;
+    }
+
+    /* Three tracks do not fit beside a 178px wordmark on a phone. */
+    .top-mark {
+        width: 118px;
+    }
+
+    .top-nav {
+        justify-self: center;
     }
 
     /* Three items across 375px need a tighter rhythm than the desktop 28px. */

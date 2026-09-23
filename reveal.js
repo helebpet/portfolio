@@ -51,40 +51,65 @@
         }, 2000);
     }
 
-    /* Footer wordmark: each letter settles into place as the footer arrives.
+    /* Footer wordmark: the fill follows the cursor.
      *
-     * Same safety shape as above. The displaced state lives behind the
-     * `wordmark-ready` flag, which only this function sets, so without JS the
-     * name renders in place. The per-letter delay is in CSS, driven by --i. */
-    function wordmark() {
+     * A radial gradient inside the svg supplies the colour; this only moves its
+     * centre, converted from page coordinates into the svg's own user space.
+     * Parked off-canvas until the pointer arrives, and returned there when it
+     * leaves, so the name sits in flat ink by default. */
+    function wordmarkSpot() {
         var marks = document.querySelectorAll('.footer-wordmark');
         if (!marks.length) return;
+        if (!window.matchMedia('(hover: hover)').matches) return;
 
-        if (!('IntersectionObserver' in window)) return;
+        var PARKED = -400;
+        var pending = false;
+        var last = null;
 
-        document.documentElement.classList.add('wordmark-ready');
+        function apply() {
+            pending = false;
+            for (var i = 0; i < marks.length; i++) {
+                var svg = marks[i];
+                var stop = svg.querySelector('#wm-spot');
+                if (!stop) continue;
+                var box = svg.getBoundingClientRect();
+                if (!box.width || !last) { park(stop); continue; }
 
-        var observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (!entry.isIntersecting) return;
-                observer.unobserve(entry.target);   // once only
-                entry.target.classList.add('is-set');
-            });
-        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.2 });
+                // viewBox is 534 x 45; the svg scales uniformly, so a simple
+                // ratio maps client pixels onto user units.
+                var vb = svg.viewBox.baseVal;
+                var x = (last.x - box.left) / box.width * vb.width;
+                var y = (last.y - box.top) / box.height * vb.height;
 
-        Array.prototype.forEach.call(marks, function (el) { observer.observe(el); });
+                // Keep the wash alive while the pointer is anywhere near the
+                // band, not only directly over the glyphs.
+                var near = last.y > box.top - 160 && last.y < box.bottom + 160;
+                stop.setAttribute('cx', near ? x.toFixed(1) : PARKED);
+                stop.setAttribute('cy', y.toFixed(1));
+            }
+        }
 
-        // If anything stalls, set it anyway rather than leaving a blank footer.
-        setTimeout(function () {
-            Array.prototype.forEach.call(marks, function (el) {
-                el.classList.add('is-set');
-            });
-        }, 2500);
+        function park(stop) { stop.setAttribute('cx', PARKED); }
+
+        document.addEventListener('mousemove', function (e) {
+            last = { x: e.clientX, y: e.clientY };
+            if (pending) return;
+            pending = true;
+            requestAnimationFrame(apply);
+        }, { passive: true });
+
+        document.addEventListener('mouseleave', function () {
+            last = null;
+            for (var i = 0; i < marks.length; i++) {
+                var stop = marks[i].querySelector('#wm-spot');
+                if (stop) park(stop);
+            }
+        });
     }
 
     function init() {
         run();
-        wordmark();
+        wordmarkSpot();
     }
 
     if (document.readyState === 'loading') {
