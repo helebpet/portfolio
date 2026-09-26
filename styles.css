@@ -2063,9 +2063,11 @@ html.dark .footer-links a {
         padding-bottom: 12px;
     }
 
-    /* Three tracks do not fit beside a 178px wordmark on a phone. */
+    /* No room for the name beside the nav and the toggle on a phone, and it is
+       in the footer anyway. Hiding the grid item leaves its track empty, so the
+       nav stays centred and the toggle stays right. */
     .top-mark {
-        width: 118px;
+        display: none;
     }
 
     .top-nav {
