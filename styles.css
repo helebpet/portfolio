@@ -573,15 +573,15 @@ nav a.active::before {
     .hero h1,
     .hero p,
     .about-grid .text-column {
-        padding-left: 12px;
-        padding-right: 12px;
+        padding-left: 22px;
+        padding-right: 22px;
     }
 
     /* Footer copy too: the icons still line up because the whole column moves. */
     .footer-grid,
     .footer-bottom {
-        padding-left: calc(var(--page-margin) + 12px);
-        padding-right: calc(var(--page-margin) + 12px);
+        padding-left: calc(var(--page-margin) + 22px);
+        padding-right: calc(var(--page-margin) + 22px);
     }
 
     .cta-section {
@@ -879,10 +879,15 @@ nav a.active::before {
 }
 
 @media (max-width: 768px) {
+    /* Landscape, not a viewport-tall slot. Every cover is a wide image (1.27 to
+       1.78), and filling the height of a phone screen makes the box 0.48, so
+       object-fit would crop away most of the picture's width. A 4:3 frame keeps
+       the shot horizontal and shows what it actually is. */
     .project-cover {
         margin: var(--page-margin, 16px) 0 48px;
-        height: calc(100svh - var(--header-h, 70px) - (var(--page-margin, 16px) * 2));
-        min-height: 300px;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        min-height: 0;
     }
 }
 
@@ -2436,22 +2441,24 @@ html.dark .footer-links a {
         display: none;
     }
 
+    /* Centred: the open menu is the whole screen's attention, and a short
+       left-aligned list under a full-width bar reads as leftover space. */
     .top-bar.is-open .top-nav {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
         gap: 18px;
         grid-column: 1 / -1;
-        justify-self: start;
-        padding-top: 22px;
+        justify-self: center;
+        padding-top: 26px;
     }
 
     .top-bar.is-open .theme-toggle {
         display: flex;
         grid-column: 1 / -1;
-        justify-self: start;
-        padding-top: 18px;
-        padding-bottom: 4px;
+        justify-self: center;
+        padding-top: 20px;
+        padding-bottom: 6px;
     }
 
     .top-nav a {
