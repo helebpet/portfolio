@@ -43,7 +43,21 @@
             </section>
 
             <section class="cta-section">
-                <p>Think we'd work well together?</p>
+                <!-- The line runs along a sine path, the way the type does on the
+                     There Is No Finish Line site. The wave repeats every 300 units, so
+                     travelling exactly one period loops seamlessly. -->
+                <div class="cta-wave" aria-hidden="true" data-reps="10">
+                    <svg viewBox="0 0 1200 260" role="presentation" focusable="false" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <defs>
+                            <path id="cta-wave-path" fill="none"
+                                  d="M -600 130 L 1800 130"/>
+                        </defs>
+                        <text>
+                            <textPath href="#cta-wave-path" xlink:href="#cta-wave-path">Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; </textPath>
+                        </text>
+                    </svg>
+                </div>
+                <p class="visually-hidden">Think we&#8217;d work well together?</p>
                 <a class="cta-button" href="mailto:petrahelebrantova@email.cz">Let's talk <span class="arrow-circle">↗</span></a>
             </section>
         </main>
@@ -76,7 +90,8 @@
 
                 <div class="footer-col">
                     <h2 class="footer-heading">Elsewhere</h2>
-                    <p class="footer-note">San Francisco &amp; Prague<br>Available for projects</p>
+                    <p class="footer-note">San Francisco &amp; Prague<br>
+                        Open for freelance brand and UX/UI projects; <a href="mailto:petrahelebrantova@email.cz">contact via email</a> for any and all inquiries.</p>
                 </div>
             </div>
 

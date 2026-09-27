@@ -25,20 +25,55 @@
 
     <div class="layout-wrapper">
         <main class="right-column">
-            <!-- Project Title -->
-            <section class="hero project-hero">
-                <h1>Circadian Lamp</h1>
-                <p>Course: Interaction Design</p>
-                <p>Fall 2025</p>
-                <p>Physical Computing, Arduino, 3D Printing</p>
+            <figure class="project-cover">
+                <img src="img/circadian-lamp/1.jpg" alt="Circadian Lamp" width="2400" height="1600" loading="eager" fetchpriority="high" decoding="async">
+            </figure>
+
+            <section class="project-intro">
+                <div class="project-meta">
+                <div class="meta-group">
+                    <h2>Course</h2>
+                    <ul>
+                        <li>Interaction Design</li>
+                    </ul>
+                </div>
+                <div class="meta-group">
+                    <h2>Date</h2>
+                    <ul>
+                        <li>Fall 2025</li>
+                    </ul>
+                </div>
+                <div class="meta-group">
+                    <h2>Category</h2>
+                    <ul>
+                        <li>Physical Computing</li>
+                        <li>Arduino</li>
+                        <li>3D Printing</li>
+                    </ul>
+                </div>
+                <div class="meta-group">
+                    <h2>Programs</h2>
+                    <ul>
+                        <li>Arduino</li>
+                        <li>Blender</li>
+                        <li>PrusaSlicer</li>
+                    </ul>
+                </div>
+                </div>
+
+                <div class="project-lede">
+                    <h1>Circadian Lamp</h1>
+                <p><em>Circadian Lamp</em> is a ritual object for winding down, made in response to screen-heavy days that have thrown off natural sleep rhythms. From 6 AM to 8 PM, it glows gentle blue. Two hours before bedtime, from 8 PM to 10 PM, it slowly shifts from yellow to red, then turns off to signal that it’s time to rest, since red light doesn’t suppress melatonin the way blue light does. A single clap turns it back on.</p>
+                    <p>Inside, an Arduino Nano runs a DS3231 real-time clock module, a sound sensor for clap detection, and a NeoPixel LED strip, all housed in a 3D-printed base wrapped in heat-resistant Kapton tape as a barrier between the electronics and the PLA. The translucent shade has a twisted, organic form, somewhere between a mushroom and a bell, modeled in Blender and printed with the spiral vase setting in PrusaSlicer.</p>
+                </div>
             </section>
+
 
             <!-- Project Details -->
             <section class="project-details">
-                <div class="project-grid">
+                <div class="project-grid images-only">
                     <!-- Images (Left Column) -->
                     <div class="image-column">
-                        <img src="img/circadian-lamp/1.jpg" alt="Circadian Lamp overview" loading="eager" fetchpriority="high" decoding="async" width="2400" height="1600">
                         
                         <!-- Embedded Video 1 -->
                         <iframe src="https://drive.google.com/file/d/1UXDhL4rk7evsmFr8lFk974y4k2sILQG4/preview" style="width: 100%; aspect-ratio: 16/9;" allow="autoplay"></iframe>
@@ -48,14 +83,6 @@
                         
                         <!-- Embedded PDF -->
                         <iframe src="https://drive.google.com/file/d/1ivMeFkGJORs_a6HhYKiVh3SES2bCcrYX/preview" style="width: 100%; aspect-ratio: 1/1.2;" allow="autoplay"></iframe>
-                    </div>
-                    
-                    <!-- Text (Right Column) - 3 Sections -->
-                    <div class="text-column">
-                        <div class="text-section">
-                            <p><em>Circadian Lamp</em> is a ritual object for winding down, made in response to screen-heavy days that have thrown off natural sleep rhythms. From 6 AM to 8 PM, it glows gentle blue. Two hours before bedtime, from 8 PM to 10 PM, it slowly shifts from yellow to red, then turns off to signal that it’s time to rest, since red light doesn’t suppress melatonin the way blue light does. A single clap turns it back on.</p>
-                            <p>Inside, an Arduino Nano runs a DS3231 real-time clock module, a sound sensor for clap detection, and a NeoPixel LED strip, all housed in a 3D-printed base wrapped in heat-resistant Kapton tape as a barrier between the electronics and the PLA. The translucent shade has a twisted, organic form, somewhere between a mushroom and a bell, modeled in Blender and printed with the spiral vase setting in PrusaSlicer.</p>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -99,7 +126,8 @@
 
                 <div class="footer-col">
                     <h2 class="footer-heading">Elsewhere</h2>
-                    <p class="footer-note">San Francisco &amp; Prague<br>Available for projects</p>
+                    <p class="footer-note">San Francisco &amp; Prague<br>
+                        Open for freelance brand and UX/UI projects; <a href="mailto:petrahelebrantova@email.cz">contact via email</a> for any and all inquiries.</p>
                 </div>
             </div>
 

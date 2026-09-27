@@ -107,9 +107,82 @@
         });
     }
 
+    /* CTA marquee, ported from the There Is No Finish Line sketch (js/page4.js).
+     *
+     * Two motions, not one: the wave itself ripples as its sine phase advances,
+     * and the text travels along that moving wave. Sliding text along a frozen
+     * curve, which is all CSS can do, misses what makes it feel alive.
+     *
+     * Same constants as the sketch, scaled to the viewBox: there the wave is
+     * y = height/2 + sin(x * 0.01 + phase) * height/10, the phase steps 0.05 a
+     * frame and the text scrolls 2px a frame. */
+    function ctaWave() {
+        var wrap = document.querySelector('.cta-wave');
+        if (!wrap) return;
+        var path = wrap.querySelector('#cta-wave-path');
+        var tp = wrap.querySelector('textPath');
+        if (!path || !tp) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        var CY = 130, AMP = 58, K = 0.0105;      // centre line, height, frequency
+        // Per 60fps frame. Deliberately unhurried: this sits under the closing
+        // invitation, so it should drift rather than scroll past.
+        var PHASE_STEP = 0.014, SCROLL = 0.45;
+        var X0 = -600, X1 = 1800, STEP = 12;
+
+        var phase = 0, offset = null, phrase = 0, paused = false, last = 0;
+
+        function buildPath() {
+            var d = 'M ' + X0 + ' ' + (CY + Math.sin(X0 * K + phase) * AMP).toFixed(1);
+            for (var x = X0 + STEP; x <= X1; x += STEP) {
+                d += ' L ' + x + ' ' + (CY + Math.sin(x * K + phase) * AMP).toFixed(1);
+            }
+            return d;
+        }
+
+        // One phrase's length along the path, so the loop wraps invisibly.
+        function measure() {
+            try {
+                var total = tp.getComputedTextLength();
+                var reps = Number(wrap.dataset.reps || 10);
+                if (total > 0) phrase = total / reps;
+            } catch (e) { phrase = 0; }
+        }
+
+        function frame(now) {
+            // Scale by elapsed time so a 120Hz screen does not run this at
+            // double speed, and a dropped frame does not stutter the travel.
+            var dt = last ? Math.min((now - last) / 16.667, 3) : 1;
+            last = now;
+
+            if (!paused) {
+                phase += PHASE_STEP * dt;
+                path.setAttribute('d', buildPath());
+                if (!phrase) measure();
+                if (phrase) {
+                    if (offset === null) offset = phrase;
+                    offset -= SCROLL * dt;             // travels leftward
+                    if (offset <= 0) offset += phrase; // wrap, one phrase on
+                    tp.setAttribute('startOffset', offset.toFixed(1));
+                }
+            }
+            requestAnimationFrame(frame);
+        }
+
+        wrap.addEventListener('mouseenter', function () { paused = true; });
+        wrap.addEventListener('mouseleave', function () { paused = false; });
+        document.addEventListener('visibilitychange', function () {
+            paused = document.hidden;
+            last = 0;   // drop the accumulated gap so it resumes smoothly
+        });
+
+        requestAnimationFrame(frame);
+    }
+
     function init() {
         run();
         wordmarkSpot();
+        ctaWave();
     }
 
     if (document.readyState === 'loading') {

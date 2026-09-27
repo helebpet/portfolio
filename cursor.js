@@ -43,8 +43,8 @@
         'width:12px;height:12px;border-radius:50%;' +
         'transform:translate(-50%,-50%);' +
         'opacity:0;' +
-        'transition:width 180ms cubic-bezier(0.23,1,0.32,1),' +
-        'height 180ms cubic-bezier(0.23,1,0.32,1),' +
+        'transition:width 180ms var(--ease-out),' +
+        'height 180ms var(--ease-out),' +
         'opacity 0.3s ease;';
 
     // Secondary ring: this is the element allowed to lag, so the trailing
@@ -62,8 +62,8 @@
         'width:30px;height:30px;border-radius:50%;' +
         'transform:translate(-50%,-50%);' +
         'opacity:0;' +
-        'transition:width 180ms cubic-bezier(0.23,1,0.32,1),' +
-        'height 180ms cubic-bezier(0.23,1,0.32,1),' +
+        'transition:width 180ms var(--ease-out),' +
+        'height 180ms var(--ease-out),' +
         'border-color 180ms ease,opacity 0.3s ease;';
 
     ring.appendChild(ringDot);

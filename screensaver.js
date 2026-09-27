@@ -43,7 +43,7 @@
         overlay = document.createElement('div');
         overlay.style.cssText =
             'position:fixed;inset:0;z-index:9999;display:none;cursor:none;' +
-            'opacity:0;transition:opacity 1s ease;';   // dismissal overrides this to 400ms
+            'opacity:0;transition:opacity 1s var(--ease-out);';   // dismissal overrides this to 400ms
         canvas = document.createElement('canvas');
         canvas.style.cssText = 'display:block;width:100%;height:100%;';
         overlay.appendChild(canvas);

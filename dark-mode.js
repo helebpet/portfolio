@@ -92,3 +92,21 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.matches) setOpen(false);
     });
 });
+
+/* Publish the header's real height so a full-view cover image can size itself
+ * to the remainder of the first screen. */
+(function () {
+    function setHeaderHeight() {
+        var bar = document.querySelector('.top-bar');
+        if (!bar) return;
+        document.documentElement.style.setProperty(
+            '--header-h', Math.round(bar.getBoundingClientRect().bottom) + 'px');
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setHeaderHeight);
+    } else {
+        setHeaderHeight();
+    }
+    window.addEventListener('load', setHeaderHeight);
+    window.addEventListener('resize', setHeaderHeight);
+})();
