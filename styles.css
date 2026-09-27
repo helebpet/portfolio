@@ -107,6 +107,52 @@ p, li, h1, h2, h3, h4, h5, h6 {
 .top-nav  { justify-self: center; }
 .top-bar .theme-toggle { justify-self: end; }
 
+/* Hamburger. Hidden on desktop, so it is not a grid item there and the header
+   keeps its three tracks. */
+.nav-toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.nav-toggle-bar {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: #000;
+    transition: transform 220ms var(--ease-out), opacity 140ms ease;
+}
+
+html.dark .nav-toggle-bar {
+    background: #e8e8e8;
+}
+
+/* Open: top and bottom bars cross, middle fades. */
+.top-bar.is-open .nav-toggle-bar:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+}
+
+.top-bar.is-open .nav-toggle-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.top-bar.is-open .nav-toggle-bar:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-toggle-bar { transition: none; }
+}
+
 /* The name, same artwork as the footer. Used as a mask rather than an <img> so
    it takes the page's ink in both themes, and stays one cached file instead of
    19KB of inline paths on every page. */
@@ -2063,15 +2109,52 @@ html.dark .footer-links a {
         padding-bottom: 12px;
     }
 
-    /* No room for the name beside the nav and the toggle on a phone, and it is
-       in the footer anyway. Hiding the grid item leaves its track empty, so the
-       nav stays centred and the toggle stays right. */
+    /* Phone: the name on the left, a hamburger on the right, and everything else
+       folded behind it. The menu expands in flow as extra grid rows rather than
+       overlaying the page, so nothing needs scroll locking. */
+    .top-bar {
+        grid-template-columns: auto 1fr;
+        gap: 0 12px;
+    }
+
     .top-mark {
+        display: block;
+        width: 132px;
+        grid-column: 1;
+    }
+
+    .nav-toggle {
+        display: flex;
+        grid-column: 2;
+        justify-self: end;
+        margin-right: -10px;   /* optical: the bars sit inside a 44px target */
+    }
+
+    .top-nav,
+    .top-bar .theme-toggle {
         display: none;
     }
 
-    .top-nav {
-        justify-self: center;
+    .top-bar.is-open .top-nav {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+        grid-column: 1 / -1;
+        justify-self: start;
+        padding-top: 22px;
+    }
+
+    .top-bar.is-open .theme-toggle {
+        display: flex;
+        grid-column: 1 / -1;
+        justify-self: start;
+        padding-top: 18px;
+        padding-bottom: 4px;
+    }
+
+    .top-nav a {
+        font-size: 15px;
     }
 
     /* Three items across 375px need a tighter rhythm than the desktop 28px. */

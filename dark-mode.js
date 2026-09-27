@@ -51,3 +51,44 @@ document.addEventListener('DOMContentLoaded', function () {
         updateButton();
     });
 });
+
+/* Mobile header menu. The nav and the theme toggle are folded behind a
+ * hamburger below 768px; above that the button is display:none and none of
+ * this has any effect. */
+document.addEventListener('DOMContentLoaded', function () {
+    var bar = document.querySelector('.top-bar');
+    var btn = bar && bar.querySelector('.nav-toggle');
+    if (!bar || !btn) return;
+
+    function setOpen(open) {
+        bar.classList.toggle('is-open', open);
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        btn.setAttribute('aria-label', open ? 'Close menu' : 'Menu');
+    }
+
+    btn.addEventListener('click', function () {
+        setOpen(!bar.classList.contains('is-open'));
+    });
+
+    // Following a link should not leave the menu hanging open behind the
+    // next page's paint, and tapping the theme toggle is a deliberate act
+    // that does not need the menu to stay up either.
+    bar.querySelectorAll('.top-nav a, .theme-toggle').forEach(function (el) {
+        el.addEventListener('click', function () { setOpen(false); });
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && bar.classList.contains('is-open')) {
+            setOpen(false);
+            btn.focus();
+        }
+    });
+
+    // Back above the breakpoint the menu is irrelevant; drop the state so it
+    // cannot linger and re-appear on the next resize down.
+    var wide = window.matchMedia('(min-width: 769px)');
+    (wide.addEventListener ? wide.addEventListener.bind(wide, 'change') :
+        wide.addListener.bind(wide))(function (e) {
+        if (e.matches) setOpen(false);
+    });
+});
