@@ -124,18 +124,25 @@
         if (!path || !tp) return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-        var CY = 130, AMP = 58, K = 0.0105;      // centre line, height, frequency
+        var CY = 130, K = 0.0105;                // centre line, frequency
         // Per 60fps frame. Deliberately unhurried: this sits under the closing
         // invitation, so it should drift rather than scroll past.
         var PHASE_STEP = 0.014, SCROLL = 0.45;
         var X0 = -600, X1 = 1800, STEP = 12;
 
+        // Wave height answers scroll position, not speed: it is shallow as the
+        // marquee enters from the bottom of the screen and opens up as it
+        // travels to the top, so the wave grows under you as you scroll past.
+        // AMP_EASE just smooths the frame-to-frame steps.
+        var AMP_MIN = 30, AMP_MAX = 96, AMP_EASE = 0.12;
+        var amp = AMP_MIN;
+
         var phase = 0, offset = null, phrase = 0, paused = false, last = 0;
 
         function buildPath() {
-            var d = 'M ' + X0 + ' ' + (CY + Math.sin(X0 * K + phase) * AMP).toFixed(1);
+            var d = 'M ' + X0 + ' ' + (CY + Math.sin(X0 * K + phase) * amp).toFixed(1);
             for (var x = X0 + STEP; x <= X1; x += STEP) {
-                d += ' L ' + x + ' ' + (CY + Math.sin(x * K + phase) * AMP).toFixed(1);
+                d += ' L ' + x + ' ' + (CY + Math.sin(x * K + phase) * amp).toFixed(1);
             }
             return d;
         }
@@ -156,6 +163,18 @@
             last = now;
 
             if (!paused) {
+                // Where the marquee sits on screen: 0 when its centre is at the
+                // bottom edge, 1 when it reaches the top. Clamped, so it holds
+                // its end values rather than inverting once it is off screen.
+                var box = wrap.getBoundingClientRect();
+                var vh = window.innerHeight || 1;
+                var centre = box.top + box.height / 2;
+                var t = 1 - (centre / vh);
+                t = t < 0 ? 0 : (t > 1 ? 1 : t);
+
+                var target = AMP_MIN + (AMP_MAX - AMP_MIN) * t;
+                amp += (target - amp) * AMP_EASE * dt;
+
                 phase += PHASE_STEP * dt;
                 path.setAttribute('d', buildPath());
                 if (!phrase) measure();
