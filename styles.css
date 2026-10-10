@@ -878,6 +878,17 @@ nav a.active::before {
     display: block;
 }
 
+/* A square asset in a wide cover box would lose most of itself to the crop,
+   so this variant fits the whole frame on the project's own white ground. */
+.project-cover--contain {
+    background: #fff;
+}
+
+.project-cover--contain img,
+.project-cover--contain video {
+    object-fit: contain;
+}
+
 @media (max-width: 768px) {
     /* Landscape, not a viewport-tall slot. Every cover is a wide image (1.27 to
        1.78), and filling the height of a phone screen makes the box 0.48, so
@@ -1000,19 +1011,19 @@ html.dark .meta-group h2 {
 
 /* Projects Grid
    ---------------------------------------------------------------------------
-   A twelve-column field, eight rows deep, with the ten projects laid out as
+   A twelve-column field, eight rows deep, with the eleven projects laid out as
    interlocking blocks rather than equal thirds. Every block is a rectangle and
    together they tile the field exactly, so the grid reads as one filled shape
    with no stranded card and no ragged edge.
 
         a a a a a b b b c c c c
         a a a a a b b b c c c c
-        a a a a a d d d c c c c
-        e e e e e d d d c c c c
-        e e e e e f f f g g g g
-        h h h h h f f f g g g g
-        h h h h h i i i i j j j
-        h h h h h i i i i j j j
+        a a a a a d d d e e e e
+        f f f f f d d d e e e e
+        f f f f f g g g h h h h
+        i i i i i g g g h h h h
+        i i i i i j j j j k k k
+        i i i i i j j j j k k k
 
    The blocks step across each other rather than lining up in bands: `a` is
    three rows deep against `b` and `d` at two, and `c` runs the full four down
@@ -1023,12 +1034,12 @@ html.dark .meta-group h2 {
     grid-template-areas:
         "a a a a a b b b c c c c"
         "a a a a a b b b c c c c"
-        "a a a a a d d d c c c c"
-        "e e e e e d d d c c c c"
-        "e e e e e f f f g g g g"
-        "h h h h h f f f g g g g"
-        "h h h h h i i i i j j j"
-        "h h h h h i i i i j j j";
+        "a a a a a d d d e e e e"
+        "f f f f f d d d e e e e"
+        "f f f f f g g g h h h h"
+        "i i i i i g g g h h h h"
+        "i i i i i j j j j k k k"
+        "i i i i i j j j j k k k";
     grid-auto-rows: 128px;
     gap: 56px;
     /* No bottom margin: .footer-wrapper already sets the gap to the footer, and
@@ -1047,6 +1058,7 @@ html.dark .meta-group h2 {
 .projects-grid .project-card:nth-child(8)  { grid-area: h; }
 .projects-grid .project-card:nth-child(9)  { grid-area: i; }
 .projects-grid .project-card:nth-child(10) { grid-area: j; }
+.projects-grid .project-card:nth-child(11) { grid-area: k; }
 
 /* Each card fills its block: the thumbnail takes whatever height is left once
    the title line has taken its own, so the blocks butt up against each other
