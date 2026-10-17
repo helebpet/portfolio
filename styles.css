@@ -373,9 +373,13 @@ nav a.active::before {
     display: inline-block;
     /* Sized to the longest word in the rotation so swapping the word crossfades
        the text instead of reflowing the whole headline. */
-    min-width: 4.6em;
+    /* Sized for "graphic", the longest word, with room for the curve: an
+       ellipse only contains a centred box when (w/W)^2 + (h/H)^2 <= 1, and the
+       old 4.6em / 6px-18px put that at 1.11, so the word broke the outline.
+       Padding is in em so it holds as the headline scales. */
+    min-width: 5em;
     text-align: center;
-    padding: 6px 18px;
+    padding: 0.3em 0.85em;
     border: 2px solid #000;
     border-radius: 50%;
     font-style: italic;
@@ -1155,10 +1159,15 @@ html.dark .meta-group h2 {
     background: #C2C2C2;
 }
 
+/* Title and year sit together as one unit. Pushing them to opposite edges put
+   them anywhere from 121px to 466px apart depending on the block's width and
+   the length of the name, so the caption read differently on every card even
+   though the type was identical. */
 .project-info {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: baseline;
+    gap: 14px;
     font-size: 13px;
 }
 
@@ -1419,7 +1428,8 @@ html.dark .text-column p a.inline-link::before {
     align-items: center;
     gap: 44px;
     text-align: center;
-    margin: 200px 0 180px;
+    /* Close under the bio, with the air kept below it instead. */
+    margin: 80px 0 150px;
 }
 
 .cta-section p {
