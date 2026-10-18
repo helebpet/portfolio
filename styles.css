@@ -588,7 +588,13 @@ nav a.active::before {
         padding-right: calc(var(--page-margin) + 22px);
     }
 
-    .cta-section {
+    /* The call to action sits with the bio rather than alone further down. */
+.bio-cta {
+    margin-top: 36px;
+    margin-bottom: 0;
+}
+
+.cta-section {
         margin: 110px 0 96px;
         gap: 32px;
     }
