@@ -290,21 +290,6 @@ nav a.active::before {
     border: 1px solid #000;
 }
 
-.arrow-circle {
-    width: 22px;
-    height: 22px;
-    border: 1px solid #000;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-style: normal;
-    font-family: 'Xanh Mono', monospace;
-    line-height: 1;
-    flex-shrink: 0;
-}
-
 /* Retired with the rail: the case-study prev/next now uses the single
    .project-navigation block at the bottom of the page at every width. */
 .project-navigation-left {
@@ -514,13 +499,6 @@ nav a.active::before {
 .cv-download:hover {
     background: var(--accent-green);
     transform: translateY(-2px);
-}
-
-.cv-download .arrow-circle {
-    width: 24px;
-    height: 24px;
-    font-size: 12px;
-    background: #f5f5f5;
 }
 
 .cv-intro {
@@ -1493,22 +1471,9 @@ html.dark .text-column p a.inline-link::before {
     gap: 14px;
 }
 
-.cta-button .arrow-circle {
-    transition: transform 0.3s;
-    width: 34px;
-    height: 36px;
-    font-size: 18px;
-    background: #f5f5f5;
-    transition: transform 0.3s;
-}
-
 .cta-button:hover {
     background: var(--accent-green);
     transform: translateY(-2px);
-}
-
-.cta-button:hover .arrow-circle {
-    transform: translate(2px, -2px);
 }
 
 /* Project Grid Styling */
@@ -1747,10 +1712,6 @@ html.dark .text-column p a.inline-link::before {
         padding-bottom: 0;
     }
 
-    .arrow-circle {
-        margin-left: 0;
-    }
-
     .center-top-line {
         display: none;
     }
@@ -1916,10 +1877,6 @@ html.dark nav a {
     border-bottom-color: #e8e8e8;
 }
 
-html.dark .arrow-circle {
-    border-color: #e8e8e8;
-}
-
 html.dark nav a.active::before {
     border-color: #e8e8e8;
 }
@@ -1978,10 +1935,6 @@ html.dark .cv-download {
     color: #000;
 }
 
-html.dark .cv-download .arrow-circle {
-    border-color: #000;
-}
-
 /* Dark mode: the CV sheet uses the same dark as the rest of the site. */
 html.dark .cv-page {
     background: #141414;
@@ -2024,10 +1977,6 @@ html.dark .text-column p a.inline-link {
 html.dark .cta-button {
     color: #000;
     background: var(--accent-purple);
-}
-
-html.dark .cta-button .arrow-circle {
-    border-color: #000;
 }
 
 html.dark .theme-toggle {
@@ -2320,7 +2269,6 @@ html.dark {
     transition: color 200ms var(--ease-out);
 }
 
-/* Monoline icons, 1.5px stroke, matching the hairline weight of the rules. */
 .footer-icon {
     width: 16px;
     height: 16px;
@@ -2330,19 +2278,6 @@ html.dark {
     fill: none;
     stroke-linecap: round;
     stroke-linejoin: round;
-}
-
-.footer-links .go {
-    font-size: 11px;
-    opacity: 0;
-    transform: translate(-3px, 3px);
-    transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
-}
-
-.footer-links a:hover .go,
-.footer-links a:focus-visible .go {
-    opacity: 1;
-    transform: none;
 }
 
 /* Same mono as the footer links beside it: this row was inheriting the gyst
@@ -2495,13 +2430,6 @@ html.dark .footer-links a {
 
     .top-nav a {
         font-size: 13px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .footer-links .go {
-        transition: opacity 0.01ms;
-        transform: none;
     }
 }
 
