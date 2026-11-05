@@ -986,7 +986,10 @@ html.dark .meta-group h2 {
 }
 
 @media (max-width: 560px) {
+    /* One column: two side by side left the metadata groups (Course, Date,
+       Category, Software) squeezed to a sliver on a phone. */
     .project-meta {
+        grid-template-columns: 1fr;
         gap: 28px 24px;
     }
 }
@@ -2053,12 +2056,25 @@ summary:focus-visible,
     transform: scale(1.03);
 }
 
-/* ── Press feedback ──────────────────────────────────────────────────────
-   A pressable thing has to visibly react to the press. */
-.cta-button,
-.cta-button:active,
+/* A dangling ".cta-button, .cta-button:active," selector used to sit here with
+   no declaration block of its own, which made the whole @media (hover: none)
+   rule below invalid CSS and browsers dropped it entirely. Removed the
+   fragment; the two rules below are what actually exist now. */
+
+/* ── Full color on touch ──────────────────────────────────────────────────
+   Thumbnails are grayscale until :hover, but a touch device has no hover, so
+   the grid stayed black and white with no way to see color at all. Show full
+   color by default wherever hover is not available. */
+@media (hover: none) {
+    .project-image:not(.framed-pewter) img,
+    .project-image:not(.framed-pewter) video {
+        filter: none;
+    }
+}
+
 /* ── Hover reveals only where hover is real ──────────────────────────────
-   On touch, :hover sticks after a tap and after back-navigation. */
+   On touch, :hover sticks after a tap and after back-navigation, so the lift
+   and zoom need resetting even though color now stays on regardless. */
 @media (hover: none) {
     .project-card-link:hover .project-image {
         transform: none;
@@ -2067,11 +2083,6 @@ summary:focus-visible,
     .project-card-link:hover .project-image img,
     .project-card-link:hover .project-image video {
         transform: none;
-    }
-
-    .project-card-link:hover .project-image:not(.framed-pewter) img,
-    .project-card-link:hover .project-image:not(.framed-pewter) video {
-        filter: grayscale(1);
     }
 }
 
@@ -2267,6 +2278,19 @@ html.dark {
     /* 44px tap target without visually padding the row apart. */
     min-height: 28px;
     transition: color 200ms var(--ease-out);
+}
+
+/* The address itself, as plain readable and copyable text under the Email
+   link, pointing at the same mailto. */
+.footer-email-text {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-top: -4px;
+}
+
+html.dark .footer-email-text {
+    color: #9A9992;
 }
 
 .footer-icon {
