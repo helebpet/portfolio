@@ -306,14 +306,14 @@ nav a.active::before {
     text-decoration: none;
     color: #000;
     font-family: 'Xanh Mono', monospace;
+    font-style: italic;
     font-size: 13px;
-    transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out);
-    background: transparent;
+    transition: background-color 200ms var(--ease-out);
+    background: var(--accent-purple);
 }
 
 .nav-button-left:hover {
-    background: #000;
-    color: #f5f5f5;
+    background: var(--accent-green);
 }
 
 /* Bottom-of-page project navigation, shown at every width now that the rail
@@ -1140,13 +1140,13 @@ html.dark .meta-group h2 {
     background: #C2C2C2;
 }
 
-/* Title and year sit together as one unit. Pushing them to opposite edges put
-   them anywhere from 121px to 466px apart depending on the block's width and
-   the length of the name, so the caption read differently on every card even
-   though the type was identical. */
+/* Title at the left edge of the image, year at the right edge. gap is a
+   floor, not the spacing itself: space-between stretches the two apart to
+   fill the card, gap only stops them touching if a title were ever long
+   enough to need it. */
 .project-info {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: baseline;
     gap: 14px;
     font-size: 13px;
@@ -1244,14 +1244,14 @@ footer {
     text-decoration: none;
     color: #000;
     font-family: 'Xanh Mono', monospace;
+    font-style: italic;
     font-size: 14px;
-    transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out);
-    background: transparent;
+    transition: background-color 200ms var(--ease-out);
+    background: var(--accent-purple);
 }
 
 .nav-button:hover {
-    background: #000;
-    color: #f5f5f5;
+    background: var(--accent-green);
 }
 
 .nav-button .arrow {
@@ -1458,20 +1458,24 @@ html.dark .text-column p a.inline-link::before {
 }
 
 /* Same pill as the inline UXR link, scaled up: purple ground, hairline black
-   edge, italic label, and a circled arrow filled with the page ground. */
+   edge, italic label, and a circled arrow filled with the page ground. Shares
+   the nav-button pill's 50px radius and 200ms ease-out timing so every button
+   on the site reads as one family, even though this one stays filled/purple
+   as the primary action. */
 .cta-button {
     font-family: 'Xanh Mono', monospace;
     font-style: italic;
-    font-size: 24px;
+    font-size: 14px;
     color: #000;
     text-decoration: none;
     background: var(--accent-purple);
     border: 1px solid #000;
-    border-radius: 40px;
-    padding: 12px 14px 12px 30px;
+    border-radius: 50px;
+    padding: 16px 24px;
     display: inline-flex;
     align-items: center;
     gap: 14px;
+    transition: background-color 200ms var(--ease-out), transform 200ms var(--ease-out);
 }
 
 .cta-button:hover {
@@ -1916,14 +1920,17 @@ html.dark .project-image.framed-pewter {
 
 html.dark .nav-button,
 html.dark .nav-button-left {
-    border-color: #e8e8e8;
-    color: #e8e8e8;
+    color: #000;
+    background: var(--accent-purple);
+    border-color: #000;
 }
 
+/* Same specificity trap as the footer links: the base dark rule above
+   (0,2,1) otherwise beats .nav-button:hover / .nav-button-left:hover
+   (0,2,0), so Previous/Next never actually changed color on hover here. */
 html.dark .nav-button:hover,
 html.dark .nav-button-left:hover {
-    background: #e8e8e8;
-    color: #141414;
+    background: var(--accent-green);
 }
 
 html.dark footer {
@@ -1980,6 +1987,13 @@ html.dark .text-column p a.inline-link {
 html.dark .cta-button {
     color: #000;
     background: var(--accent-purple);
+}
+
+/* Same specificity trap as the footer links and nav buttons: html.dark
+   .cta-button (0,2,1) otherwise beats .cta-button:hover (0,2,0), so the
+   button silently stayed purple on hover in dark mode. */
+html.dark .cta-button:hover {
+    background: var(--accent-green);
 }
 
 html.dark .theme-toggle {
@@ -2280,17 +2294,23 @@ html.dark {
     transition: color 200ms var(--ease-out);
 }
 
-/* The address itself, as plain readable and copyable text under the Email
-   link, pointing at the same mailto. */
-.footer-email-text {
-    display: block;
-    font-size: 12px;
-    color: #666;
-    margin-top: -4px;
+/* One style for every footer link, including the email address: same font,
+   weight and size as the rest. The only state change on hover/focus is this
+   color shift to the brand purple, matching every other hover accent on the
+   site (project links, inline links, the footer note). At 14px on the light
+   footer background this is 1.7:1, below AA text contrast; the icon beside
+   it still passes the 3:1 bar for non-text UI, and the link is identifiable
+   by its underline-free, icon-paired layout even before hover. */
+.footer-links a:hover,
+.footer-links a:focus-visible {
+    color: var(--accent-purple);
 }
 
-html.dark .footer-email-text {
-    color: #9A9992;
+/* html.dark .footer-links a (0,2,2) otherwise outranks the hover rule above
+   (0,2,1) by specificity, so hovering silently did nothing in dark mode. */
+html.dark .footer-links a:hover,
+html.dark .footer-links a:focus-visible {
+    color: var(--accent-purple);
 }
 
 .footer-icon {
