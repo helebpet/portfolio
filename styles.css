@@ -329,9 +329,6 @@ nav a.active::before {
 }
 
 .hero h1 {
-    /* .hero centres inline content, which put each of the two lines on its
-       own centred axis instead of sharing a left edge. */
-    text-align: left;
     font-size: clamp(42px, 5.5vw, 72px);
     font-weight: 400;
     font-style: italic;
@@ -349,12 +346,10 @@ nav a.active::before {
     /* Sized for "graphic", the longest word, with room for the curve: an
        ellipse only contains a centred box when (w/W)^2 + (h/H)^2 <= 1, and the
        old 4.6em / 6px-18px put that at 1.11, so the word broke the outline.
-       Padding is in em so it holds as the headline scales. A touch more than
-       that minimum so a descender like the "g" in "graphic" clears the ring
-       instead of brushing it. */
+       Padding is in em so it holds as the headline scales. */
     min-width: 5em;
     text-align: center;
-    padding: 0.4em 0.95em;
+    padding: 0.3em 0.85em;
     border: 2px solid #000;
     border-radius: 50%;
     font-style: italic;
@@ -940,14 +935,16 @@ footer {
    About content first, so the mobile stack (one column) needs no reordering. */
 .about-split {
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    grid-template-columns: minmax(0, 1fr) minmax(480px, 540px);
     gap: clamp(56px, 7vw, 104px);
     align-items: start;
 }
 
+/* Photo and bio sit side by side, tops aligned, rather than stacked. */
 .about-left {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: flex-start;
     gap: 32px;
 }
 
@@ -956,7 +953,8 @@ footer {
    frame regardless of the source photo's own proportions. */
 .about-portrait {
     margin: 0;
-    width: clamp(280px, 30vw, 380px);
+    width: clamp(300px, 28vw, 380px);
+    flex-shrink: 0;
 }
 
 .about-portrait img {
@@ -982,6 +980,18 @@ footer {
     .about-split {
         grid-template-columns: minmax(0, 1fr);
         gap: 48px;
+    }
+
+    .inquiry {
+        max-width: 540px;
+    }
+}
+
+/* Mobile: heading, photo, bio text, then the form, all in one stack. */
+@media (max-width: 600px) {
+    .about-left {
+        flex-direction: column;
+        gap: 24px;
     }
 }
 
