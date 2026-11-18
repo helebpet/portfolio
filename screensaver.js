@@ -389,7 +389,7 @@
         // only, on every page including the home page.
         var path = location.pathname.replace(/\/+$/, '');
         var isHome = path === '' || /\/index$/.test(path) || /\/index\.html$/.test(path);
-        var isReading = !isHome || document.querySelector('.project-details, .about-content, .cv-content');
+        var isReading = !isHome || document.querySelector('.project-details, .about-content');
 
         IDLE_MS = isReading ? IDLE_READING_MS : IDLE_HOME_MS;
 

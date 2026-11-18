@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Petra Helebrantová</title>
     <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://use.typekit.net" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Xanh+Mono:ital@0;1&display=swap">
+    <link rel="stylesheet" href="https://use.typekit.net/vzz8cwm.css">
     <link rel="stylesheet" href="styles.css">
     <script src="dark-mode.js"></script>
 </head>
@@ -25,40 +30,96 @@
 
     <div class="layout-wrapper">
         <main class="right-column">
-            <section class="hero">
+            <section class="hero about-hero">
                 <h1>About Me</h1>
             </section>
 
-            <section class="about-content">
-                <div class="about-grid">
-                    <div class="picture-column">
+            <section class="about-content about-split">
+                <div class="about-left">
+                    <figure class="about-portrait">
                         <img src="img/about.jpg" alt="Picture of Petra Helebrantová" loading="eager" fetchpriority="high" decoding="async" width="1202" height="902">
-                    </div>
+                    </figure>
                     <div class="text-column">
-                        <p>Hello! I'm Petra Helebrantová, a Czech multidisciplinary digital designer. During the academic year you will find me in San Francisco, and over the summer in Prague. Most of my work sits in branding and UX/UI, but once in a while I like to step away from my specialization and just create some art.</p>
+                        <p>Hi! I'm Petra Helebrantová, a Czech multidisciplinary digital designer. During the academic year you will find me in San Francisco, and over the summer in Prague. Most of my work sits in branding and UX/UI, but once in a while I like to step away from my specialization and just create some art.</p>
                         <p>I'm a senior at the University of San Francisco, majoring in design with a minor in <a class="inline-link" data-tip="View my User Experience Research Portfolio" href="https://www.figma.com/deck/W5k0ZzqrfumQoMwCyK1d8Y/Petra-Helebrantov%C3%A1?node-id=782-144&viewport=288%2C251%2C0.21&t=PliJOZpNjVaXat7U-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">UX/UI<span class="visually-hidden">, view my User Experience Research Portfolio, opens in a new tab</span></a>. On campus, I work as a Technology Design Tutor, helping other students with coding and software problems, and as a graphic designer at Ampersand Design Studio, an on-campus design lab run by one of my professors.</p>
                         <p>Most of what drives my work comes from time away from the screen of my laptop. I run and spend as much time outdoors as I can. I also almost always carry a camera with me, ready to capture the ordinarily extraordinary moments that catch my eye. As a designer, my goal is to empower ethical and environmentally conscious businesses in health, wellness, and sport through thoughtful design.</p>
                     </div>
                 </div>
-            </section>
 
-            <section class="cta-section">
-                <!-- The line runs along a sine path, the way the type does on the
-                     There Is No Finish Line site. The wave repeats every 300 units, so
-                     travelling exactly one period loops seamlessly. -->
-                <div class="cta-wave" aria-hidden="true" data-reps="10">
-                    <svg viewBox="0 0 1200 260" role="presentation" focusable="false" xmlns:xlink="http://www.w3.org/1999/xlink">
-                        <defs>
-                            <path id="cta-wave-path" fill="none"
-                                  d="M -600 130 L 1800 130"/>
-                        </defs>
-                        <text>
-                            <textPath href="#cta-wave-path" xlink:href="#cta-wave-path">Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; Think we&#8217;d work well together? &#183; </textPath>
-                        </text>
-                    </svg>
-                </div>
-                <p class="visually-hidden">Think we&#8217;d work well together?</p>
-                <a class="cta-button" href="mailto:petrahelebrantova@email.cz">Let's talk</a>
+                <section class="inquiry" id="inquiry">
+                    <h2 class="inquiry-title">Think we&#8217;d work well together?</h2>
+                    <p class="inquiry-intro">Tell me a little about your project. Fields marked optional can be skipped.</p>
+                    <form id="inquiry-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+                        <!-- Paste the free Web3Forms access key over the placeholder below -->
+                        <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+                        <input type="hidden" name="subject" value="New project inquiry from petrahelebrantova.com">
+                        <input type="checkbox" name="botcheck" class="form-honeypot" tabindex="-1" autocomplete="off">
+
+                        <div class="form-field">
+                            <label for="f-name">Name</label>
+                            <p class="form-hint" id="h-name">Your full name, or how you would like me to address you.</p>
+                            <input type="text" id="f-name" name="name" autocomplete="name" placeholder="Your name" aria-describedby="h-name" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="f-email">Email</label>
+                            <p class="form-hint" id="h-email">Where I can reply to you.</p>
+                            <input type="email" id="f-email" name="email" autocomplete="email" placeholder="name@example.com" aria-describedby="h-email" required>
+                        </div>
+                        <fieldset class="form-field form-types" aria-describedby="h-types">
+                            <legend>Project Type</legend>
+                            <p class="form-hint" id="h-types">Tick everything that fits.</p>
+                                <label class="form-check"><input type="checkbox" name="project_type" value="Brand Identity"><span>Brand Identity</span></label>
+                                <label class="form-check"><input type="checkbox" name="project_type" value="Packaging"><span>Packaging</span></label>
+                                <label class="form-check"><input type="checkbox" name="project_type" value="Web Design"><span>Web Design</span></label>
+                                <label class="form-check"><input type="checkbox" name="project_type" value="Mobile App Design"><span>Mobile App Design</span></label>
+                                <label class="form-check"><input type="checkbox" name="project_type" value="Editorial Design"><span>Editorial Design</span></label>
+                                <label class="form-check"><input type="checkbox" name="project_type" value="Motion Design"><span>Motion Design</span></label>
+                                <label class="form-check"><input type="checkbox" name="project_type" value="Photography"><span>Photography</span></label>
+                        </fieldset>
+                        <div class="form-field">
+                            <label for="f-about">About the Project</label>
+                            <p class="form-hint" id="h-about">The project name if it has one, what you want to achieve, and what you need from me. A few sentences is plenty.</p>
+                            <textarea id="f-about" name="about_the_project" rows="5" placeholder="Project name, goal, and what you need" aria-describedby="h-about" required></textarea>
+                        </div>
+                        <div class="form-field">
+                            <label for="f-company">Company / Brand <span class="form-optional">optional</span></label>
+                            <p class="form-hint" id="h-company">The business or brand the project is for, if there is one.</p>
+                            <input type="text" id="f-company" name="company" autocomplete="organization" aria-describedby="h-company">
+                        </div>
+                        <div class="form-field">
+                            <label for="f-timeline">Timeline <span class="form-optional">optional</span></label>
+                            <p class="form-hint" id="h-timeline">When would you like the project to be finished?</p>
+                            <select id="f-timeline" name="timeline" aria-describedby="h-timeline">
+                                <option value="">Select</option>
+                                <option>As soon as possible</option>
+                                <option>Within 1 month</option>
+                                <option>1 to 3 months</option>
+                                <option>3 months or more</option>
+                                <option>Flexible</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="f-budget">Budget Range <span class="form-optional">optional</span></label>
+                            <p class="form-hint" id="h-budget">A rough range is fine. Choose Not sure yet if you have no number in mind.</p>
+                            <select id="f-budget" name="budget_range" aria-describedby="h-budget">
+                                <option value="">Select</option>
+                                <!-- Placeholder ranges: replace each with a real amount before launch -->
+                                <option>[Range 1: set amount]</option>
+                                <option>[Range 2: set amount]</option>
+                                <option>[Range 3: set amount]</option>
+                                <option>[Range 4: set amount]</option>
+                                <option>Not sure yet</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="f-hear">How Did You Hear About Me <span class="form-optional">optional</span></label>
+                            <p class="form-hint" id="h-hear">A person, a website, social media, anywhere at all.</p>
+                            <input type="text" id="f-hear" name="heard_about_me" aria-describedby="h-hear">
+                        </div>
+                        <button type="submit" class="form-submit">Send inquiry</button>
+                        <p class="form-status" role="status" aria-live="polite" hidden></p>
+                    </form>
+                </section>
             </section>
         </main>
     </div>
@@ -104,6 +165,7 @@
     <script src="reveal.js"></script>
     <script src="typography.js"></script>
     <script src="cursor.js"></script>
+    <script src="form.js"></script>
     <script src="screensaver.js?v=11"></script>
 </body>
 </html>

@@ -10,13 +10,9 @@
     var SELECTOR = [
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
         '.text-column p',
-        '.cv-about p',
-        '.cv-entry p',
         '.project-details p',
         '.hero p',
-        '.cta-section p',
         '.footer-tagline',
-        '.project-title',
         'figcaption',
         '.caption',
         'blockquote p',
