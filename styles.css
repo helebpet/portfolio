@@ -295,7 +295,6 @@ nav a.active::before {
     text-decoration: none;
     color: #000;
     font-family: 'Xanh Mono', monospace;
-    font-style: italic;
     font-size: 13px;
     transition: background-color 200ms var(--ease-out);
     background: var(--accent-purple);
@@ -913,211 +912,254 @@ footer {
 }
 
 /* About Page Styling */
-.about-content {
-    margin-bottom: 80px;
+/* One column: the About heading, then photo and bio side by side, then the
+   inquiry card below the bio text, in that reading order at every width. */
+.about-split {
+    padding: 72px 0 96px;
 }
 
-.hero.about-hero h1 {
+.about-left {
+    margin-bottom: 56px;
+}
+
+.about-heading {
+    font-family: "gyst-variable", sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(42px, 5.5vw, 72px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin-bottom: 32px;
     text-align: left;
 }
 
-/* The heading sat on the general .hero padding (120px top and bottom), sized
-   for a centred homepage band. On its own above a two-column layout that
-   left a dead gap before the grid started, so the About page gets its own,
-   shorter bottom padding. */
-.hero.about-hero {
-    padding: 72px 0 32px;
-}
-
-/* Two columns on an editorial grid: About content on the left, the inquiry
-   form on the right, both reading off the same row start so neither column
-   floats independently of the other. Order in the markup already puts the
-   About content first, so the mobile stack (one column) needs no reordering. */
-.about-split {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(480px, 540px);
-    gap: clamp(56px, 7vw, 104px);
-    align-items: start;
-}
-
 /* Photo and bio sit side by side, tops aligned, rather than stacked. */
-.about-left {
+.about-body {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     gap: 32px;
 }
 
-/* A magazine-style portrait, not a full-width banner: capped well below the
-   column width and cropped to a portrait frame so the whole head stays in
-   frame regardless of the source photo's own proportions. */
+/* The source photo (img/about.jpg) is a landscape 4:3 picture. Shown at its
+   natural ratio with height auto, not cropped into a tall portrait box. */
 .about-portrait {
     margin: 0;
-    width: clamp(300px, 28vw, 380px);
+    width: clamp(300px, 32vw, 460px);
     flex-shrink: 0;
 }
 
 .about-portrait img {
     width: 100%;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    object-position: center 25%;
+    height: auto;
     display: block;
 }
 
-.about-left .text-column {
+.about-body .text-column {
     gap: 24px;
     max-width: 60ch;
 }
 
-/* Project inquiry form: white fields straight on the page, and a short hint
-   under every label saying what to write. */
+/* The inquiry form on one flat white card, centred on the page, with a
+   plain black outline, rounded corners, no gradient, no blur, no shadow.
+   Wider than a typical narrow form column so paired fields (name, email)
+   have room to sit side by side and the whole thing has room to breathe. */
 .inquiry {
     width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #000;
+    border-radius: 20px;
+    padding: clamp(32px, 4.5vw, 52px);
+}
+
+/* Name and email sit side by side on the web; on a narrow phone they stack
+   like everything else in the form. */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 480px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 900px) {
     .about-split {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 48px;
+        padding: 56px 0 80px;
     }
 
-    .inquiry {
-        max-width: 540px;
+    .about-left {
+        margin-bottom: 48px;
     }
 }
 
-/* Mobile: heading, photo, bio text, then the form, all in one stack. */
+/* Mobile: heading, photo, bio text, then the form card, all in one stack. */
 @media (max-width: 600px) {
-    .about-left {
+    .about-body {
         flex-direction: column;
         gap: 24px;
     }
+
+    .about-portrait {
+        width: 100%;
+    }
+
+    .inquiry {
+        padding: 24px 20px;
+        border-radius: 8px;
+    }
 }
 
+/* Desktop only: the card rises up and overlaps the bottom of the photo and
+   bio text, instead of sitting cleanly below it. .about-left paints first
+   (normal document order), so the white card simply covers whatever it
+   overlaps as it's pulled up. Phones keep the plain stack with no overlap,
+   where the card covering part of the photo would just look broken. */
+@media (min-width: 901px) {
+    .inquiry {
+        position: relative;
+        z-index: 2;
+        margin-top: -160px;
+    }
+}
+
+/* Clear top of the hierarchy: the one display-sized, italic line in the
+   card, everything else below it is plain working type. */
 .inquiry-title {
     font-family: "gyst-variable", sans-serif;
     font-style: italic;
     font-weight: 400;
-    font-size: clamp(28px, 3vw, 40px);
+    font-size: clamp(26px, 2.8vw, 34px);
     line-height: 1.15;
-    margin-bottom: 28px;
+    margin-bottom: 10px;
 }
 
-/* The form itself: a short run of large sentences with the fields as
-   underlines and pills inside the text, not a stack of labelled boxes. */
+.inquiry-intro {
+    font-family: 'Xanh Mono', monospace;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 36px;
+}
+
+html.dark .inquiry-intro {
+    color: #999;
+}
+
+/* The form itself: a plain label above each boxed field, like a standard
+   contact form, in black and white only, no colour. Generous gaps between
+   fields so each one reads as its own step rather than a dense stack. */
 .inquiry form {
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: 28px;
 }
 
-.sentence {
-    font-family: "gyst-variable", sans-serif;
-    font-style: normal;
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Two tiers of label: a field's own label (what to type) is quiet and
+   lower-case; a group label (choosing among pills) is bolder and in small
+   caps, closer in weight to a section heading than to a field hint. */
+.form-label {
+    font-family: 'Xanh Mono', monospace;
+    font-size: 13px;
     font-weight: 400;
-    font-size: clamp(19px, 2vw, 26px);
-    line-height: 1.65;
-    color: #000;
+    letter-spacing: 0.02em;
+    color: #555;
 }
 
-.sentence-block {
-    margin: 2px 0;
+span.form-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #000;
 }
 
 .form-optional {
-    font-family: 'Xanh Mono', monospace;
-    font-size: 0.55em;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-style: normal;
-    color: #666;
-    vertical-align: middle;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    color: #999;
 }
 
-/* Underline fields: no box, just a rule under the text, sized to sit inside
-   the sentence rather than break its flow. */
-.field-underline {
-    font: inherit;
-    font-size: inherit;
-    font-family: inherit;
+/* Boxed fields: a visible rounded border rather than a plain underline, and
+   a placeholder inside every field that shows what to type there, the way
+   the reference form does. 16px floor so iOS Safari never auto-zooms, 44px
+   min-height so the tap target is comfortable. */
+.form-input,
+.form-select,
+.form-textarea {
+    font-family: 'Xanh Mono', monospace;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
     color: #000;
-    background: transparent;
-    border: 0;
-    border-bottom: 1.5px solid #000;
-    border-radius: 0;
+    background: #fff;
+    border: 1.5px solid #000;
+    border-radius: 10px;
     box-shadow: none;
-    padding: 0 2px 3px;
-    width: clamp(130px, 15vw, 210px);
-    max-width: 100%;
+    padding: 12px 14px;
+    min-height: 44px;
+    width: 100%;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     outline: none;
-    vertical-align: baseline;
     transition: border-color 200ms var(--ease-out);
 }
 
-.field-select.field-underline {
-    width: auto;
-    max-width: 220px;
+.form-select {
     cursor: pointer;
-    padding-right: 22px;
+    padding-right: 36px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23000' stroke-width='1.5'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
-    background-position: right center;
+    background-position: right 14px center;
     background-repeat: no-repeat;
     background-size: 11px 7px;
 }
 
-.field-underline:focus-visible {
-    border-color: var(--accent-purple);
-}
-
-.field-underline::placeholder {
-    color: #999;
-    opacity: 1;
-}
-
-/* The one block-level field: a short paragraph's worth of lines, still
-   underlined rather than boxed, sitting inline with the rest of the form. */
-.field-textarea {
-    display: block;
-    font: inherit;
-    font-size: inherit;
-    font-family: inherit;
-    color: #000;
-    background: transparent;
-    border: 0;
-    border-bottom: 1.5px solid #000;
-    border-radius: 0;
-    box-shadow: none;
-    padding: 4px 2px 8px;
-    width: 100%;
-    min-height: 3.4em;
-    max-height: 7em;
+.form-textarea {
     resize: vertical;
+    min-height: 110px;
     line-height: 1.5;
-    outline: none;
-    transition: border-color 200ms var(--ease-out);
 }
 
-.field-textarea:focus-visible {
-    border-color: var(--accent-purple);
+.form-input:focus-visible,
+.form-select:focus-visible,
+.form-textarea:focus-visible {
+    border-color: #000;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.12);
 }
 
-.field-textarea::placeholder {
+.form-input::placeholder,
+.form-textarea::placeholder {
     color: #999;
     opacity: 1;
 }
 
-/* Pills: outlined choice chips sitting inline in the sentence. The input is
-   visually hidden but still the real control; the span carries the chrome so
-   :checked can be targeted with a plain adjacent-sibling selector instead of
-   :has(), which is the more broadly supported route across browsers. */
-/* Flex lives on an inner span rather than the fieldset itself: some engines
-   give a <fieldset> that's a flex/grid container a non-zero minimum size
-   that ignores its content, which overflows a narrow row. The fieldset
-   stays a plain inline box; the span does the wrapping. */
+/* The site-wide focus ring is a heavy purple outline, meant for the purple
+   and green brand accents elsewhere on the page. This card is black and
+   white only, so every focusable thing inside it (fields, pills, the submit
+   button) gets a plain black ring instead, in keeping with the rest of the
+   card. Overrides the global a/button/input/textarea focus-visible rule. */
+.inquiry :focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+}
+
+/* Pills: outlined choice chips under their own label, same as the other
+   fields. The input is visually hidden but still the real control; the span
+   carries the chrome so :checked can be targeted with a plain
+   adjacent-sibling selector instead of :has(), the more broadly supported
+   route across browsers. */
 .field-pills {
     display: inline;
     border: 0;
@@ -1127,16 +1169,14 @@ footer {
 }
 
 .pills-row {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    margin: 6px 4px;
+    display: inline;
 }
 
 .pill {
-    display: inline-flex;
+    display: inline-block;
+    margin: 0 8px 10px 0;
     cursor: pointer;
+    vertical-align: middle;
 }
 
 .pill input {
@@ -1150,23 +1190,25 @@ footer {
 .pill span {
     display: inline-flex;
     align-items: center;
+    min-height: 44px;
     font-family: 'Xanh Mono', monospace;
-    font-size: 13px;
+    font-size: 14px;
     font-style: normal;
     letter-spacing: 0;
     color: #000;
     border: 1px solid #000;
     border-radius: 50px;
-    padding: 6px 14px;
-    transition: background-color 200ms var(--ease-out);
+    padding: 10px 16px;
+    transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out);
 }
 
 .pill input:checked + span {
-    background: var(--accent-purple);
+    background: #000;
+    color: #fff;
 }
 
 .pill input:focus-visible + span {
-    outline: 2px solid var(--accent-purple);
+    outline: 2px solid #000;
     outline-offset: 2px;
 }
 
@@ -1174,17 +1216,21 @@ footer {
     display: none;
 }
 
+/* The pink/purple oval button used site-wide, same as everywhere else:
+   bigger and bolder than any field or pill above it, so it still reads as
+   the one thing the form is building toward, no divider needed. */
 .form-submit {
     align-self: flex-start;
-    margin-top: 6px;
+    margin-top: 8px;
+    min-height: 48px;
     font-family: 'Xanh Mono', monospace;
-    font-size: 13px;
-    font-style: italic;
+    font-size: 15px;
+    font-weight: 700;
     color: #000;
     background: var(--accent-purple);
     border: 1px solid #000;
     border-radius: 50px;
-    padding: 12px 20px;
+    padding: 14px 28px;
     cursor: pointer;
     transition: background-color 200ms var(--ease-out);
 }
@@ -1201,44 +1247,11 @@ footer {
     line-height: 1.6;
 }
 
-html.dark .sentence {
-    color: #e8e8e8;
-}
-
+/* The card itself stays white and black in both themes (it has its own
+   fixed white background), so none of the site's dark-mode text colours
+   apply inside it. */
 html.dark .form-optional {
-    color: #999;
-}
-
-html.dark .field-underline,
-html.dark .field-textarea {
-    color: #e8e8e8;
-    border-bottom-color: rgba(232, 232, 232, 0.6);
-}
-
-html.dark .field-underline:focus-visible,
-html.dark .field-textarea:focus-visible {
-    border-bottom-color: var(--accent-purple);
-}
-
-html.dark .field-underline::placeholder,
-html.dark .field-textarea::placeholder {
-    color: #777;
-}
-
-html.dark .field-select.field-underline {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23e8e8e8' stroke-width='1.5'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
-}
-
-html.dark .pill span {
-    color: #e8e8e8;
-    border-color: rgba(232, 232, 232, 0.6);
-}
-
-@media (max-width: 768px) {
-    .about-portrait {
-        padding-left: 22px;
-        padding-right: 22px;
-    }
+    color: #666;
 }
 
 /* The column is full-width now, so cap the running measure rather than let
@@ -1919,6 +1932,28 @@ html.reveal-ready .project-card.is-revealed {
     html.reveal-ready .project-card {
         transform: none;
         transition: opacity var(--dur-enter) var(--ease-out);
+    }
+}
+
+/* ── Inquiry card entrance ───────────────────────────────────────────────
+   The card rises up into place as it scrolls into view, rather than just
+   appearing. Same reveal-ready/is-revealed mechanism as the project grid,
+   added by reveal.js; without JS the card stays fully visible throughout. */
+html.reveal-ready .inquiry {
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out);
+}
+
+html.reveal-ready .inquiry.is-revealed {
+    opacity: 1;
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html.reveal-ready .inquiry {
+        transform: none;
+        transition: opacity 500ms var(--ease-out);
     }
 }
 

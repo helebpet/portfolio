@@ -16,36 +16,60 @@
 
     function run() {
         var cards = document.querySelectorAll('.project-card');
-        if (!cards.length) return;
+        var all = Array.prototype.slice.call(cards);
 
         // No IntersectionObserver: leave everything visible, do nothing.
-        if (!('IntersectionObserver' in window)) return;
+        var hasIO = 'IntersectionObserver' in window;
+
+        // The About page's inquiry card rises into place the same way the
+        // project grid does, just on its own.
+        var inquiry = document.querySelector('.inquiry');
+
+        if (!all.length && !inquiry) return;
+        if (!hasIO) return;
 
         document.documentElement.classList.add('reveal-ready');
 
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        var observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (!entry.isIntersecting) return;
-                var el = entry.target;
-                observer.unobserve(el);          // once only
-                var i = Number(el.dataset.revealIndex || 0);
-                var delay = reduce ? 0 : Math.min(i * STAGGER_MS, MAX_DELAY);
-                el.style.setProperty('--reveal-delay', delay + 'ms');
-                el.classList.add('is-revealed');
-            });
-        }, { rootMargin: '0px 0px -40px 0px', threshold: 0.05 });
+        function revealNow(el, i) {
+            var delay = reduce ? 0 : Math.min(i * STAGGER_MS, MAX_DELAY);
+            el.style.setProperty('--reveal-delay', delay + 'ms');
+            el.classList.add('is-revealed');
+        }
 
-        Array.prototype.forEach.call(cards, function (el, i) {
-            el.dataset.revealIndex = i;
-            observer.observe(el);
-        });
+        if (all.length) {
+            var gridObserver = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
+                    gridObserver.unobserve(entry.target);
+                    revealNow(entry.target, Number(entry.target.dataset.revealIndex || 0));
+                });
+            }, { rootMargin: '0px 0px -40px 0px', threshold: 0.05 });
+
+            Array.prototype.forEach.call(all, function (el, i) {
+                el.dataset.revealIndex = i;
+                gridObserver.observe(el);
+            });
+        }
+
+        if (inquiry) {
+            var cardObserver = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
+                    cardObserver.unobserve(entry.target);
+                    revealNow(entry.target, 0);
+                });
+            }, { rootMargin: '0px 0px -40px 0px', threshold: 0.05 });
+
+            cardObserver.observe(inquiry);
+        }
 
         // Belt and braces: if anything stalls, reveal everything after 2s so a
         // card can never be left invisible.
+        var targets = inquiry ? all.concat([inquiry]) : all;
         setTimeout(function () {
-            Array.prototype.forEach.call(cards, function (el) {
+            Array.prototype.forEach.call(targets, function (el) {
                 el.classList.add('is-revealed');
             });
         }, 2000);

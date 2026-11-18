@@ -30,33 +30,45 @@
 
     <div class="layout-wrapper">
         <main class="right-column">
-            <section class="hero about-hero">
-                <h1>About Me</h1>
-            </section>
-
             <section class="about-content about-split">
                 <div class="about-left">
-                    <figure class="about-portrait">
-                        <img src="img/about.jpg" alt="Picture of Petra Helebrantová" loading="eager" fetchpriority="high" decoding="async" width="1202" height="902">
-                    </figure>
-                    <div class="text-column">
-                        <p>Hi! I'm Petra Helebrantová, a Czech multidisciplinary digital designer. During the academic year you will find me in San Francisco, and over the summer in Prague. Most of my work sits in branding and UX/UI, but once in a while I like to step away from my specialization and just create some art.</p>
-                        <p>I'm a senior at the University of San Francisco, majoring in design with a minor in <a class="inline-link" data-tip="View my User Experience Research Portfolio" href="https://www.figma.com/deck/W5k0ZzqrfumQoMwCyK1d8Y/Petra-Helebrantov%C3%A1?node-id=782-144&viewport=288%2C251%2C0.21&t=PliJOZpNjVaXat7U-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">UX/UI<span class="visually-hidden">, view my User Experience Research Portfolio, opens in a new tab</span></a>. On campus, I work as a Technology Design Tutor, helping other students with coding and software problems, and as a graphic designer at Ampersand Design Studio, an on-campus design lab run by one of my professors.</p>
-                        <p>Most of what drives my work comes from time away from the screen of my laptop. I run and spend as much time outdoors as I can. I also almost always carry a camera with me, ready to capture the ordinarily extraordinary moments that catch my eye. As a designer, my goal is to empower ethical and environmentally conscious businesses in health, wellness, and sport through thoughtful design.</p>
+                    <h1 class="about-heading">About Me</h1>
+
+                    <div class="about-body">
+                        <figure class="about-portrait">
+                            <img src="img/about.jpg" alt="Picture of Petra Helebrantová" loading="eager" fetchpriority="high" decoding="async" width="1202" height="902">
+                        </figure>
+                        <div class="text-column">
+                            <p>Hi! I'm Petra Helebrantová, a Czech multidisciplinary digital designer. During the academic year you will find me in San Francisco, and over the summer in Prague. Most of my work sits in branding and UX/UI, but once in a while I like to step away from my specialization and just create some art.</p>
+                            <p>I'm a senior at the University of San Francisco, majoring in design with a minor in <a class="inline-link" data-tip="View my User Experience Research Portfolio" href="https://www.figma.com/deck/W5k0ZzqrfumQoMwCyK1d8Y/Petra-Helebrantov%C3%A1?node-id=782-144&viewport=288%2C251%2C0.21&t=PliJOZpNjVaXat7U-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">UX/UI<span class="visually-hidden">, view my User Experience Research Portfolio, opens in a new tab</span></a>. On campus, I work as a Technology Design Tutor, helping other students with coding and software problems, and as a graphic designer at Ampersand Design Studio, an on-campus design lab run by one of my professors.</p>
+                            <p>Most of what drives my work comes from time away from the screen of my laptop. I run and spend as much time outdoors as I can. I also almost always carry a camera with me, ready to capture the ordinarily extraordinary moments that catch my eye. As a designer, my goal is to empower ethical and environmentally conscious businesses in health, wellness, and sport through thoughtful design.</p>
+                        </div>
                     </div>
                 </div>
 
                 <section class="inquiry" id="inquiry">
                     <h2 class="inquiry-title">Think we&#8217;d work well together?</h2>
+                    <p class="inquiry-intro">Here, you can fill in the form below and I will get back to you soon.</p>
                     <form id="inquiry-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
                         <!-- Paste the free Web3Forms access key over the placeholder below -->
                         <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
                         <input type="hidden" name="subject" value="New project inquiry from petrahelebrantova.com">
                         <input type="checkbox" name="botcheck" class="form-honeypot" tabindex="-1" autocomplete="off">
 
-                        <p class="sentence">My name is <label class="visually-hidden" for="f-name">Name</label><input type="text" id="f-name" name="name" class="field-underline" autocomplete="name" required>.</p>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label class="form-label" for="f-name">Full name</label>
+                                <input type="text" id="f-name" name="name" class="form-input" placeholder="Your full name" autocomplete="name" required>
+                            </div>
 
-                        <p class="sentence">I&#8217;d like to discuss a
+                            <div class="form-field">
+                                <label class="form-label" for="f-email">Email</label>
+                                <input type="email" id="f-email" name="email" class="form-input" placeholder="your@email.com" autocomplete="email" required>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <span class="form-label">Project type</span>
                             <fieldset class="field-pills">
                                 <legend class="visually-hidden">Project type</legend>
                                 <span class="pills-row">
@@ -69,25 +81,15 @@
                                     <label class="pill"><input type="checkbox" name="project_type" value="Photography"><span>Photography</span></label>
                                 </span>
                             </fieldset>
-                            project.
-                        </p>
+                        </div>
 
-                        <p class="sentence sentence-block">
-                            <label class="visually-hidden" for="f-about">About the project</label>
-                            <textarea id="f-about" name="about_the_project" class="field-textarea" rows="4" placeholder="What are you making, and what do you need from me?" required></textarea>
-                        </p>
+                        <div class="form-field">
+                            <label class="form-label" for="f-about">Project details</label>
+                            <textarea id="f-about" name="about_the_project" class="form-textarea" rows="4" placeholder="What are you making, and what do you need from me?" required></textarea>
+                        </div>
 
-                        <p class="sentence">Timeline <label class="visually-hidden" for="f-timeline">Timeline</label><select id="f-timeline" name="timeline" class="field-underline field-select">
-                                <option value="">select</option>
-                                <option>As soon as possible</option>
-                                <option>Within 1 month</option>
-                                <option>1 to 3 months</option>
-                                <option>3 months or more</option>
-                                <option>Flexible</option>
-                            </select>.
-                        </p>
-
-                        <p class="sentence">Budget
+                        <div class="form-field">
+                            <span class="form-label">Budget</span>
                             <fieldset class="field-pills">
                                 <legend class="visually-hidden">Budget range</legend>
                                 <!-- Provisional ranges: confirm before launch -->
@@ -98,12 +100,8 @@
                                     <label class="pill"><input type="radio" name="budget_range" value="Over $4,000"><span>Over $4,000</span></label>
                                     <label class="pill"><input type="radio" name="budget_range" value="Not sure yet"><span>Not sure yet</span></label>
                                 </span>
-                            </fieldset>.
-                        </p>
-
-                        <p class="sentence">Company / brand <span class="form-optional"> (optional) </span><label class="visually-hidden" for="f-company">Company or brand</label><input type="text" id="f-company" name="company" class="field-underline" autocomplete="organization">. Get back at <label class="visually-hidden" for="f-email">Email</label><input type="email" id="f-email" name="email" class="field-underline" autocomplete="email" required>.</p>
-
-                        <p class="sentence">How did you hear about me <span class="form-optional"> (optional) </span><label class="visually-hidden" for="f-hear">How did you hear about me</label><input type="text" id="f-hear" name="heard_about_me" class="field-underline"></p>
+                            </fieldset>
+                        </div>
 
                         <button type="submit" class="form-submit">Send inquiry</button>
                         <p class="form-status" role="status" aria-live="polite" hidden></p>
