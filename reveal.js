@@ -54,25 +54,49 @@
         }
 
         if (inquiry) {
-            var cardObserver = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (!entry.isIntersecting) return;
-                    cardObserver.unobserve(entry.target);
-                    revealNow(entry.target, 0);
-                });
-            }, { rootMargin: '0px 0px -40px 0px', threshold: 0.05 });
+            // IntersectionObserver fires its first callback almost as soon as
+            // observe() is called, checking whatever is already on screen.
+            // On a short page the card can already satisfy that check before
+            // the user has scrolled at all, which reveals it instantly on
+            // load instead of in response to scrolling, and reads as "the
+            // animation doesn't work". A plain scroll listener only ever
+            // runs in response to an actual scroll, so it can't fire early.
+            var revealed = false;
 
-            cardObserver.observe(inquiry);
+            function tryRevealInquiry() {
+                if (revealed) return;
+                var top = inquiry.getBoundingClientRect().top;
+                if (top > window.innerHeight * 0.92) return;
+                revealed = true;
+                revealNow(inquiry, 0);
+                window.removeEventListener('scroll', tryRevealInquiry);
+                window.removeEventListener('resize', tryRevealInquiry);
+            }
+
+            // If the page is too short to scroll at all, there is no scroll
+            // event to trigger on, so reveal it right away rather than
+            // leaving the form permanently hidden.
+            var canScroll = document.documentElement.scrollHeight > window.innerHeight + 40;
+            if (!canScroll || reduce) {
+                tryRevealInquiry();
+            } else {
+                window.addEventListener('scroll', tryRevealInquiry, { passive: true });
+                window.addEventListener('resize', tryRevealInquiry);
+            }
         }
 
-        // Belt and braces: if anything stalls, reveal everything after 2s so a
-        // card can never be left invisible.
-        var targets = inquiry ? all.concat([inquiry]) : all;
-        setTimeout(function () {
-            Array.prototype.forEach.call(targets, function (el) {
-                el.classList.add('is-revealed');
-            });
-        }, 2000);
+        // Belt and braces: if the project grid stalls, reveal it after 2s so
+        // a card can never be left invisible. The inquiry card is deliberately
+        // excluded: it is meant to stay hidden until the page is scrolled to
+        // it, and tryRevealInquiry above already covers the case where the
+        // page can't be scrolled at all.
+        if (all.length) {
+            setTimeout(function () {
+                Array.prototype.forEach.call(all, function (el) {
+                    el.classList.add('is-revealed');
+                });
+            }, 2000);
+        }
     }
 
     /* Footer wordmark: the fill follows the cursor.

@@ -912,14 +912,15 @@ footer {
 }
 
 /* About Page Styling */
-/* One column: the About heading, then photo and bio side by side, then the
-   inquiry card below the bio text, in that reading order at every width. */
+/* One column at every width: the About heading, then photo and bio side by
+   side, then the inquiry card below the bio text, in that reading order, so
+   the card never sits on top of the bio. */
 .about-split {
     padding: 72px 0 96px;
 }
 
 .about-left {
-    margin-bottom: 56px;
+    margin-bottom: 110px;
 }
 
 .about-heading {
@@ -962,16 +963,18 @@ footer {
 
 /* The inquiry form on one flat white card, centred on the page, with a
    plain black outline, rounded corners, no gradient, no blur, no shadow.
-   Wider than a typical narrow form column so paired fields (name, email)
-   have room to sit side by side and the whole thing has room to breathe. */
+   Wide and landscape-shaped on desktop, rather than a narrow tall column,
+   so paired fields (name, email) have plenty of room to sit side by side.
+   Content reads left-aligned, like a normal form, not centred. */
 .inquiry {
     width: 100%;
-    max-width: 760px;
+    max-width: 1140px;
     margin: 0 auto;
     background: #fff;
     border: 1px solid #000;
     border-radius: 20px;
-    padding: clamp(32px, 4.5vw, 52px);
+    padding: clamp(48px, 6vw, 88px);
+    text-align: left;
 }
 
 /* Name and email sit side by side on the web; on a narrow phone they stack
@@ -980,6 +983,7 @@ footer {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
+    width: 100%;
 }
 
 @media (max-width: 480px) {
@@ -994,7 +998,7 @@ footer {
     }
 
     .about-left {
-        margin-bottom: 48px;
+        margin-bottom: 72px;
     }
 }
 
@@ -1010,23 +1014,11 @@ footer {
     }
 
     .inquiry {
-        padding: 24px 20px;
+        padding: 32px 24px;
         border-radius: 8px;
     }
 }
 
-/* Desktop only: the card rises up and overlaps the bottom of the photo and
-   bio text, instead of sitting cleanly below it. .about-left paints first
-   (normal document order), so the white card simply covers whatever it
-   overlaps as it's pulled up. Phones keep the plain stack with no overlap,
-   where the card covering part of the photo would just look broken. */
-@media (min-width: 901px) {
-    .inquiry {
-        position: relative;
-        z-index: 2;
-        margin-top: -160px;
-    }
-}
 
 /* Clear top of the hierarchy: the one display-sized, italic line in the
    card, everything else below it is plain working type. */
@@ -1034,8 +1026,8 @@ footer {
     font-family: "gyst-variable", sans-serif;
     font-style: italic;
     font-weight: 400;
-    font-size: clamp(26px, 2.8vw, 34px);
-    line-height: 1.15;
+    font-size: clamp(32px, 3.6vw, 42px);
+    line-height: 1.1;
     margin-bottom: 10px;
 }
 
@@ -1051,37 +1043,43 @@ html.dark .inquiry-intro {
 }
 
 /* The form itself: a plain label above each boxed field, like a standard
-   contact form, in black and white only, no colour. Generous gaps between
-   fields so each one reads as its own step rather than a dense stack. */
+   contact form, in black and white only, no colour. The gap between the
+   form's direct children is the space between logically separate groups
+   (contact info, project info, budget, submit); fields that belong together
+   sit closer, inside a .form-group or a shared .form-row. */
 .inquiry form {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    align-items: stretch;
+    gap: 36px;
 }
 
 .form-field {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: 8px;
+    width: 100%;
 }
 
-/* Two tiers of label: a field's own label (what to type) is quiet and
-   lower-case; a group label (choosing among pills) is bolder and in small
-   caps, closer in weight to a section heading than to a field hint. */
+/* Project type and the project-details message are one idea (what the
+   project is), so they sit closer to each other than to the groups around
+   them. */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+    width: 100%;
+}
+
+/* One consistent label style everywhere, whether it labels a text field or
+   a group of pills: quiet and lower-case, never competing with the title. */
 .form-label {
     font-family: 'Xanh Mono', monospace;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 400;
-    letter-spacing: 0.02em;
     color: #555;
-}
-
-span.form-label {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #000;
 }
 
 .form-optional {
@@ -1095,6 +1093,8 @@ span.form-label {
    a placeholder inside every field that shows what to type there, the way
    the reference form does. 16px floor so iOS Safari never auto-zooms, 44px
    min-height so the tap target is comfortable. */
+/* Underline only, no box: a plain line under the text, the same way the
+   reference form does it. */
 .form-input,
 .form-select,
 .form-textarea {
@@ -1103,25 +1103,27 @@ span.form-label {
     font-weight: 400;
     font-size: 16px;
     color: #000;
-    background: #fff;
-    border: 1.5px solid #000;
-    border-radius: 10px;
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid #000;
+    border-radius: 4px 4px 0 0;
     box-shadow: none;
-    padding: 12px 14px;
+    padding: 10px 6px;
     min-height: 44px;
     width: 100%;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     outline: none;
-    transition: border-color 200ms var(--ease-out);
+    text-align: left;
+    transition: background-color 200ms var(--ease-out), border-color 200ms var(--ease-out);
 }
 
 .form-select {
     cursor: pointer;
-    padding-right: 36px;
+    padding-right: 28px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23000' stroke-width='1.5'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
-    background-position: right 14px center;
+    background-position: right 6px center;
     background-repeat: no-repeat;
     background-size: 11px 7px;
 }
@@ -1132,11 +1134,13 @@ span.form-label {
     line-height: 1.5;
 }
 
+/* No border or ring change on focus, just the same purple the rest of the
+   page already uses (checked pills, the submit button), at 30% so the fill
+   stays light rather than fully covering the field. */
 .form-input:focus-visible,
 .form-select:focus-visible,
 .form-textarea:focus-visible {
-    border-color: #000;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.12);
+    background: rgba(228, 170, 253, 0.3);
 }
 
 .form-input::placeholder,
@@ -1145,14 +1149,10 @@ span.form-label {
     opacity: 1;
 }
 
-/* The site-wide focus ring is a heavy purple outline, meant for the purple
-   and green brand accents elsewhere on the page. This card is black and
-   white only, so every focusable thing inside it (fields, pills, the submit
-   button) gets a plain black ring instead, in keeping with the rest of the
-   card. Overrides the global a/button/input/textarea focus-visible rule. */
+/* No outline anywhere in this card. Overrides the site-wide focus-visible
+   rule, which would otherwise draw a heavy purple ring here. */
 .inquiry :focus-visible {
-    outline: 2px solid #000;
-    outline-offset: 2px;
+    outline: none;
 }
 
 /* Pills: outlined choice chips under their own label, same as the other
@@ -1174,7 +1174,7 @@ span.form-label {
 
 .pill {
     display: inline-block;
-    margin: 0 8px 10px 0;
+    margin: 0 6px 6px 0;
     cursor: pointer;
     vertical-align: middle;
 }
@@ -1187,18 +1187,20 @@ span.form-label {
     opacity: 0;
 }
 
+/* Tighter chips: still an easy tap target, but closer to the size of the
+   word inside them instead of a wide, loose pill. */
 .pill span {
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
+    min-height: 36px;
     font-family: 'Xanh Mono', monospace;
-    font-size: 14px;
+    font-size: 13px;
     font-style: normal;
     letter-spacing: 0;
     color: #000;
     border: 1px solid #000;
     border-radius: 50px;
-    padding: 10px 16px;
+    padding: 8px 13px;
     transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out);
 }
 
@@ -1208,8 +1210,7 @@ span.form-label {
 }
 
 .pill input:focus-visible + span {
-    outline: 2px solid #000;
-    outline-offset: 2px;
+    outline: none;
 }
 
 .form-honeypot {
@@ -1247,11 +1248,45 @@ span.form-label {
     line-height: 1.6;
 }
 
-/* The card itself stays white and black in both themes (it has its own
-   fixed white background), so none of the site's dark-mode text colours
-   apply inside it. */
-html.dark .form-optional {
-    color: #666;
+/* Dark mode: the card was hard-coded to a white background regardless of
+   theme, which left a bright white block sitting in the middle of an
+   otherwise dark page. It now flips to a dark card with light text, the
+   same way every other surface on the site responds to the toggle; the
+   purple/green accents stay the same in both themes. */
+html.dark .inquiry {
+    background: #1c1c1c;
+    border-color: rgba(232, 232, 232, 0.6);
+}
+
+html.dark .inquiry-title,
+html.dark .form-label {
+    color: #e8e8e8;
+}
+
+html.dark .form-input,
+html.dark .form-select,
+html.dark .form-textarea {
+    color: #e8e8e8;
+    border-bottom-color: rgba(232, 232, 232, 0.6);
+}
+
+html.dark .form-input::placeholder,
+html.dark .form-textarea::placeholder {
+    color: #777;
+}
+
+html.dark .form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23e8e8e8' stroke-width='1.5'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+}
+
+html.dark .pill span {
+    color: #e8e8e8;
+    border-color: rgba(232, 232, 232, 0.6);
+}
+
+html.dark .pill input:checked + span {
+    background: #e8e8e8;
+    color: #141414;
 }
 
 /* The column is full-width now, so cap the running measure rather than let
