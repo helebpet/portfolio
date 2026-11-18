@@ -14,9 +14,9 @@
     --img-gap: 14px;
     --page-margin: 16px;
     /* Gap between homepage gallery cards, horizontal and vertical. Stays below
-       --page-margin on phones (12px against 16px) and below the 40px desktop
-       body inset (24px cap). */
-    --grid-gap: clamp(12px, 1.6vw, 24px);
+       --page-margin on phones (10px against 16px) and below the 40px desktop
+       body inset (18px cap). */
+    --grid-gap: clamp(10px, 1.3vw, 18px);
 }
 
 * {
@@ -101,6 +101,7 @@ p, li, h1, h2, h3, h4, h5, h6 {
     /* Sticky, so the name and the nav stay reachable down a long case study.
        It needs its own ground: with no background the page would scroll
        through it. The 2px rule below is what separates it from the content. */
+    position: -webkit-sticky;
     position: sticky;
     top: 0;
     z-index: 50;
@@ -328,6 +329,9 @@ nav a.active::before {
 }
 
 .hero h1 {
+    /* .hero centres inline content, which put each of the two lines on its
+       own centred axis instead of sharing a left edge. */
+    text-align: left;
     font-size: clamp(42px, 5.5vw, 72px);
     font-weight: 400;
     font-style: italic;
@@ -345,10 +349,12 @@ nav a.active::before {
     /* Sized for "graphic", the longest word, with room for the curve: an
        ellipse only contains a centred box when (w/W)^2 + (h/H)^2 <= 1, and the
        old 4.6em / 6px-18px put that at 1.11, so the word broke the outline.
-       Padding is in em so it holds as the headline scales. */
+       Padding is in em so it holds as the headline scales. A touch more than
+       that minimum so a descender like the "g" in "graphic" clears the ring
+       instead of brushing it. */
     min-width: 5em;
     text-align: center;
-    padding: 0.3em 0.85em;
+    padding: 0.4em 0.95em;
     border: 2px solid #000;
     border-radius: 50%;
     font-style: italic;
@@ -578,21 +584,6 @@ html.dark .meta-group h2 {
     margin-bottom: 0;
 }
 
-.project-lede .project-number {
-    font-size: 13px;
-    color: #666;
-    margin-bottom: 14px;
-}
-
-html.dark .project-lede .project-number {
-    color: #999;
-}
-
-.project-lede h1 + p {
-    font-size: clamp(18px, 1.6vw, 22px);
-    line-height: 1.5;
-}
-
 .project-links {
     margin-top: 28px;
     font-family: 'Xanh Mono', monospace;
@@ -815,6 +806,8 @@ html.dark .project-lede .project-number {
     line-height: 1.4;
     color: inherit;
     text-decoration: none;
+    /* Same hover accent as the footer nav links. */
+    transition: color 200ms var(--ease-out);
 }
 
 .project-index .index-num,
@@ -827,11 +820,32 @@ html.dark .project-lede .project-number {
     text-align: right;
 }
 
+/* Same colour shift as .footer-links a:hover, on the whole row since the row
+   is the link. The number/category/year spans set their own colour, so they
+   need the override spelled out too, not just inherited. */
+.project-index a:hover,
+.project-index a:focus-visible,
+.project-index a:hover .index-num,
+.project-index a:hover .index-cat,
+.project-index a:hover .index-year,
+.project-index a:focus-visible .index-num,
+.project-index a:focus-visible .index-cat,
+.project-index a:focus-visible .index-year {
+    color: var(--accent-purple);
+}
+
 html.dark .project-index h2,
 html.dark .project-index .index-num,
 html.dark .project-index .index-cat,
 html.dark .project-index .index-year {
     color: #999;
+}
+
+/* html.dark .project-index a (0,2,2) would otherwise outrank the hover rule
+   above (0,2,1), the same issue the footer links hit. */
+html.dark .project-index a:hover,
+html.dark .project-index a:focus-visible {
+    color: var(--accent-purple);
 }
 
 html.dark .project-index li {
@@ -912,26 +926,44 @@ footer {
     text-align: left;
 }
 
-.about-split {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(64px, 8vw, 112px);
+/* The heading sat on the general .hero padding (120px top and bottom), sized
+   for a centred homepage band. On its own above a two-column layout that
+   left a dead gap before the grid started, so the About page gets its own,
+   shorter bottom padding. */
+.hero.about-hero {
+    padding: 72px 0 32px;
 }
 
-.about-left {
+/* Two columns on an editorial grid: About content on the left, the inquiry
+   form on the right, both reading off the same row start so neither column
+   floats independently of the other. Order in the markup already puts the
+   About content first, so the mobile stack (one column) needs no reordering. */
+.about-split {
     display: grid;
-    grid-template-columns: minmax(0, 300px) minmax(0, 60ch);
-    column-gap: clamp(40px, 7vw, 112px);
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(56px, 7vw, 104px);
     align-items: start;
 }
 
+.about-left {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* A magazine-style portrait, not a full-width banner: capped well below the
+   column width and cropped to a portrait frame so the whole head stays in
+   frame regardless of the source photo's own proportions. */
 .about-portrait {
     margin: 0;
+    width: clamp(280px, 30vw, 380px);
 }
 
 .about-portrait img {
     width: 100%;
-    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center 25%;
     display: block;
 }
 
@@ -944,7 +976,13 @@ footer {
    under every label saying what to write. */
 .inquiry {
     width: 100%;
-    max-width: 640px;
+}
+
+@media (max-width: 900px) {
+    .about-split {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 48px;
+    }
 }
 
 .inquiry-title {
@@ -953,126 +991,173 @@ footer {
     font-weight: 400;
     font-size: clamp(28px, 3vw, 40px);
     line-height: 1.15;
-    margin-bottom: 12px;
+    margin-bottom: 28px;
 }
 
-.inquiry-intro {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #666;
-    margin-bottom: 32px;
-}
-
+/* The form itself: a short run of large sentences with the fields as
+   underlines and pills inside the text, not a stack of labelled boxes. */
 .inquiry form {
     display: flex;
     flex-direction: column;
-    gap: 26px;
+    gap: 22px;
 }
 
-.form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    border: 0;
-    padding: 0;
-    margin: 0;
-    min-width: 0;
-}
-
-.form-field label,
-.form-field legend {
-    font-size: 12px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+.sentence {
+    font-family: "gyst-variable", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(19px, 2vw, 26px);
+    line-height: 1.65;
     color: #000;
-    padding: 0;
+}
+
+.sentence-block {
+    margin: 2px 0;
 }
 
 .form-optional {
-    text-transform: none;
-    letter-spacing: 0;
-    font-style: italic;
+    font-family: 'Xanh Mono', monospace;
+    font-size: 0.55em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-style: normal;
     color: #666;
-    margin-left: 6px;
+    vertical-align: middle;
 }
 
-.form-hint {
-    font-size: 13px;
-    line-height: 1.5;
-    color: #666;
-    margin: 0 0 4px;
-}
-
-.form-field input[type="text"],
-.form-field input[type="email"],
-.form-field select,
-.form-field textarea {
+/* Underline fields: no box, just a rule under the text, sized to sit inside
+   the sentence rather than break its flow. */
+.field-underline {
     font: inherit;
-    font-size: 16px;
+    font-size: inherit;
+    font-family: inherit;
     color: #000;
-    background: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.35);
+    background: transparent;
+    border: 0;
+    border-bottom: 1.5px solid #000;
     border-radius: 0;
     box-shadow: none;
-    padding: 12px 14px;
-    width: 100%;
+    padding: 0 2px 3px;
+    width: clamp(130px, 15vw, 210px);
+    max-width: 100%;
     appearance: none;
     -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    vertical-align: baseline;
+    transition: border-color 200ms var(--ease-out);
+}
+
+.field-select.field-underline {
+    width: auto;
+    max-width: 220px;
+    cursor: pointer;
+    padding-right: 22px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23000' stroke-width='1.5'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+    background-position: right center;
+    background-repeat: no-repeat;
+    background-size: 11px 7px;
+}
+
+.field-underline:focus-visible {
+    border-color: var(--accent-purple);
+}
+
+.field-underline::placeholder {
+    color: #999;
+    opacity: 1;
+}
+
+/* The one block-level field: a short paragraph's worth of lines, still
+   underlined rather than boxed, sitting inline with the rest of the form. */
+.field-textarea {
+    display: block;
+    font: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    color: #000;
+    background: transparent;
+    border: 0;
+    border-bottom: 1.5px solid #000;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 4px 2px 8px;
+    width: 100%;
+    min-height: 3.4em;
+    max-height: 7em;
+    resize: vertical;
+    line-height: 1.5;
     outline: none;
     transition: border-color 200ms var(--ease-out);
 }
 
-.form-field textarea {
-    resize: vertical;
-    line-height: 1.6;
+.field-textarea:focus-visible {
+    border-color: var(--accent-purple);
 }
 
-.form-field select {
-    cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23000' stroke-width='1.5'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
-    background-position: right 14px center;
-    background-repeat: no-repeat;
-    padding-right: 40px;
-}
-
-.form-field input:focus-visible,
-.form-field select:focus-visible,
-.form-field textarea:focus-visible {
-    border-color: #000;
-    box-shadow: 0 0 0 2px var(--accent-purple);
-}
-
-.form-field ::placeholder {
-    color: #8a8a8a;
+.field-textarea::placeholder {
+    color: #999;
     opacity: 1;
 }
 
-.form-types {
-    flex-direction: row;
-    flex-wrap: wrap;
-    column-gap: 24px;
-    row-gap: 10px;
+/* Pills: outlined choice chips sitting inline in the sentence. The input is
+   visually hidden but still the real control; the span carries the chrome so
+   :checked can be targeted with a plain adjacent-sibling selector instead of
+   :has(), which is the more broadly supported route across browsers. */
+/* Flex lives on an inner span rather than the fieldset itself: some engines
+   give a <fieldset> that's a flex/grid container a non-zero minimum size
+   that ignores its content, which overflows a narrow row. The fieldset
+   stays a plain inline box; the span does the wrapping. */
+.field-pills {
+    display: inline;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
 }
 
-.form-types legend,
-.form-types .form-hint {
-    width: 100%;
-}
-
-.form-field .form-check {
+.pills-row {
     display: inline-flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 8px;
-    font-size: 14px;
-    letter-spacing: 0;
-    text-transform: none;
-    color: #000;
+    margin: 6px 4px;
+}
+
+.pill {
+    display: inline-flex;
     cursor: pointer;
 }
 
-.form-check input {
-    accent-color: #000;
+.pill input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
     margin: 0;
+    opacity: 0;
+}
+
+.pill span {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Xanh Mono', monospace;
+    font-size: 13px;
+    font-style: normal;
+    letter-spacing: 0;
+    color: #000;
+    border: 1px solid #000;
+    border-radius: 50px;
+    padding: 6px 14px;
+    transition: background-color 200ms var(--ease-out);
+}
+
+.pill input:checked + span {
+    background: var(--accent-purple);
+}
+
+.pill input:focus-visible + span {
+    outline: 2px solid var(--accent-purple);
+    outline-offset: 2px;
 }
 
 .form-honeypot {
@@ -1081,6 +1166,7 @@ footer {
 
 .form-submit {
     align-self: flex-start;
+    margin-top: 6px;
     font-family: 'Xanh Mono', monospace;
     font-size: 13px;
     font-style: italic;
@@ -1099,58 +1185,43 @@ footer {
 }
 
 .form-status {
+    font-family: 'Xanh Mono', monospace;
+    font-size: 13px;
     font-style: italic;
     line-height: 1.6;
 }
 
-html.dark .inquiry-intro,
-html.dark .form-hint,
+html.dark .sentence {
+    color: #e8e8e8;
+}
+
 html.dark .form-optional {
     color: #999;
 }
 
-html.dark .form-field label,
-html.dark .form-field legend,
-html.dark .form-field .form-check {
+html.dark .field-underline,
+html.dark .field-textarea {
     color: #e8e8e8;
+    border-bottom-color: rgba(232, 232, 232, 0.6);
 }
 
-html.dark .form-field input[type="text"],
-html.dark .form-field input[type="email"],
-html.dark .form-field select,
-html.dark .form-field textarea {
-    background: #141414;
-    color: #e8e8e8;
-    border-color: rgba(232, 232, 232, 0.35);
+html.dark .field-underline:focus-visible,
+html.dark .field-textarea:focus-visible {
+    border-bottom-color: var(--accent-purple);
 }
 
-html.dark .form-field input:focus-visible,
-html.dark .form-field select:focus-visible,
-html.dark .form-field textarea:focus-visible {
-    border-color: #e8e8e8;
-}
-
-html.dark .form-field ::placeholder {
+html.dark .field-underline::placeholder,
+html.dark .field-textarea::placeholder {
     color: #777;
 }
 
-html.dark .form-field select {
+html.dark .field-select.field-underline {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23e8e8e8' stroke-width='1.5'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
 }
 
-html.dark .form-check input {
-    accent-color: #e8e8e8;
-}
-
-@media (max-width: 900px) {
-    .about-left {
-        grid-template-columns: minmax(0, 1fr);
-        row-gap: 32px;
-    }
-
-    .about-portrait {
-        max-width: 300px;
-    }
+html.dark .pill span {
+    color: #e8e8e8;
+    border-color: rgba(232, 232, 232, 0.6);
 }
 
 @media (max-width: 768px) {
@@ -1537,7 +1608,7 @@ html.dark .text-column p a.inline-link::before {
     }
 
     .circle {
-        padding: 4px 14px;
+        padding: 6px 16px;
     }
 }
 

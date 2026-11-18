@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://use.typekit.net" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Xanh+Mono:ital@0;1&display=swap">
     <link rel="stylesheet" href="https://use.typekit.net/vzz8cwm.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=3">
     <script src="dark-mode.js"></script>
 </head>
 <body>
@@ -48,74 +48,60 @@
 
                 <section class="inquiry" id="inquiry">
                     <h2 class="inquiry-title">Think we&#8217;d work well together?</h2>
-                    <p class="inquiry-intro">Tell me a little about your project. Fields marked optional can be skipped.</p>
                     <form id="inquiry-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
                         <!-- Paste the free Web3Forms access key over the placeholder below -->
                         <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
                         <input type="hidden" name="subject" value="New project inquiry from petrahelebrantova.com">
                         <input type="checkbox" name="botcheck" class="form-honeypot" tabindex="-1" autocomplete="off">
 
-                        <div class="form-field">
-                            <label for="f-name">Name</label>
-                            <p class="form-hint" id="h-name">Your full name, or how you would like me to address you.</p>
-                            <input type="text" id="f-name" name="name" autocomplete="name" placeholder="Your name" aria-describedby="h-name" required>
-                        </div>
-                        <div class="form-field">
-                            <label for="f-email">Email</label>
-                            <p class="form-hint" id="h-email">Where I can reply to you.</p>
-                            <input type="email" id="f-email" name="email" autocomplete="email" placeholder="name@example.com" aria-describedby="h-email" required>
-                        </div>
-                        <fieldset class="form-field form-types" aria-describedby="h-types">
-                            <legend>Project Type</legend>
-                            <p class="form-hint" id="h-types">Tick everything that fits.</p>
-                                <label class="form-check"><input type="checkbox" name="project_type" value="Brand Identity"><span>Brand Identity</span></label>
-                                <label class="form-check"><input type="checkbox" name="project_type" value="Packaging"><span>Packaging</span></label>
-                                <label class="form-check"><input type="checkbox" name="project_type" value="Web Design"><span>Web Design</span></label>
-                                <label class="form-check"><input type="checkbox" name="project_type" value="Mobile App Design"><span>Mobile App Design</span></label>
-                                <label class="form-check"><input type="checkbox" name="project_type" value="Editorial Design"><span>Editorial Design</span></label>
-                                <label class="form-check"><input type="checkbox" name="project_type" value="Motion Design"><span>Motion Design</span></label>
-                                <label class="form-check"><input type="checkbox" name="project_type" value="Photography"><span>Photography</span></label>
-                        </fieldset>
-                        <div class="form-field">
-                            <label for="f-about">About the Project</label>
-                            <p class="form-hint" id="h-about">The project name if it has one, what you want to achieve, and what you need from me. A few sentences is plenty.</p>
-                            <textarea id="f-about" name="about_the_project" rows="5" placeholder="Project name, goal, and what you need" aria-describedby="h-about" required></textarea>
-                        </div>
-                        <div class="form-field">
-                            <label for="f-company">Company / Brand <span class="form-optional">optional</span></label>
-                            <p class="form-hint" id="h-company">The business or brand the project is for, if there is one.</p>
-                            <input type="text" id="f-company" name="company" autocomplete="organization" aria-describedby="h-company">
-                        </div>
-                        <div class="form-field">
-                            <label for="f-timeline">Timeline <span class="form-optional">optional</span></label>
-                            <p class="form-hint" id="h-timeline">When would you like the project to be finished?</p>
-                            <select id="f-timeline" name="timeline" aria-describedby="h-timeline">
-                                <option value="">Select</option>
+                        <p class="sentence">My name is <label class="visually-hidden" for="f-name">Name</label><input type="text" id="f-name" name="name" class="field-underline" autocomplete="name" required>.</p>
+
+                        <p class="sentence">I&#8217;d like to discuss a
+                            <fieldset class="field-pills">
+                                <legend class="visually-hidden">Project type</legend>
+                                <span class="pills-row">
+                                    <label class="pill"><input type="checkbox" name="project_type" value="Brand Identity"><span>Brand Identity</span></label>
+                                    <label class="pill"><input type="checkbox" name="project_type" value="Packaging"><span>Packaging</span></label>
+                                    <label class="pill"><input type="checkbox" name="project_type" value="Web Design"><span>Web Design</span></label>
+                                    <label class="pill"><input type="checkbox" name="project_type" value="Mobile App Design"><span>Mobile App Design</span></label>
+                                    <label class="pill"><input type="checkbox" name="project_type" value="Editorial Design"><span>Editorial Design</span></label>
+                                    <label class="pill"><input type="checkbox" name="project_type" value="Motion Design"><span>Motion Design</span></label>
+                                    <label class="pill"><input type="checkbox" name="project_type" value="Photography"><span>Photography</span></label>
+                                </span>
+                            </fieldset>
+                            project.
+                        </p>
+
+                        <p class="sentence sentence-block">
+                            <label class="visually-hidden" for="f-about">About the project</label>
+                            <textarea id="f-about" name="about_the_project" class="field-textarea" rows="4" placeholder="What are you making, and what do you need from me?" required></textarea>
+                        </p>
+
+                        <p class="sentence">Timeline <label class="visually-hidden" for="f-timeline">Timeline</label><select id="f-timeline" name="timeline" class="field-underline field-select">
+                                <option value="">select</option>
                                 <option>As soon as possible</option>
                                 <option>Within 1 month</option>
                                 <option>1 to 3 months</option>
                                 <option>3 months or more</option>
                                 <option>Flexible</option>
-                            </select>
-                        </div>
-                        <div class="form-field">
-                            <label for="f-budget">Budget Range <span class="form-optional">optional</span></label>
-                            <p class="form-hint" id="h-budget">A rough range is fine. Choose Not sure yet if you have no number in mind.</p>
-                            <select id="f-budget" name="budget_range" aria-describedby="h-budget">
-                                <option value="">Select</option>
-                                <!-- Placeholder ranges: replace each with a real amount before launch -->
-                                <option>[Range 1: set amount]</option>
-                                <option>[Range 2: set amount]</option>
-                                <option>[Range 3: set amount]</option>
-                                <option>[Range 4: set amount]</option>
-                                <option>Not sure yet</option>
-                            </select>
-                        </div>
-                        <div class="form-field">
-                            <label for="f-hear">How Did You Hear About Me <span class="form-optional">optional</span></label>
-                            <p class="form-hint" id="h-hear">A person, a website, social media, anywhere at all.</p>
-                            <input type="text" id="f-hear" name="heard_about_me" aria-describedby="h-hear">
-                        </div>
+                            </select>. Budget
+                            <fieldset class="field-pills">
+                                <legend class="visually-hidden">Budget range</legend>
+                                <!-- Provisional ranges: confirm before launch -->
+                                <span class="pills-row">
+                                    <label class="pill"><input type="radio" name="budget_range" value="Under $500"><span>Under $500</span></label>
+                                    <label class="pill"><input type="radio" name="budget_range" value="$500 - $1,500"><span>$500 - $1,500</span></label>
+                                    <label class="pill"><input type="radio" name="budget_range" value="$1,500 - $4,000"><span>$1,500 - $4,000</span></label>
+                                    <label class="pill"><input type="radio" name="budget_range" value="Over $4,000"><span>Over $4,000</span></label>
+                                    <label class="pill"><input type="radio" name="budget_range" value="Not sure yet"><span>Not sure yet</span></label>
+                                </span>
+                            </fieldset>.
+                        </p>
+
+                        <p class="sentence">Company / brand <span class="form-optional"> (optional) </span><label class="visually-hidden" for="f-company">Company or brand</label><input type="text" id="f-company" name="company" class="field-underline" autocomplete="organization">. Get back at <label class="visually-hidden" for="f-email">Email</label><input type="email" id="f-email" name="email" class="field-underline" autocomplete="email" required>.</p>
+
+                        <p class="sentence">How did you hear about me <span class="form-optional"> (optional) </span><label class="visually-hidden" for="f-hear">How did you hear about me</label><input type="text" id="f-hear" name="heard_about_me" class="field-underline"></p>
+
                         <button type="submit" class="form-submit">Send inquiry</button>
                         <p class="form-status" role="status" aria-live="polite" hidden></p>
                     </form>
